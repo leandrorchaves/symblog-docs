@@ -4,8 +4,11 @@ Criando um blog com Symfony2
 Introdução
 ------------
 
-Este tutorial irá guiá-lo através do processo de criação de um blog completo
-usando `Symfony 2 <http://symfony.com/>`_. A distribuição Standard do Framework é a que será usada pois inclui os principais componentes que serão necessários para a construção de seus próprios sites. O tutorial é dividido em um número de partes. Estas, cobrem diferentes aspectos do Symfony 2 e seus componentes. Este tutorial tem por objetivo ser similar ao tutorial `Jobeet <http://www.symfony-project.org/jobeet/1_4/Doctrine/en/>`_ utilizado no Symfony 1.
+Este tutorial irá guiá-lo no processo de aprendizado através da criação de um blog completo usando `Symfony 2 <http://symfony.com/>`_. 
+
+A distribuição do Framework que será utilizada será a Standard pois inclui os principais componentes que serão necessários para a construção de seus sites. 
+
+O tutorial está dividido em partes cobrindo diferentes aspectos do Symfony 2 e seus componentes. Este tutorial tem por objetivo ser similar ao tutorial `Jobeet <http://www.symfony-project.org/jobeet/1_4/Doctrine/en/>`_ utilizado no Symfony 1.
 
 Partes do tutorial
 ~~~~~~~~~~~~~~~~~~
@@ -23,13 +26,13 @@ Partes do tutorial
 Website de exemplo
 ------------------
 
-O site symblog pode ser visto em
-`http://symblog.co.uk <http://symblog.co.uk/>`_. O código fonte está disponível via `Github <https://github.com/dsyph3r/symblog>`_. Estes sendo mostrados em cada parte do tutorial.
+O site Symblog pode ser acessado em
+`http://symblog.co.uk <http://symblog.co.uk/>`_. O código fonte está disponível via `Github <https://github.com/dsyph3r/symblog>`_. Estes códigos, serão mostrados em cada parte do tutorial.
 
 Cobertura do tutorial
 ---------------------
 
-Este tutorial tem como objetivo cobrir as tarefas comuns que são enfrentados ao criar sites usando Symfony 2.
+Este tutorial tem como objetivo cobrir as tarefas comuns ao desenvolvimento de sites usando Symfony 2.
 
     1.  Pacotes (Bundles)
     2.  Controladores
@@ -43,16 +46,23 @@ Este tutorial tem como objetivo cobrir as tarefas comuns que são enfrentados ao
     10. Gerenciamento de Ativos
     11. Envio de Email
     12. Ambientes
-    13. Customisando páginas de erro
+    13. Customização de páginas de erro
     14. Segurança
-    15. O usuário & Sessões
-    16. Geração do CRUD
-    17. Memória Cach
+    15. Usuário & Sessão
+    16. Geração de CRUD
+    17. Memória Cache
     18. Testes
     19. Desenvolvimento
 
-Symfony2 é altamente personalizável e fornece um número de maneiras diferentes para realizar a mesma tarefa. Um exemplo disso é a opções de escrever configuração em YAML, XML, PHP, ou Annotation, e criar interfaces utilizando Twig ou
-PHP. Para manter este tutorial o mais simples vamos usar YAML e Annotations para configuração e Twig para as interfaces. O `Livro do Symfony <http://symfony.com/doc/current/book/index.html>`_ fornece um excelente recurso com exemplos de como usar os outros métodos. Se outras pessoas quiserem contribuir para a realização de outros métodos alternativos, simplesmente faça o fork do repositório em `Github <https://github.com/dsyph3r/symblog-docs>`_ e envie os pedidos de alteração. :)
+Symfony2 é altamente personalizável e fornece várias maneiras diferentes para
+realizar a mesma tarefa. Alguns exemplos disso são a opção de escrever configurações em YAML, XML, PHP, ou Annotation, e criar interfaces utilizando Twig ou
+PHP. 
+
+Para manter este tutorial o mais simples possível vamos usar YAML e Annotations para configuração e Twig para as interfaces. 
+
+O `Symfony Book <http://symfony.com/doc/current/book/index.html>`_ pode ser utilizado como um excelente recurso com exemplos de como usar os outros métodos. 
+
+Se outras pessoas quiserem contribuir para a realização de outros métodos alternativos, simplesmente faça o fork do repositório em `Github <https://github.com/dsyph3r/symblog-docs>`_ e envie os pedidos de alteração. :)
 
 Traduções
 ---------
@@ -81,14 +91,18 @@ Este tutorial foi inicialmente criado por `dsyph3r <http://twitter.com/#!/dsyph3
 Contribuindo
 ------------
 
-O `código <https://github.com/dsyph3r/symblog-docs>`_ para este tutorial está disponível em Github. Se você gostaria de melhorar e ampliar este tutorial simplesmente faça o fork do projeto e envie-nos os pedidos. Você também pode propor questões usando o `GitHub Issue Tracker <https://github.com/dsyph3r/symblog-docs/issues>`_. Se alguém está interessado em criar um design muito mais agradável visualmente, por favor entrar em `contato <http://twitter.com/#!/dsyph3r>`_!
+O `código <https://github.com/dsyph3r/symblog-docs>`_ para este tutorial está disponível no Github. Se você gostaria de melhorar e/ou ampliar este tutorial, simplesmente faça o fork do projeto e envie-nos os pedidos para alteração. 
+
+Você também pode propor questões usando o `GitHub Issue Tracker <https://github.com/dsyph3r/symblog-docs/issues>`_. 
+
+Se alguém está interessado em criar um design muito mais agradável visualmente, por favor entre em `contato <http://twitter.com/#!/dsyph3r>`_!
 
 Creditos
 --------
 
 Um agradecimento especial à todos os que contribuiram com a `Documentação oficial do Symfony 2 <http://symfony.com/doc/current/>`_. Esta ação proporcionou um recurso inestimável de informação.
 
-Ícones das bandeiras provenientes de `famfamfam <http://www.famfamfam.com/lab/icons/flags/>`_.
+Os ícones das bandeiras podem ser encontrados em `famfamfam <http://www.famfamfam.com/lab/icons/flags/>`_.
 
 Busca
 -----
