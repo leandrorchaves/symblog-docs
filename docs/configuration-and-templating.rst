@@ -36,7 +36,7 @@ Como não queremos repetir a excelente documentação fornecida pelo livro do Sy
 detalhes, como por exemplo, como instalar os vendors necessários, e como designar corretamente as permissões para as 
 pastas corretas.
 
-.. warning::
+.. warning:: s
     
     É importante prestar atenção em 
     `Configurando Permissões <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_ na seção 
@@ -54,7 +54,7 @@ Estas instruções são específicas para `Apache <http://httpd.apache.org/>`_ .
 instalado e funcionando em sua máquina. Se você utiliza outro servidor para utilização em seus domínios locais, como 
 `Nginx <http://nginx.net/>`_, por exemplo, você pode pular esta seção.
 
-.. note::
+.. note:: 
 
      Estas etapas foram realizadas na distribuição Fedora Linux. Então, nomes de caminho, etc, podem ser diferentes 
     dependendo do seu sistema operacional. 
@@ -98,7 +98,7 @@ que fizemos.
 
     $ sudo service httpd restart
 
-.. tip::
+.. tip:: 
 
     Se você cria seus próprios domínios virtuais, você pode simplificar seu processo, usando 
     `Hosts virtuais dinâmicos <http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html>`_. 
