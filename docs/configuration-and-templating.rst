@@ -36,7 +36,11 @@ Como não queremos repetir a excelente documentação fornecida pelo livro do Sy
 detalhes, como por exemplo, como instalar os vendors necessários, e como designar corretamente as permissões para as 
 pastas corretas.
 
-.. warning:: s
+.. worning::
+    
+    teste
+
+.. warning:: 
     
     É importante prestar atenção em 
     `Configurando Permissões <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_ na seção 
