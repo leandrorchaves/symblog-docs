@@ -341,7 +341,7 @@ Com Symfony 2 podemos criar os layouts usando 2 padrões;
 `Twig <http://www.twig-project.org/>`_ e PHP. 
 
 Você poderia optar por não utilizar as opções citadas acima e escolher usar outra biblioteca. Isso é possível graças ao 
-`Conteúdo de Injeção de Dependencia <http://symfony.com/doc/current/book/service_container.html>`_. 
+`Injeção de Dependencia de Conteúdo <http://symfony.com/doc/current/book/service_container.html>`_. 
 
 Iremos utilizar Twig para gerar nossos layouts por alguns motivos: 
 
