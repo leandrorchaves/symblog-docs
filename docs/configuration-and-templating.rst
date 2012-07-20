@@ -10,7 +10,7 @@ Vamos baixar e configurar a distribuição `Standard <http://symfony.com/doc/cur
 do Framework, criar o pacote (bundle) Blog e montar os principai layouts utilizando HTML. 
 
 No final deste capítulo, você terá configurado um site em Symfony 2 que estará disponível através de um domínio local, 
-por exemplo: `` http://symblog.dev/ ``. 
+por exemplo: ``http://symblog.dev/ ``. 
 
 O site irá conter a estrutura principal HTML do blog, juntamente com algum conteúdo fictício. 
 
@@ -37,7 +37,7 @@ detalhes, como por exemplo, como instalar os vendors necessários, e como design
 pastas corretas.
 
 .. warning::
-    :title: Importante!
+    
     É importante prestar atenção em 
     `Configurando Permissões <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_ na seção 
     do capítulo de instalação. Esta seção explica várias maneiras como você pode designar permissão para as pastas 
