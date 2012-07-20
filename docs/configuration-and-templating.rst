@@ -103,7 +103,7 @@ que fizemos.
     Se você cria seus próprios domínios virtuais, você pode simplificar seu processo, usando 
     `Hosts virtuais dinâmicos <http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html>`_. 
 
-Agora você deve ser capaz de acessar ``http://symblog.dev/app_dev.php/ ``. 
+Agora você deve ser capaz de acessar ``http://symblog.dev/app_dev.php/``. 
 
 .. image:: /_static/images/part_1/welcome.jpg
     :align: center
