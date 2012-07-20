@@ -10,7 +10,7 @@ Vamos baixar e configurar a distribuição `Standard <http://symfony.com/doc/cur
 do Framework, criar o pacote (bundle) Blog e montar os principai layouts utilizando HTML. 
 
 No final deste capítulo, você terá configurado um site em Symfony 2 que estará disponível através de um domínio local, 
-por exemplo: ``http://symblog.dev/ ``. 
+por exemplo: ``http://symblog.dev/``. 
 
 O site irá conter a estrutura principal HTML do blog, juntamente com algum conteúdo fictício. 
 
@@ -573,7 +573,7 @@ flexibilidade no futuro, para adicionarmos personalizações que todos os outros
 
 Por exemplo, poderíamos querer mudar a cópia de rodapé de todas as páginas, este seria um ótimo lugar para fazer isso. 
 
-Gabarito de Página - Nível 3 
+Template da Página - Nível 3 
 ............................ 
 
 Finalmente estamos prontos para o layout do controlador. Estes layouts vão ser comumente relacionados com uma ação do 
