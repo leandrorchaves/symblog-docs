@@ -1,69 +1,72 @@
-[Part 1] - Symfony2 Configuration and Templating
-================================================
+[Parte 1] - Configuração do Symfony 2 e Criação de layout 
+========================================================= 
 
-Overview
---------
+Visão geral 
+----------- 
 
-This chapter will cover the first steps when creating a Symfony2 website.
-We will download and configure the Symfony2
-`Standard Distribution <http://symfony.com/doc/current/glossary.html#term-distribution>`_,
-create the Blog bundle and put together the main HTML templates. At the end
-of this chapter you will have configured a Symfony2 website that
-will be available via a local domain, eg ``http://symblog.dev/``. The website will
-contain the main HTML structure of the blog along with some dummy content.
+Este capítulo cobrirá os primeiros passos na criação de um site utilizando Symfony 2. 
 
-The following areas will be demonstrated in this chapter:
+Vamos baixar e configurar a distribuição `Standard <http://symfony.com/doc/current/glossary.html#term-distribution>`_ 
+do Framework, criar o pacote (bundle) Blog e montar os principai layouts utilizando HTML. 
 
-    1. Setting up a Symfony2 application
-    2. Configuring a development domain
-    3. Symfony2 Bundles
-    4. Routing
-    5. Controllers
-    6. Templating with Twig
+No final deste capítulo, você terá configurado um site em Symfony 2 que estará disponível através de um domínio local, 
+por exemplo: `` http://symblog.dev/ ``. 
 
-Download and Setup
-------------------
+O site irá conter a estrutura principal HTML do blog, juntamente com algum conteúdo fictício. 
 
-As stated above we will be using the Symfony2 Standard Distribution. This
-distribution comes complete with the Symfony2 core libraries and the most common
-bundles required to create websites. You can
-`Download <http://symfony.com/download>`_ the Symfony2 package from the Symfony2 website.
-As I don't want to repeat the excellent documentation provided by the Symfony2 book,
-please refer to the
-`Installing and Configuring Symfony2 <http://symfony.com/doc/current/book/installation.html>`_
-chapter for detailed requirements. This will guide you through the process of
-which package to download, how to install the required vendors, and how to
-correctly permission folders.
+As seguintes áreas serão abordadas neste capítulo: 
+
+    1. Configurando um aplicativo Symfony 2 
+    2. Configurando um domínio do desenvolvimento 
+    3. Pacotes (Bundles) Symfony 2 
+    4. Roteamento 
+    5. Controladores 
+    6. Geração de layout com Twig 
+
+Download e Instalação 
+--------------------- 
+
+Como dito acima, estaremos usando a distribuição Standard do Framework. Esta distribuição vem completa com as principais 
+bibliotecas e pacotes mais comuns necessários para o desenvolvimento de sites. 
+
+Você pode fazer o `Download <http://symfony.com/download>`_ do pacote Symfony 2 diretamente do site do Symfony 2. 
+
+Como não queremos repetir a excelente documentação fornecida pelo livro do Symfony 2, por favor, consulte o capítulo 
+`Instalando e configurando Symfony 2  <http://symfony.com/doc/current/book/installation.html>`_ para obter maiores 
+detalhes, como por exemplo, como instalar os vendors necessários, e como designar corretamente as permissões para as 
+pastas corretas.
 
 .. warning::
+    :title: Importante!
+    É importante prestar atenção em 
+    `Configurando Permissões <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_ na seção 
+    do capítulo de instalação. Esta seção explica várias maneiras como você pode designar permissão para as pastas 
+    ``app/cache`` e ``app/logs`` para que os usuário do servidor e os usuário de linha de comando possam ter acesso de 
+    escrita nestas pastas. 
 
-    It is important to pay special attention to the
-    `Setting up Permissions <http://symfony.com/doc/current/book/installation.html#configuration-and-setup>`_
-    section in the Installation chapter. This explains the various ways you
-    should permission the ``app/cache`` and ``app/logs`` folders so the web
-    server user and command line user have write access to them.
+Criando um Domínio de Desenvolvimento 
+------------------------------------- 
 
-Creating a Development Domain
------------------------------
+Como padrão deste tutorial, iremos utilizar o domínio local ``Http://symblog.dev/``, porém você pode escolher qualquer 
+domínio que você deseja. 
 
-For the purpose of this tutorial we will be using the local domain
-``http://symblog.dev/``, however you can choose any domain you want. These
-instructions are specific to `Apache <http://httpd.apache.org/>`_ and assume you
-already have Apache setup and running on your machine. If you are comfortable
-with setting up local domains, or use a different web server such as
-`nginx <http://nginx.net/>`_ you can skip this section.
+Estas instruções são específicas para `Apache <http://httpd.apache.org/>`_ . Assim, assumimos que você já tenha o Apache 
+instalado e funcionando em sua máquina. Se você utiliza outro servidor para utilização em seus domínios locais, como 
+`Nginx <http://nginx.net/>`_, por exemplo, você pode pular esta seção.
 
 .. note::
+    :title: Observação
 
-    These steps were performed on the Linux distribution Fedora so
-    path names, etc, may differ depending on your Operating System.
+     Estas etapas foram realizadas na distribuição Fedora Linux. Então, nomes de caminho, etc, podem ser diferentes 
+    dependendo do seu sistema operacional. 
 
-Lets begin by creating a virtual host with Apache. Locate the Apache configuration
-file and append the following settings, making sure to change the ``DocumentRoot``
-and ``Directory`` paths accordingly. The location and name of
-the Apache configuration can vary a lot depending on your OS. In Fedora
-its located at ``/etc/httpd/conf/httpd.conf``. You will need to edit this file with
-``sudo`` privileges.
+Vamos começar criando um domínio virtual com o Apache. 
+
+Localize o arquivo de configuração do Apache e acrescente as seguintes configurações, certificando-se de mudar o 
+``DocumentRoot`` e os caminhos de diretório. 
+
+A localização e nome da configuração do Apache pode variar muito dependendo do seu sistema operacional. No Fedora , sua 
+localização é ``/etc/httpd/conf/httpd.conf``. Você terá que editar este arquivo com privilégio de ``sudo``.
 
 .. code-block:: text
 
@@ -81,17 +84,16 @@ its located at ``/etc/httpd/conf/httpd.conf``. You will need to edit this file w
       </Directory>
     </VirtualHost>
 
-
-Next add a new domain to the bottom of the host file located at ``/etc/hosts``.
-Again, you will need to edit this file with ``sudo`` privileges.
+Em seguida, adicione um novo domínio no arquivo host localizado em ``/etc/hosts``. Novamente, você terá que editar este 
+arquivo com privilégios ``sudo``. 
 
 .. code-block:: text
 
     # /etc/hosts
     127.0.0.1     symblog.dev
 
-Lastly don't forget to restart the Apache service. This will reload the
-updated configuration settings we have made.
+Por último não se esqueça de reiniciar o serviço Apache. Assim, o servidor irá recarregar as definições de configuração 
+que fizemos. 
 
 .. code-block:: bash
 
@@ -99,105 +101,98 @@ updated configuration settings we have made.
 
 .. tip::
 
-    If you find yourself creating virtual domains all the time, you can simplify
-    this process by using
-    `Dynamic virtual hosts <http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html>`_.
+    Se você cria seus próprios domínios virtuais, você pode simplificar seu processo, usando 
+    `Hosts virtuais dinâmicos <http://blog.dsyph3r.com/2010/11/apache-dynamic-virtual-hosts.html>`_. 
 
-You should now be able to visit ``http://symblog.dev/app_dev.php/``.
+Agora você deve ser capaz de acessar ``http://symblog.dev/app_dev.php/ ``. 
 
 .. image:: /_static/images/part_1/welcome.jpg
     :align: center
     :alt: Symfony2 welcome page
 
-If this is your first visit to the Symfony2 welcome page, take some time to view
-the demo pages. Each demo page provides code snippets that demonstrate how each
-page works behind the scenes.
+Se esta é primeira vez que você vê a página de boas-vindas do Symfony 2, gaste um tempo observando as páginas de 
+demonstração. Cada página exibe trechos de código que demonstram como cada página funciona.
 
 .. note::
+    :title: Observação
 
-    You will also notice a toolbar at the bottom of the welcome screen. This
-    is the developer toolbar and provides you will invaluable information
-    about the state of the application. Information including the page execution time,
-    memory usage, database queries, authentication state and much more
-    can be viewed from this toolbar. By default the toolbar is only visible when
-    running in the ``dev`` environment, as providing the toolbar in production
-    would be a big security risk as it exposes a lot of the internals of your
-    application. References to the toolbar will be made through this tutorial
-    as we introduce new features.
+    Você também vai perceber uma barra de ferramentas na parte inferior da tela de boas-vindas. Esta é a barra de 
+    ferramentas do desenvolvedor e fornece a você informações muito importantes sobre o estado da aplicação como, por 
+    exemplo, o tempo de execução da página, uso de memória, as consultas de banco de dados, estado de autenticação e 
+    muito mais pode ser visto a partir desta barra de ferramentas. 
 
-Configuring Symfony: Web Interface
-----------------------------------
+    Por padrão, a barra de ferramentas só é visível quando estamos no ambiente ``dev``, pois exibir a barra de 
+    ferramentas no ambiente de produção seria um grande risco à segurança porque ela expõe muitas informações da sua 
+    aplicação. 
 
-Symfony2 introduces a web interface to configure various aspects regarding the
-website such as database settings. We require a database for this project so
-lets begin using the configurator.
+    As referências à barra de ferramentas serão feitas no decorrer deste tutorial à medida que formos introduzindo novas 
+    funcionalidades.
 
-Visit ``http://symblog.dev/app_dev.php/`` and click the Configure button. Enter
-the details to setup the database (this tutorial assumes the use of MySQL, but
-you can choose any other database you have access to), followed by generating a
-CSRF token on the next page. You will be presented with the parameter settings
-that Symfony2 has generated. Pay attention to the notice on the page, it is
-likely that your ``app/config/parameters.ini`` file is not writable so you will need to
-copy and paste the settings to the file located at ``app/config/parameters.ini`` (These
-settings can replace the existing settings in this file).
+Configurando Symfony: Interface Web 
+----------------------------------- 
+
+Symfony 2 possui uma interface web para configurar vários aspectos relacionados ao site, tais como configurações de 
+banco de dados. Precisamos de um banco de dados para este projeto então vamos começar a usar o configurador. 
+
+Acesse ``http://symblog.dev/app_dev.php/`` e clique no botão ``Configure``. Forneça os detalhes para configurar o banco 
+de dados (este tutorial assume o uso do MySQL, mas você pode escolher qualquer outro banco de dados de sua preferência). Na próxima página, gere um token de segurança CSRF. Será apresentado a você as definições dos parâmetros que o Symfony 2 gerou. Preste atenção ao aviso que possa surgir na página, pois é bem provável que você não tenha acesso de escrita no seu arquivo ``app/config/parameters.ini`` sendo necessário copiar e colar as configurações neste arquivo (Estas configurações podem substituir as definições já existentes neste arquivo). 
 
 
-Bundles: Symfony2 Building Blocks
-----------------------------------
+Pacotes (Bundles): Construindo blocos com Symfony 2 
+--------------------------------------------------- 
 
-Bundles are the basic building block of any Symfony2 application, in fact the
-Symfony2 framework is itself a bundle. Bundles allow us to separate
-functionality to provide reusable units of code. They encapsulate the entire
-needs to support the bundles purpose including the controllers, the model,
-the templates, and the various resources such as images and CSS. We will create
-a bundle for our website in the namespace Blogger. If you are not familiar with
-namespaces in PHP you should spend some time reading up on them as they are
-heavily used in Symfony2, everything is namespaced. See the
-`Symfony2 autoloader <http://symfony.com/doc/current/cookbook/tools/autoloader.html>`_
-for specific details on how Symfony2 achieves autoloading.
+Os pacotes (bundles) são blocos básicos de construção de qualquer aplicação Symfony 2, e só pra constar, o Symfony 2 é 
+um pacote. Pacotes nos permitem separar funcionalidades para fornecer unidades de código reutilizáveis. Eles encapsulam 
+as entradas afim de dar suporte aos propósitos dos pacotes incluindo controladores, o modelo, os layouts e diversos 
+outros recursos, tais como imagens e CSS. Criaremos um pacote para o nosso site com namespace ``Blogger``. Se você não 
+estiver familiarizado com ``namespaces`` em PHP você deve gastar um tempo lendo sobre eles pois eles são muito usados em 
+Symfony 2. Leia o `Symfony 2 autoloader <http://symfony.com/doc/current/cookbook/tools/autoloader.html>`_ para maiores 
+detalhes sobre como Symfony 2 trabalha com autoloading.
 
 .. tip::
+    :title: Dica!
 
-    A good understanding of namespaces can help eliminate common problems you may face
-    when folder structures do not correctly map to namespace structures.
+    Um bom entendimento de namespaces pode ajudar a eliminar problemas comuns que você pode enfrentar ao ter de mapear 
+    corretamente as estruturas de pastas sem namespace. 
 
-Creating the bundle
-~~~~~~~~~~~~~~~~~~~
+Criando o pacote 
+~~~~~~~~~~~~~~~~ 
 
-To encapsulate the functionality for the blog we will create a Blog bundle.
-This will house all the required files and so could easily be dropped into another
-Symfony2 application. Symfony2 provides a number of tasks to assist us when performing common
-operations. One such task is the bundle generator.
+Para encapsular funcionalidades para o blog, vamos criar um pacote Blog. Este pacote irá abrigar todos os arquivos 
+necessários para o trabalho da aplicação Symfony 2. 
 
-To start the bundle generator run the following command. You will be presented
-with a number of prompts that allow you to configure the way the bundle is setup.
-The default for each prompt should be used.
+Symfony 2 fornece uma série de ferramentas para nos auxiliar na execução de operações comuns. Uma dessas ferramentas é o 
+gerador de pacote. 
+
+Para iniciar o gerador de pacote execute o seguinte comando. Você verá uma série de instruções que permitem configurar a 
+forma como o pacote pode ser configurado. Cada solicitação deve seguir um padrão.
 
 .. code-block:: bash
 
     $ php app/console generate:bundle --namespace=Blogger/BlogBundle --format=yml
 
-Upon completion of the generator Symfony2 will have constructed the basic bundle
-layout. A few important changes need to be noted here.
+Após a execução do código acima, o gerador do Symfony 2 terá construído o pacote base. Algumas mudanças importantes são 
+observadas aqui.
 
 .. tip::
+    :title: Dica!
 
-    You don't have to use the generator tasks that Symfony2 provides, they are simply
-    there to assist you. You could have manually created the Bundle folder structure
-    and files. While it is not mandatory to use the generators, they do provide some benefits
-    such as they are quick to use and perform all tasks required to get the bundle
-    up and running. One such example is registering the bundle.
+    Você não precisa usar as opções do gerador de pacote do Symfony 2, elas são simplesmente para ajudá-lo. 
 
-Registering the bundle
-......................
+    Você poderia ter criado manualmente a estrutura de pastas e arquivos. Embora não seja obrigatório o uso do gerador, 
+    ele fornece alguns benefícios como agilidade e execução de todas as tarefas básicas para deixar o pacote instalado e 
+    funcionando. Um exemplo disso é o registrando do pacote. 
 
-Our new bundle ``BloggerBlogBundle`` has been registered in the Kernel located at
-``app/AppKernel.php``. Symfony2 requires us to register all bundles that the application
-needs to use. You will also notice that some bundles are only registered when in
-the ``dev`` or ``test`` environments. Loading these bundles in the ``prod``
-(production) environment would introduce additional overhead for functionality
-that wouldn't be used. The snippet below shows how the ``BloggerBlogBundle`` has
-been registered.
+Registrando o pacote 
+.................... 
+
+O nosso novo pacote ``BloggerBlogBundle`` foi registrado no Kernel da aplicação localizado em 
+``App/AppKernel.php``. O Symfony 2 nos obriga a registrar todos os pacotes que a aplicação precisa usar. 
+
+Você também vai notar que alguns pacotes só são registrados quando estão em ambientes ``dev`` ou ``test``. 
+
+Carregando estes pacotes no ambiente``prod``(Produção) iria provocar sobrecarga adicional para a funcionalidade que não 
+seriam utilizados. O trecho abaixo mostra como o ``BloggerBlogBundle`` foi registrado.
 
 .. code-block:: php
 
@@ -218,11 +213,10 @@ been registered.
         // ..
     }
 
-Routing
-.......
+Criando rotas
+............. 
 
-The bundle routing has been imported into the applications main
-routing file located at ``app/config/routing.yml``.
+A rota do pacote foi inserido arquivo principal de rotas das aplicações, localizado em ``app/config/routing.yml``.
 
 .. code-block:: yaml
 
@@ -231,36 +225,35 @@ routing file located at ``app/config/routing.yml``.
         resource: "@BloggerBlogBundle/Resources/config/routing.yml"
         prefix:   /
 
-The prefix option allows us to mount the entire ``BloggerBlogBundle`` routing
-with a prefix. In our case we have opted to mount at the default which is ``/``.
-If for example you would like all routes to be prefixed with ``/blogger`` change
-the prefix to ``prefix: /blogger``.
+A possibilidade de utilizar prefixos nos permite montar toda a rota de ``BloggerBlogBundle``. No nosso caso, optamos por 
+montar a rota utilizando o padrão, que é ``/``. Se, por exemplo, você quiser que todos os caminhos sejam prefixados com 
+``/blogger`` mude o prefixo para ``:/blogger``. 
 
-Default structure
-.................
+Estrutura padrão 
+................
 
-Under the ``src`` directory the default bundle layout has been created. This
-starts at the top level with the ``Blogger`` folder which maps directly to
-the ``Blogger`` namespace we have created our bundle in. Under this we have the
-``BlogBundle`` folder which contains the actual bundle. The contents of this folder
-will be examined as we work through the tutorial. If your familiar with MVC
-frameworks, some of the folders will be self explanatory.
+O pacote foi criado no diretório ``src`` com uma estrutura padrão começando no nível mais alto com a pasta ``Blogger`` 
+que mapeia diretamente para o namespace do pacote que criamos dentro de ``Blogger``. 
 
-The Default Controller
-~~~~~~~~~~~~~~~~~~~~~~
+Dentro desta pasta temos a pasta``BlogBundle`` que contém o pacote atual. Os conteúdos desta pasta serão analisados com 
+o aprofundamento do tutorial. 
 
-As part of the bundle generator, Symfony2 has created a default controller. We
-can run this controller by going to
-``http://symblog.dev/app_dev.php/hello/symblog``. You should see a simple
-greeting page. Try changing the ``symblog`` part of the URL to your name.
-We can examine at a high level how this page was generated.
+Se você já é familiarizado com a estrutura MVC, algumas das pastas serão auto-explicativas. 
 
-Routed
-......
+O Controlador padrão 
+~~~~~~~~~~~~~~~~~~~~ 
 
-The ``BloggerBlogBundle`` routing file located at
-``src/Blogger/BlogBundle/Resources/config/routing.yml`` contains the following
-routing rule.
+Como padrão do gerador de pacote, Symfony 2 criou um controlador padrão. Nós podemos executar este controlador, 
+acessando ``Http://symblog.dev/app_dev.php/hello/symblog``. Você deverá ver uma página de saudação simples. 
+
+Tente alterar o ``symblog`` da parte final da URL pelo seu nome. Vamos examinar com um nível elevado, como esta página 
+foi gerada. 
+ 
+Rota 
+.... 
+
+O arquivo de roteamento ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` 
+contém a seguinte regra de roteamento.
 
 .. code-block:: yaml
 
@@ -269,40 +262,41 @@ routing rule.
         pattern:  /hello/{name}
         defaults: { _controller: BloggerBlogBundle:Default:index }
 
-The routing is composed of a pattern and a some default options. The pattern is
-checked against the URL, and the default options specify the controller to
-execute if the route matches. In the pattern ``/hello/{name}``, the ``{name}``
-placeholder will match any value as no specific requirements have been set. The
-route also doesn't specify any culture, format or HTTP methods. As no HTTP
-methods have been set, requests from GET, POST, PUT, etc will all be eligible
-for pattern matching.
+O roteamento é composto de um padrão e outras opções padrão. 
 
-If the route meets all the specified criteria it will be executed by the
-_controller option in defaults. The _controller option specifies the
-Logical Name of the controller which allows Symfony2 to map this to a specific file.
-The above example will cause the ``index`` action in the ``Default`` controller
-located at ``src/Blogger/BlogBundle/Controller/DefaultController.php`` to be executed.
+O padrão é verificado em relação a URL, e as opções padrão dizem para o controlador executar se as rotas coincidirem. 
 
-The Controller
-..............
+No padrão ``/Olá/{nome}``, o ``{nome}`` é um local específico que irá corresponder a qualquer valor uma vez que os 
+requisitos específicos não foram definidos. 
 
-The controller in this example is very simple. The ``DefaultController`` class
-extends the ``Controller`` class which provides some helpful methods such as the ``render``
-method used below. As our route defines a placeholder it is passed into the
-action as the argument ``$name``. The action does nothing more than
-call the ``render`` method specifying the ``index.html.twig`` template
-in the ``BloggerBlogBundle`` Default view folder to be rendered. The
-format of the template name is ``bundle:controller:template``. In
-our example this is ``BloggerBlogBundle:Default:index.html.twig``
-which maps to the ``index.html.twig`` template, in the ``Default``
-views folder of the ``BloggerBlogBundle``, or physically to the file
-``src/Blogger/BlogBundle/Resources/views/Default/index.html.twig``. Different
-variations of the template format can be used to render templates
-at different locations within the application and its bundles. We will see
-this later in the chapter.
+A rota também não especifica os métodos de língua ou HTTP. Como não temos métodos HTTP definidos, as solicitações de GET, 
+POST, PUT, etc serão todos elegíveis para casamento de padrões. 
 
-We also pass over the ``$name`` variable to the template via the ``array``
-options.
+Se a rota satisfaz todos os critérios especificados, as opções padrão do _controller será invocado. As opções 
+_controller especificam o Nome lógico do controlador que permite o Symfony 2 mapear para um arquivo específico. 
+
+O exemplo acima fará com que a ação ``index`` do controlador padrão localizado em 
+``src/Blogger/BlogBundle/Controller/DefaultController.php`` seja executada. 
+
+O Controlador 
+............. 
+
+O controlador neste exemplo é muito simples.  A classe ``DefaultController``estende a classe ``Controller`` que fornece 
+alguns métodos úteis, como a renderização, método utilizado a seguir. 
+
+Como a nossa rota define um local específico que é passado para a ação com o argumento ``$nome``, a ação faz nada mais 
+do que chamar o método de renderização especificando o template ``index.html.twig`` na pasta padãro de visão ``View`` 
+dentro de ``BloggerBlogBundle``. 
+
+O formato do nome do template é ``bundle:controller:template``. Em nosso exemplo, 
+``BloggerBlogBundle:Default:index.html.twig`` que mapeia para o tamplate ``index.html.twig``, na pasta de visão padrão 
+de ``BloggerBlogBundle``, ou fisicamente para o arquivo 
+``src/Blogger/BlogBundle/resources/views/default/index.html.twig``. 
+
+Diferentes formatos de templates podem ser usados para renderizar os templates em diferentes locais dentro das 
+aplicações dos seus pacotes. Veremos isso mais tarde neste capítulo. 
+
+Nós também podemos passar a variavel ``$name`` para o template por meio de ``array``.
 
 .. code-block:: php
 
@@ -321,67 +315,62 @@ options.
         }
     }
 
-The Template (The View)
-.......................
+O template (A View) 
+................... 
 
-As you can see the template is very simple. It prints out Hello followed
-by the name argument passed over from the controller.
+Como você pode ver, o template é muito simples. Ela imprime Olá seguido pelo argumento ``name`` passado pelo controlador.
 
 .. code-block:: html
 
     {# src/Blogger/BlogBundle/Resources/views/Default/index.html.twig #}
     Hello {{ name }}!
 
-Cleaning up
-~~~~~~~~~~~
+Limpando 
+~~~~~~~~ 
 
-As we don't need some of the default files created by the generator we can clean
-these up.
+Como alguns arquivos padrão, criados pelo gerador, não são necessários podemos excluí-los. 
 
-The controller file ``src/Blogger/BlogBundle/Controller/DefaultController.php``
-can be deleted, along with the view folder and its content at
-``src/Blogger/BlogBundle/Resources/views/Default/``. Finally remove the route
-defined at ``src/Blogger/BlogBundle/Resources/config/routing.yml``
+O arquivo ``src/Blogger/BlogBundle/Controller/DefaultController.php`` pode ser excluído, juntamente com a pasta View e o 
+seu conteúdo localizdo em `` Src/Blogger/BlogBundle/resources/views/Default/``. Finalmente, remova a rota definida em 
+``src/Blogger/BlogBundle/Resources/config/routing.yml``. 
 
-Templating
-----------
+Gerando os layouts 
+------------------ 
 
-We have 2 options by default when using Symfony2 for templating;
-`Twig <http://www.twig-project.org/>`_ and PHP. You could of course use neither of
-these and opt for a different library. This is possible thanks to Symfony2
-`Dependency Injection Container <http://symfony.com/doc/current/book/service_container.html>`_.
-We will be using Twig as our templating engine for a number of reasons.
+Com Symfony 2 podemos criar os layouts usando 2 padrões; 
+`Twig <http://www.twig-project.org/>`_ e PHP. 
 
-1. Twig is fast - Twig templates compile down to PHP classes so there is very little
-   overhead to use Twig templates.
-2. Twig is concise - Twig allows us to perform templating functionality in very little
-   code. Compare this to PHP where some statements become very verbose.
-3. Twig supports template inheritance - This is one of my personal favorites.
-   Templates have the ability to extend and override other templates allowing children
-   templates to change the defaults provided by their parents.
-4. Twig is secure - Twig has output escaping enabled by default and even provides a sand
-   boxed environment for imported templates.
-5. Twig is extensible - Twig comes will a lot of common core functionality that
-   you'd expected from a templating engine, but for those occasions where you need
-   some extra bespoke functionality, Twig can be easily extended.
+Você poderia optar por não utilizar as opções citadas acima e escolher usar outra biblioteca. Isso é possível graças ao 
+`Conteúdo de Injeção de Dependencia <http://symfony.com/doc/current/book/service_container.html>`_. 
 
-These are just some of the benefits of Twig. For more reasons why you should use
-Twig see the official `Twig <http://www.twig-project.org/>`_ site.
+Iremos utilizar Twig para gerar nossos layouts por alguns motivos: 
 
-Layout Structure
-~~~~~~~~~~~~~~~~
+    1. Twig é rápido – Templates feitos com Twig tem um baixo custo para compilar as classes PHP o que gera pouca 
+       sobrecarga. 
+    2. Twig é conciso - Twig nos permite executar a funcionalidade de templates com pouco código. Compare isso com o PHP, 
+       onde algumas declarações tornam-se muito detalhadas. 
+    3. Twig suporta herança de templates – Templates têm a capacidade de ampliar e substituir outros templates 
+       permitindo templates filhos alterar os padrões estabelecidos pelos templates de seus pais. 
+    4. Twig é seguro - Twig tem saída ativa por padrão e ainda fornece um pacote de ambientes para templates importados. 
+    5. Twig é extensível - Twig vem com um monte de funcionalidades comuns que você esperava de um gerador de templates, 
+       mas para aquelas ocasiões em que você precisa de mais algumas funcionalidades extras, o Twig pode ser facilmente 
+       estendido. 
 
-As Twig supports template inheritance, we are going to use the
-`Three level inheritance <http://symfony.com/doc/current/book/templating.html#three-level-inheritance>`_
-approach. This approach allows us to modify the view at 3 distinct levels within the
-application, giving us plenty of room for customisations.
+Estes são apenas alguns dos benefícios do Twig. Para mais motivos pelos quais você deve usar Twig, veja o site oficial 
+do `Twig <http://www.twig-project.org/>`_. 
 
-Main Template - Level 1
-.......................
+Estrutura de layout 
+~~~~~~~~~~~~~~~~~~~ 
 
-Lets start by creating our basic block level template for symblog. We need 2
-files here, the template and the CSS. As Symfony2 supports
-`HTML5 <http://diveintohtml5.org/>`_ we will also be using it.
+Como Twig suporta herança de templates, vamos usar a abordagem de  
+`Herança de Três níveis <http://symfony.com/doc/current/book/templating.html#three-level-inheritance>`_. Essa abordagem 
+nos permite modificar a visão em 3 níveis distintos dentro da aplicação, nos dando muito espaço para personalizações. 
+
+Template Principal - Nível 1 
+............................ 
+
+Vamos começar criando o nosso template de blocos básico para symblog. Precisamos de 2 arquivos aqui, o layout e o CSS. 
+Como Symfony 2 suporta `HTML5 <http://diveintohtml5.org/>`_, também vamos usá-lo. 
 
 .. code-block:: html
 
@@ -442,33 +431,35 @@ files here, the template and the CSS. As Symfony2 supports
     </html>
 
 .. note::
+    :title: Observações
 
-    There are 3 external files pulled into the template, 1 JavaScript and 2 CSS.
-    The JavaScript file fixes the lack of HTML5 support in IE browsers pre version
-    9. The 2 CSS files import fonts from
-    `Google Web font <http://www.google.com/webfonts>`_.
+    Existem 3 arquivos externos referenciados para o modelo, 1 arquivo JavaScript  e 2 arquivos CSS. O arquivo 
+    JavaScript corrige a falta de suporte ao HTML5 das versões do IE anteriores ao IE9. Os 2 arquivos CSS importam 
+    fontes do `Google Web Font <http://www.google.com/webfonts>`_. 
 
-This template marks up the main structure of our blogging website. Most
-of the template consists of HTML, with the odd Twig directive. Its these
-Twig directives that we will examine now.
+Este layout representa a estrutura principal do nosso site. A maior parte do layout consiste em HTML, com umas diretivas 
+Twig estranhas. Vamos examinar estas diretivas agora. 
 
-We will start by focusing on the document HEAD. Lets look at the title:
+Vamos começar com o cabeçalho do documento. Vamos começar pelo título: 
 
 .. code-block:: html
 
     <title>{% block title %}symblog{% endblock %} - symblog</title>
 
-The first thing you'll notice is the alien ``{%`` tag. Its not HTML, and its
-definitely not PHP. This is one of the 3 Twig tags. This tag is the Twig
-``Do something`` tag. It is used to execute statements such as control statements and
-for defining block elements. A full list of
-`control structures <http://www.twig-project.org/doc/templates.html#list-of-control-structures>`_
-can be found in the Twig Documentation. The Twig block we have defined in the
-title does 2 things; It sets the block identifier to title, and provides a
-default output between the block and endblock directives. By defining a block we
-can take advantage of Twig's inheritance model. For example, on a page to
-display a blog post we would want the page title to reflect the title of the
-blog. We can achieve this by extending the template and overriding the title block.
+A primeira coisa que você notará é a tag estranha ``{%``. Não é HTML, e definitivamente não é PHP. Esta tag é um das três 
+tags do Twig. Esta tag é o Twig ``Faça algo``. Ela é usada para executar comandos, como instruções de controle e para a 
+definição de elementos de bloco. 
+
+A lista completa de 
+`Estruturas de controle <http://www.twig-project.org/doc/templates.html#list-of-control-structures>`_ pode ser 
+encontrada na Documentação do Twig. 
+
+O bloco Twig que definimos no título faz 2 coisas; 
+Ele define o identificador do bloco de título, e fornece uma saída padrão entre as diretivas ``block`` e ``endblock``. 
+Através da definição de um bloco, podemos tirar proveito do modelo de herança do Twig. Por exemplo, em uma página para 
+exibir um post do blog que gostariamos que o título da página refletisse o título do blog. 
+
+Podemos conseguir isso estendendo o layout e substituir o bloco de título. 
 
 .. code-block:: html
 
@@ -476,52 +467,49 @@ blog. We can achieve this by extending the template and overriding the title blo
 
     {% block title %}The blog title goes here{% endblock %}
 
-In the above example we have extended the applications base template that first
-defined the title block. You'll notice the template format used with the
-``extends`` directive is missing the ``Bundle`` and the ``Controller`` parts,
-remember the template format is ``bundle:controller:template``. By excluding the
-``Bundle`` and the ``Controller`` parts we are specifiying the use of the application
-level templates defined at ``app/Resources/views/``.
+No exemplo acima, estendemos o layout base das aplicações que primeiro definiu o bloco de título. Você notará que o 
+formato de layout usado com a diretiva ``extends`` está faltando as partes do pacote (Bundle) e do Controlador, 
+lembrando que o formato de layout é ``bundle:controller:template``. 
 
-Next we have defined another title block and put in some
-content, in this case the blog title. As the parent template already
-contains a title block, it is overridden by our new one. The title would now
-output as 'The blog title goes here - symblog'. This functionality provided by
-Twig will be used extensively when creating templates.
+Excluindo partes do pacote e do controlador, estamos especificando o uso de níveis de templates por aplicativo definido 
+em ``app/Recursos/views/``. 
 
-In the stylesheets block we are introduced to the next Twig tag, the ``{{`` tag,
-or the ``Say something`` tag.
+Em seguida, temos definido um outro bloco de título e colocamos um conteúdo, neste caso, o título do blog. Como o modelo 
+pai já contém um bloco de título, ele é substituído por esse bloco novo. O título seria, agora, algo como 
+'O título do blog vai aqui - symblog'. 
+
+Esta funcionalidade fornecida pelo Twig será bastante usada na criação de layouts. 
+
+No bloco de folhas de estilo, foi introduzidos a próxima tag do Twig, a tag ``{{``,  ou a tag ``Diga algo``. 
 
 .. code-block:: html
 
     <link href="{{ asset('css/screen.css') }}" type="text/css" rel="stylesheet" />
 
-This tag is used to print the value of variable or expression. In the above example
-it prints out the return value of the ``asset`` function, which provides us with
-a portable way to link to the application assets, such as CSS, JavaScript, and images.
+Esta tag é usada para imprimir o valor da variável ou expressão. No exemplo acima ela mostra o valor de retorno da 
+função ``_asset``, que nos fornece uma forma portátil de vincular a aplicação dos ativos, tais como CSS, JavaScript e 
+imagens. 
 
-The ``{{`` tag can also be combined with filters to manipulate the output before
-printing.
+A tag ``{{`` pode também ser combinado com filtros para manipular os retornos antes da impressão.
 
 .. code-block:: html
 
     {{ blog.created|date("d-m-Y") }}
 
-For a full list of filters check the
-`Twig Documentation <http://www.twig-project.org/doc/templates.html#list-of-built-in-filters>`_.
+Para uma lista completa de filtros, verifique a 
+`Documentação do  Twig <http://www.twig-project.org/doc/templates.html#list-of-built-in-filters>`_. 
 
-The last Twig tag, which we have not seen in the templates is the comment tag ``{#``.
-Its usage is as follows:
+A ultima tag Twig, que não vimos nos layouts é a tag de comentário ``{#``. Veja o exemplo de sua utilização:
 
 .. code-block:: html
 
     {# The quick brown fox jumps over the lazy dog #}
 
-No other concepts are introduced in this template. It provides the main
-layout ready for us to customise it as we need.
+Não há outros conceitos introduzidos neste template. Ele fornece o principal Layout pronto para que possamos 
+personalizá-lo de acordo com nossa necessidade. 
 
-Next lets add some styles. Create a stylesheet at ``web/css/screen.css`` and add
-the following content. This will add styles for the main template.
+Agora, vamos adicionar alguns estilos. Crie uma folha de estilo em ``web/css/screen.css`` e adicione o seguinte conteúdo. 
+Isto irá adicionar estilos para o layout principal.
 
 .. code-block:: css
 
@@ -554,12 +542,11 @@ the following content. This will add styles for the main template.
 
     #footer { border-top: 1px solid #ccc; clear: both; text-align: center; padding: 10px; color: #aaa; }
 
-Bundle Template - Level 2
-.........................
+Pacote Template - Nível 2 
+......................... 
 
-We now move onto creating the layout for the Blog bundle. Create a file located at
-``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` and add the
-following content.
+Vamos agora avançar para a criação do layout para o pacote (Bundle) Blog. Crie um arquivo em 
+``src/Blogger/BlogBundle/Recursos/views/layout.html.twig`` e adicione o seguinte conteúdo.
 
 .. code-block:: html
 
@@ -570,32 +557,32 @@ following content.
         Sidebar content
     {% endblock %}
 
-At a first glance this template may seem a little simple, but its simplicity is
-the key. Firstly it extends the applications base template that we created earlier.
-Secondly it overrides the parent sidebar block with some dummy content. As the
-sidebar will be present on all pages of our blog it makes sense to perform the
-customisation at this level. You may ask why don't we just put the customisation
-in the application template as it will be present on all pages. This is simple,
-the application knows nothing about the Bundle and shouldn't. The Bundle should
-self contain all its functionality and rendering the sidebar is part of this
-functionality. OK, so why don't we just place the sidebar in each of the page
-templates? Again this is simple, we would have to duplicate the sidebar each
-time we added a page. Further this level 2 template gives us the flexibility in
-the future to add other customisations that all children templates will inherit.
-For example, we may want to change the footer copy on all pages, this would be a
-great place to do this.
+À primeira vista, este modelo pode parecer um pouco simples, mas sua simplicidade é a chave. 
 
-Page Template - Level 3
-.......................
+Em primeiro lugar, amplia o template base das aplicações, que criamos anteriormente. Em segundo lugar, substitui o bloco 
+pai lateral com algum conteúdo fictício. À medida que o bloco lateral vai aparecendo em todas as páginas de nosso blog, 
+faz sentido executar sua personalização. 
 
-Finally we are ready for the controller layout. These layouts will commonly be
-related to a controller action, i.e., the blog show action will have a
-blog show template.
+Você pode perguntar por que não colocamos a personalização no templates de aplicação uma vez que irá estar presente em 
+todas as páginas. Simples, a aplicação não sabe nada sobre o pacote e não deveria. O pacote deve conter toda a sua 
+funcionalidade e tornar o bloco lateral parte de suas funcionalidades. 
 
-Lets start by creating the controller for the homepage and its template. As this
-is the first page we are creating we need to create the controller. Create the
-controller at ``src/Blogger/BlogBundle/Controller/PageController.php`` and add
-the following:
+OK, então por que não colocar a barra lateral em cada da página de template? Novamente, isto é simples, teríamos que 
+duplicar a barra lateral a cada vez que nós adicionamos uma página. Além disso, este modelo de nível 2 nos dará 
+flexibilidade no futuro, para adicionarmos personalizações que todos os outros templates filhos herdarão.  
+
+Por exemplo, poderíamos querer mudar a cópia de rodapé de todas as páginas, este seria um ótimo lugar para fazer isso. 
+
+Gabarito de Página - Nível 3 
+............................ 
+
+Finalmente estamos prontos para o layout do controlador. Estes layouts vão ser comumente relacionados com uma ação do 
+controlador, isto é, a ação do blog de exibição terá um tempĺate ``show`` do blog. 
+
+Vamos começar criando o controlador para a página inicial e seu template. Como esta é a primeira página que estamos 
+criando, precisamos criar o controlador. 
+
+Crie o controlador em ``src/Blogger/BlogBundle/Controller/PageController.php`` e adicione o seguinte conteúdo: 
 
 .. code-block:: php
 
@@ -614,9 +601,11 @@ the following:
         }
     }
 
-Now create the template for this action. As you can see in the controller action
-we are going to render the Page index template. Create the template at
-``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig``
+Agora vamos criar o modelo para esta ação. 
+
+Como você pode ver na ação do controlador, nós estamos indo para renderizar o template de Page, o Index. 
+
+Crie o template em ``src/Blogger/BlogBundle/Recursos/views/Page/index.html.twig``
 
 .. code-block:: html
 
@@ -627,14 +616,17 @@ we are going to render the Page index template. Create the template at
         Blog homepage
     {% endblock %}
 
-This introduces the final template format we can specify. In this example
-the template ``BloggerBlogBundle::layout.html.twig`` is extended where
-the ``Controller`` part of the template name is ommitted. By excluding the
-``Controller`` part we are specifiying the use of the Bundle level template
-created at ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``.
+Este formato mostra o template final que podemos especificar. 
 
-Now lets add a route for our homepage. Update the Bundle routing config located
-at ``src/Blogger/BlogBundle/Resources/config/routing.yml``.
+Neste exemplo o template ``BloggerBlogBundle::layout.html.twig`` é estendido onde parte do nome do template é omitida 
+pelo Controlador. 
+
+Excluindo partes do Controlador, estamos especificando a utilização de nível de template do pacote (bundle) criado em 
+``src/Blogger/BlogBundle/Recursos/views/layout.html.twig``. 
+
+Agora vamos adicionar uma rota para a nossa homepage. 
+
+Atualize o arquivo de configuração de rotas localizado em ``src/Blogger/BlogBundle/Recursos/config/routing.yml``.
 
 .. code-block:: yaml
 
@@ -645,35 +637,31 @@ at ``src/Blogger/BlogBundle/Resources/config/routing.yml``.
         requirements:
             _method:  GET
 
-Lastly we need to remove the default route for the Symfony2 welcome screen.
-Remove the ``_welcome`` route at the top of the ``dev`` routing file located at
-``app/config/routing_dev.yml``.
+Por último precisamos remover a rota padrão para a tela de boas-vindas do Symfony 2. Retire a rota ``_welcome`` no topo 
+do arquivo de rota ``dev`` localizado em ``app/config/routing_dev.yml``. 
 
-We are now ready to view our blogger template. Point your browser to
-``http://symblog.dev/app_dev.php/``.
+Agora estamos prontos para ver o nosso template do blog. Acesse ``http://symblog.dev/app_dev.php/``. 
 
 .. image:: /_static/images/part_1/homepage.jpg
     :align: center
     :alt: symblog main template layout
 
-You should see the basic layout of the blog, with
-the main content and sidebar reflecting the blocks we have overridden in the relevant
-templates.
+Você deverá ver o layout básico do blog, com o conteúdo principal e lateral refletindo os blocos que substituímos nos 
+respectivos templates. 
 
-The About Page
---------------
+A página Sobre 
+-------------- 
 
-The final task in this part of the tutorial will be creating a static page for the
-about page. This will demonstrate how to link pages together, and further enforce the
-Three Level Inheritance approach we have adopted.
+A tarefa final nesta parte do tutorial será a criação de uma página estática de nome Sobre. Isso vai demonstrar como 
+vincular páginas em conjunto, e reforçam ainda mais a abordagem de herança de Três Níveis que adotamos. 
 
-The Route
-~~~~~~~~~
+A Rota 
+~~~~~~ 
 
-When creating a new page, one of the first tasks should be creating the route for it.
-Open up the ``BloggerBlogBundle`` routing file located at
-``src/Blogger/BlogBundle/Resources/config/routing.yml`` and append the following routing
-rule.
+Ao criar uma nova página, uma das primeiras tarefas que devemos fazer é criar a rota para ela. 
+
+Abra o arquivo de rotas de ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` e 
+acrescente a seguinte regra de rota. 
 
 .. code-block:: yaml
 
@@ -684,12 +672,11 @@ rule.
         requirements:
             _method:  GET
 
-The Controller
-~~~~~~~~~~~~~~
+O Controlador 
+~~~~~~~~~~~~~ 
 
-Next open the ``Page`` controller located at
-``src/Blogger/BlogBundle/Controller/PageController.php`` and add the action
-to handle the about page.
+Em seguida, abra o controlador de ``Page`` localizado em ``src/Blogger/BlogBundle/controller/PageController.php`` e 
+adicione a ação para lidar com a página Sobre. 
 
 .. code-block:: php
 
@@ -704,12 +691,11 @@ to handle the about page.
         }
     }
 
-The View
-~~~~~~~~
+A Visão 
+~~~~~~~ 
 
-For the view, create a new file located at
-``src/Blogger/BlogBundle/Resources/views/Page/about.html.twig`` and copy in the
-following content.
+Para a visão, crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Recursos/views/Page/about.html.twig`` e copie 
+o seguinte conteúdo. 
 
 .. code-block:: html
 
@@ -735,18 +721,21 @@ following content.
         </article>
     {% endblock %}
 
-The about page is nothing spectacular. Its only action is to render a template file
-with some dummy content. It does however bring us on to the next task.
+A página Sobre não é nada espetacular. Sua ação é apenas para processar um arquivo de template com algum conteúdo 
+fictício. Isto, contudo, leva-nos para a próxima tarefa. 
 
-Linking the pages
-~~~~~~~~~~~~~~~~~
+Ligando as páginas 
+~~~~~~~~~~~~~~~~~~ 
 
-We now have the about page ready to go. Have a look at ``http://symblog.dev/app_dev.php/about``
-to see this. As it stands there is no way for a user of your blog to view the about page,
-short of typing in the full URL just like we did. As you'd expect Symfony2 provides both
-sides to the routing equation. It can match routes as we have seen, and can also
-generate URLs from these routes. You should always use the routing functions provided
-by Symfony2. Never in your application should you be tempted to put the following.
+Agora temos  a página Sobre pronta para ser acessada. Dê uma olhada em ``http://symblog.dev/app_dev.php/about``. 
+
+Do jeito que está não há como um usuário do seu blog ir para a página sobre, somente se digitar a URL completa, tal como 
+fizemos. 
+
+Como seria de esperar, Symfony 2 fornece 2 lados da equação de roteamento. Pode corresponder a rotas, como vimos, e 
+também pode gerar URLs a partir destas rotas. 
+
+Você deve sempre usar as regras de roteamento do Symfony 2. Nunca em sua aplicação você deve usar o seguinte: 
 
 .. code-block:: html+php
 
@@ -754,24 +743,24 @@ by Symfony2. Never in your application should you be tempted to put the followin
 
     <?php $this->redirect("/contact"); ?>
 
-You may be wondering what's wrong with this approach, it may be the way you always
-link your pages together. However, there are a number of problems with this approach.
+Você pode estar se perguntando o que há de errado com esta abordagem, pode ser o jeito que você sempre vinculou suas 
+páginas em conjunto. No entanto, há um certo número de problemas com esta abordagem. 
 
-1. It uses a hard link and ignores the Symfony2 routing system entirely. If you wanted to change
-   the location of the contact page at any point you would have to find all references to the hard
-   link and change them.
-2. It will ignore your environment controllers. Environments is something we haven't really explained yet
-   but you have been using them. The ``app_dev.php`` front controller provides us access to our application
-   in the ``dev`` environment. If you were to replace the ``app_dev.php`` with ``app.php`` you will be
-   running the application in the ``prod`` environment. The significance of these environments will
-   be explained further in the tutorial but for now it's important to note that the hard link
-   defined above does not maintain the current environment we are in as the front controller is
-   not prepended to the URL.
+    1. Ele usa um link absoluto e ignora o sistema de roteamento Symfony 2 inteiramente. Se você quiser mudar a 
+       localização da página Sobre em qualquer ponto você teria que encontrar todas as referências para o link e 
+       alterá-las. 
+    2. Ele vai ignorar seus controladores de ambiente. Ambiente é algo que realmente não explicamos ainda mas você tem 
+       de usá-los. O controlador de frente ``app_dev.php`` nos dá acesso a nossa aplicação no ambiente ``dev``. Se você 
+       quisesse substituir o ``app_dev.php`` por ``app.php``, você vai estar executando a aplicação no ambiente ``prod``. 
+       A importância desses ambientes será explicada neste tutorial, mas por agora, é importante notar que o link 
+       absoluto definido acima não mantem o ambiente atual que estamos e que o controlador de frente não é prefixado na 
+       URL. 
 
-The correct way to link pages together is with the ``path`` and ``url`` methods provided by Twig. They are
-both very similar, except the ``url`` method will provide us with absolute URLs. Lets
-update the main application template located at ``app/Resources/views/base.html.twig`` to link
-to the about page and homepage together.
+A maneira correta de vincular páginas em conjunto é com os métodos fornecidos pelo Twig ``path`` e ``url``. Os 2 são 
+muito semelhante, exceto o método ``url`` que irá nos fornecer URLs absolutas. 
+
+Vamos atualizar o template principal de aplicações, localizado em ``app/resources/views/base.html.twig`` para linkar 
+para a página Sobre e página Inicial em conjunto. 
 
 .. code-block:: html
 
@@ -786,13 +775,12 @@ to the about page and homepage together.
         </nav>
     {% endblock %}
 
-Now refresh your browser to see the Home and About page links working as expected. If you view the source
-for the pages you will notice the link has been prefixed with ``/app_dev.php/``. This
-is the front controller I was explaining above, and as you can see the use of ``path`` has maintained
-it.
+Agora atualize seu navegador para ver os links das páginas Inicial e Sobre funcionando conforme o esperado. Se você ver 
+o código fonte das páginas, você vai perceber que o link foi prefixado com ``/app_dev.php/``. Este é o controlador de 
+frente que explicamos acima, e como você pode ver o uso do ``path`` está mantido. 
 
-Finally lets update the logo links to redirect you back to the homepage. Update the
-template located at ``app/Resources/views/base.html.twig``.
+Finalmente vamos atualizar os links do logotipo para redirecioná-lo de volta para a página inicial. Atualize o template 
+localizado em ``app/resources/views/base.html.twig``.
 
 .. code-block:: html
 
@@ -802,13 +790,14 @@ template located at ``app/Resources/views/base.html.twig``.
         <h3>{% block blog_tagline %}<a href="{{ path('BloggerBlogBundle_homepage') }}">creating a blog in Symfony2</a>{% endblock %}</h3>
     </hgroup>
     
-Conclusion
-----------
+Conclusão 
+--------- 
 
-We have covered the basic areas with regards to a Symfony2 application including getting
-the application configured and up and running. We have started to explore the fundamental concepts
-behind a Symfony2 application, including Routing and the Twig templating engine.
+Nós cobrimos as áreas básicas no que diz respeito a uma aplicação Symfony 2 inclusive recebendo a aplicação configurada 
+e funcional. Começamos a explorar os conceitos fundamentais atrás de uma aplicação Symfony 2, incluindo roteamento e da 
+maquina geradora de tamplete, Twig. 
 
-Next we will look at creating the Contact page. This page is slightly more involved than the About page
-as it allows users to interact with a web form to send us enquiries. The next chapter will introduce
-concpets including Validators and Forms.
+No próximo capítulo, vamos criar a página de Contato. Esta página é um pouco mais envolvente do que a página Sobre uma 
+vez que permite aos usuários interagir com um formulário web para enviar-nos dúvidas. 
+
+O próximo capítulo irá introduzir alguns conceitos como Validadores e Formulários.
