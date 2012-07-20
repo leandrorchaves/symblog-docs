@@ -55,7 +55,6 @@ instalado e funcionando em sua máquina. Se você utiliza outro servidor para ut
 `Nginx <http://nginx.net/>`_, por exemplo, você pode pular esta seção.
 
 .. note::
-    :title: Observação
 
      Estas etapas foram realizadas na distribuição Fedora Linux. Então, nomes de caminho, etc, podem ser diferentes 
     dependendo do seu sistema operacional. 
@@ -114,7 +113,6 @@ Se esta é primeira vez que você vê a página de boas-vindas do Symfony 2, gas
 demonstração. Cada página exibe trechos de código que demonstram como cada página funciona.
 
 .. note::
-    :title: Observação
 
     Você também vai perceber uma barra de ferramentas na parte inferior da tela de boas-vindas. Esta é a barra de 
     ferramentas do desenvolvedor e fornece a você informações muito importantes sobre o estado da aplicação como, por 
@@ -150,7 +148,6 @@ Symfony 2. Leia o `Symfony 2 autoloader <http://symfony.com/doc/current/cookbook
 detalhes sobre como Symfony 2 trabalha com autoloading.
 
 .. tip::
-    :title: Dica!
 
     Um bom entendimento de namespaces pode ajudar a eliminar problemas comuns que você pode enfrentar ao ter de mapear 
     corretamente as estruturas de pastas sem namespace. 
@@ -175,7 +172,6 @@ Após a execução do código acima, o gerador do Symfony 2 terá construído o 
 observadas aqui.
 
 .. tip::
-    :title: Dica!
 
     Você não precisa usar as opções do gerador de pacote do Symfony 2, elas são simplesmente para ajudá-lo. 
 
@@ -431,7 +427,6 @@ Como Symfony 2 suporta `HTML5 <http://diveintohtml5.org/>`_, também vamos usá-
     </html>
 
 .. note::
-    :title: Observações
 
     Existem 3 arquivos externos referenciados para o modelo, 1 arquivo JavaScript  e 2 arquivos CSS. O arquivo 
     JavaScript corrige a falta de suporte ao HTML5 das versões do IE anteriores ao IE9. Os 2 arquivos CSS importam 
