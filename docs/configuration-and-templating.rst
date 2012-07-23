@@ -191,7 +191,7 @@ O nosso novo pacote ``BloggerBlogBundle`` foi registrado no Kernel da aplicaçã
 
 Você também vai notar que alguns pacotes só são registrados quando estão em ambientes ``dev`` ou ``test``. 
 
-Carregando estes pacotes no ambiente``prod``(Produção) iria provocar sobrecarga adicional para a funcionalidade que não 
+Carregando estes pacotes no ambiente ``prod`` (Produção) iria provocar sobrecarga adicional para a funcionalidade que não 
 seriam utilizados. O trecho abaixo mostra como o ``BloggerBlogBundle`` foi registrado.
 
 .. code-block:: php
@@ -266,7 +266,7 @@ O roteamento é composto de um padrão e outras opções padrão.
 
 O padrão é verificado em relação a URL, e as opções padrão dizem para o controlador executar se as rotas coincidirem. 
 
-No padrão ``/Olá/{nome}``, o ``{nome}`` é um local específico que irá corresponder a qualquer valor uma vez que os 
+No padrão ``/Hello/{nome}``, o ``{nome}`` é um local específico que irá corresponder a qualquer valor uma vez que os 
 requisitos específicos não foram definidos. 
 
 A rota também não especifica os métodos de língua ou HTTP. Como não temos métodos HTTP definidos, as solicitações de GET, 
@@ -276,12 +276,12 @@ Se a rota satisfaz todos os critérios especificados, as opções padrão do _co
 _controller especificam o Nome lógico do controlador que permite o Symfony 2 mapear para um arquivo específico. 
 
 O exemplo acima fará com que a ação ``index`` do controlador padrão localizado em 
-``src/Blogger/BlogBundle/Controller/DefaultController.php`` seja executada. 
+ ``src/Blogger/BlogBundle/Controller/DefaultController.php`` seja executada. 
 
 O Controlador 
 ............. 
 
-O controlador neste exemplo é muito simples.  A classe ``DefaultController``estende a classe ``Controller`` que fornece 
+O controlador neste exemplo é muito simples.  A classe ``DefaultController`` estende a classe ``Controller`` que fornece 
 alguns métodos úteis, como a renderização, método utilizado a seguir. 
 
 Como a nossa rota define um local específico que é passado para a ação com o argumento ``$nome``, a ação faz nada mais 
@@ -331,7 +331,7 @@ Limpando
 Como alguns arquivos padrão, criados pelo gerador, não são necessários podemos excluí-los. 
 
 O arquivo ``src/Blogger/BlogBundle/Controller/DefaultController.php`` pode ser excluído, juntamente com a pasta View e o 
-seu conteúdo localizdo em `` Src/Blogger/BlogBundle/resources/views/Default/``. Finalmente, remova a rota definida em 
+seu conteúdo localizdo em ``Src/Blogger/BlogBundle/resources/views/Default/``. Finalmente, remova a rota definida em 
 ``src/Blogger/BlogBundle/Resources/config/routing.yml``. 
 
 Gerando os layouts 
