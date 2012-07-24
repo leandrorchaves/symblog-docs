@@ -472,7 +472,7 @@ substitua seu conteúdo com o seguinte código:
 
 Você pôde ver que temos definido um bloco de folhas de estilo para substituir o bloco de folhas de estilo definido no 
 modelo pai. No entanto, é importante notar a chamada para o método ``Pai``. Isto irá importar o conteúdo do bloco de 
-folhas de estilo do template ``Pai`` localizado em ``app/Resources/base.html.twig, permitindo-nos anexar o nosso estilo 
+folhas de estilo do template ``Pai`` localizado em ``app/Resources/base.html.twig``, permitindo-nos anexar o nosso estilo 
 novo. Afinal, não queremos substituir as folhas de estilo existentes.
 
 Para que a função ``asset`` possa linkar corretamente o recurso, precisamos copiar ou vincular os recursos do pacote das 
