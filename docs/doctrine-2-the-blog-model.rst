@@ -36,7 +36,7 @@ o MySQL como nossa ferramenta de armazenamento, mas qualquer outra poderia ser f
     A `Wikipedia <http://en.wikipedia.org/wiki/Object-relational_mapping>`_ define o seguinte:
     "Mapeamento objeto-relacional (ORM, O/RM, e mapeamento O/R) em software de computador é uma técnica de programação 
     para conversão de dados entre o tipo incompatível de sistemas em linguagens orientadas a objetos de programação. 
-    Isto cria, uma 'Base de dados de objeto virtual' que pode ser usado a partir da linguagem de programação."
+    Isto cria, uma ``Base de dados de objeto virtual`` que pode ser usado a partir da linguagem de programação."
     
     O que as funcionalidades do ORM nos diz é que os dados de um banco de dados relacional, como o MySQL, podem ser 
     manipulados como objetos do PHP. Isso nos permite encapsular a funcionalidade necessária em uma tabela dentro de uma 
@@ -282,9 +282,9 @@ Isto é importante porque você pode personalizar mais tarde alguns assessores p
 
         $ php app/console doctrine:mapping:convert --namespace="Blogger\BlogBundle\Entity\Blog" yaml src/Blogger/BlogBundle/Resources/config/doctrine
 
-     O resultado é um arquivo criado em
-    ``src/Blogger/BlogBundle/Resources/config/doctrine/Blogger.BlogBundle.Entity.Blog.orm.yml ``
-     que conterá os mapeamentos da entidade do ``blog` no formato ``yaml``.
+    O resultado é um arquivo criado em
+    ``src/Blogger/BlogBundle/Resources/config/doctrine/Blogger.BlogBundle.Entity.Blog.orm.yml``
+    que conterá os mapeamentos da entidade do ``blog`` no formato ``yaml``.
 
 O banco de dados
 ~~~~~~~~~~~~~~~~
@@ -331,7 +331,7 @@ do mapeamento.
 .. tip::
 
     Nós usamos vários comandos do Symfony 2 agora, e, na verdade, cada comando tem uma ajuda associada, basta digitar a 
-    opção``--help``. Para ver os detalhes da ajuda para ``doctrine:schema:create``, execute o seguinte comando:
+    opção ``--help``. Para ver os detalhes da ajuda para ``doctrine:schema:create``, execute o seguinte comando:
 
     .. code-block:: bash
 
@@ -429,7 +429,7 @@ Se tivéssemos especificado mais parâmetros na regra de roteamento, eles també
 
 .. tip::
 
-    As ações do controlador também vão passar por um objeto ``Symfony\Component\HttpFoundation\Request se você 
+    As ações do controlador também vão passar por um objeto ``Symfony\Component\HttpFoundation\Request`` se você 
     especificar isso como um parâmetro. Isto pode ser útil quando se lida com formulários. 
 
     Formulários foram vistos no capítulo 2, mas nós não iremos usar esse método como foi utilizado em 
@@ -496,7 +496,7 @@ A View
 
 Agora que temos a ação ``show`` para o controlador ``Blog``, podemos focar em apresentar a entidade do ``Blog``. 
 
-Conforme especificado na ação ``show`, o template ``BloggerBlogBundle:Blog:show.html.twig`` será renderizado. Vamos 
+Conforme especificado na ação ``show``, o template ``BloggerBlogBundle:Blog:show.html.twig`` será renderizado. Vamos 
 criar este template em ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig`` e cole no seguinte código:
 
 .. code-block:: html
@@ -523,7 +523,7 @@ Como seria de esperar, começamos estendendo o layout principal de ``BloggerBlog
 título da página com o título do blog. Esta é útil para atividades de SEO pois o título da página do blog é mais 
 descritiva do que o título padrão que está definido. 
 
-Por último, substituimos o body block pelo conteúdo da entidade do ``Blog``. Nós usamos a função ``assets``novamente 
+Por último, substituimos o body block pelo conteúdo da entidade do ``Blog``. Nós usamos a função ``assets`` novamente 
 aqui para renderizar a imagem do blog. As imagens blog devem ser colocadas na pasta ``web/images``.
 
 CSS
@@ -791,7 +791,7 @@ coincidir qualquer rota na aplicação por causa da especificação ``\d+`` que 
 Timestamps
 ----------
 
-Finalmente, vamos analisar os 2 membros timestamp na entidade ``Blog``; ``created `` e ``updated``. 
+Finalmente, vamos analisar os 2 membros timestamp na entidade ``Blog``; ``created`` e ``updated``. 
 
 A funcionalidade destes 2 membros é referida como um comportamento ``Timestampable``. Estes membros guardam o horário em 
 que o blog foi criado e atualizado, respectivamente. 
