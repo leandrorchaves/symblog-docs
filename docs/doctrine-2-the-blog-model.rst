@@ -491,8 +491,8 @@ encontrada um ``createNotFoundException`` é exibido, ou seja, um ``404 Not Foun
     Nós vamos criar nossos próprios Repositório personalizados no próximo capítulo, quando precisarmos de pesquisas mais 
     complexas.
 
-A View
-~~~~~~
+A View Show
+~~~~~~~~~~~
 
 Agora que temos a ação ``show`` para o controlador ``Blog``, podemos focar em apresentar a entidade do ``Blog``. 
 
