@@ -1,87 +1,85 @@
-[Part 3] - The Blog Model: Using Doctrine 2 and Data Fixtures
-=============================================================
+[Parte 3] - O Model do Blog: Usando Doctrine 2 e Data Fixtures
+==============================================================
 
-Overview
---------
+Visão geral
+-----------
 
-This chapter will begin to explore the blog model. The model will be implemented
-using the `Doctrine 2 <http://www.doctrine-project.org/projects/orm>`_ Object
-Relation Mapper (ORM). Doctrine 2 provides us with persistence for our PHP
-objects. It also provides a proprietary SQL dialect
-called the Doctrine Query Language (DQL). In addition to Doctrine 2, we will also be
-introduced to the concept of Data Fixtures. Data fixtures are a
-mechanism to populate our development and testing databases with suitable test
-data. At the end of this chapter you will have defined the blog model, updated
-the database to reflect the new model, and created some data fixtures. You will
-also have built the basics of the show blog page.
+Este capítulo vai começar a explorar o Model do blog. O Model será implementado usando Mapa de Objeto Relacional (ORM) 
+`Doctrine 2 <http://www.doctrine-project.org/projects/orm>`_. 
 
-Doctrine 2: The Model
----------------------
+Doctrine 2 oferece persistência para os objetos PHP. Ele também fornece um dialeto SQL próprio chamado de Doctrine Query 
+Language (DQL). 
 
-For our blog to function we need a way to persist data. Doctrine 2 provides
-an ORM library designed exactly for this purpose. The Doctrine 2 ORM sits on top of a
-powerful
-`Database Abstraction Layer <http://www.doctrine-project.org/projects/dbal>`_
-that gives us storage abstraction via the PHP PDO. This allows us to use a number
-of different storage engines including MySQL, PostgreSQL and SQLite. We will
-use MySQL for our storage engine, but any other engine could easily be
-substituted. 
+Além disso, vamos apresentar alguns conceitos de Data Fixtures. Data Fixtures é um mecanismo para preencher o nosso 
+banco de dados em ambientes de desenvolvimento e de teste. 
+
+No final deste capítulo você terá definido o modelo do blog, terá o banco de dados atualizado para refletir o novo 
+modelo, e terá criado alguns data fixtures. Você irá também construir alguns métodos básicos da página ``show`` do blog.
+
+Doctrine 2: O Modelo (Model)
+----------------------------
+
+Para o nosso blog funcionar, precisamos de algo para trabalhar com os dados. Doctrine 2 fornece uma biblioteca ORM 
+exatamente para esta finalidade. 
+
+O Doctrine 2 ORM se baseia em uma 
+`Camada de abstração de banco de dados <http://www.doctrine-project.org/projects/dbal>`_ que nos dá uma abstração de 
+armazenamento graças ao PHP PDO. 
+
+Assim, podemos usar um número variado de ferramentas de armazenamento, incluindo MySQL, PostgreSQL e SQLite. Iremos usar 
+o MySQL como nossa ferramenta de armazenamento, mas qualquer outra poderia ser facilmente utilizada. 
 
 .. tip::
 
-    If you are not familiar with ORMs, we will explain the basic principle of them.
-    The definition from
-    `Wikipedia <http://en.wikipedia.org/wiki/Object-relational_mapping>`_ reads:
-
-    "Object-relational mapping (ORM, O/RM, and O/R mapping) in computer software
-    is a programming technique for converting data between incompatible type
-    systems in object-oriented programming languages. This creates, in effect, a
-    "virtual object database" that can be used from within the programming
-    language."
+    Se você não estiver familiarizado com ORMs, vamos explicar o princípio básico deles.
     
-    What the ORM facilitates is translating the data from a relational database
-    such as MySQL into PHP objects that we can manipulate. This allows us to
-    encapsuate the functionality we require on a table within a class. Think of a
-    user table, it probably has fields like username, password, first_name,
-    last_name, email and dob. With an ORM this becomes a class with members username,
-    password, first_name, etc which allows us to call methods such as ``getUsername()`` and
-    ``setPassword()``. ORMs go much further than this though, they are also able to
-    retrieve related tables for us, either at the same time as we retrieve the user object, or
-    lazily later on. Now consider our user has some friends related to it. This would
-    be a friends table, storing the primary key of the user table within it. Using
-    the ORM we could now make a call such as ``$user->getFriends()`` to retrieve objects
-    of the friends table. If that's not enough, the ORM also deals with persitence
-    so we can create objects in PHP, call a method such as ``save()`` and let the ORM
-    deal with the details of actually persisting the data to the database. As we are
-    using the Doctrine 2 ORM library, you will become much more familiar with
-    what an ORM is as we progress through this tutorial.
+    A `Wikipedia <http://en.wikipedia.org/wiki/Object-relational_mapping>`_ define o seguinte:
+    "Mapeamento objeto-relacional (ORM, O/RM, e mapeamento O/R) em software de computador é uma técnica de programação 
+    para conversão de dados entre o tipo incompatível de sistemas em linguagens orientadas a objetos de programação. 
+    Isto cria, uma 'Base de dados de objeto virtual' que pode ser usado a partir da linguagem de programação."
+    
+    O que as funcionalidades do ORM nos diz é que os dados de um banco de dados relacional, como o MySQL, podem ser 
+    manipulados como objetos do PHP. Isso nos permite encapsular a funcionalidade necessária em uma tabela dentro de uma 
+    classe. 
+
+    Pense em um tabela de usuário, que provavelmente tem campos como nome de usuario, senha, primeiro_nome, ultimo_nome 
+    e email. Com um ORM, isso se torna uma classe com membros usuario, senha, primeiro_nome, etc, o que nos permite 
+    chamar métodos como ``getUsername()`` e ``setSenha()``. 
+
+    Os ORMs podem ir muito mais além do que isso, eles também são capazes de recuperar tabelas relacionadas, seja ao 
+    mesmo tempo como nós recuperamos o objeto de usuário, ou mais de forma mais lenta. 
+
+    Agora, considere que nosso usuário tem alguns amigos relacionados a ele. Teríamos uma tabela de amigos, armazenando 
+    a chave primária da tabela do usuário. Utilizando ORM, podemos agora fazer uma chamada do tipo 
+    ``$user->getFriends()`` para recuperar objetos da tabela de amigos. 
+
+    E também, o ORM lida com persistência, assim, podemos criar objetos em PHP, chamar um método como ``save()`` e 
+    deixar o ORM lidar com os detalhes da persistência atual dos dados para o banco de dados. 
+
+    Como estamos usando a biblioteca Doctrine 2 ORM, você ficará muito mais familiarizado com o que é um ORM à medida 
+    que progredimos com o tutorial.
 
 .. note::
 
-    While this tutorial will use the Doctrine 2 ORM library, you could opt to use
-    the Doctrine 2 Object Document Mapper (ODM) library. There are a number of
-    variations of this library including implementations for
-    `MongoDB <http://www.mongodb.org/>`_ and
-    `CouchDB <http://couchdb.apache.org/>`_.
-    See the `Doctrine Projects <http://www.doctrine-project.org/projects>`_
-    page for more information.
+    Apesar deste tutorial usar a biblioteca Doctrine 2 ORM, você pode optar por usar a biblioteca Doctrine 2 Document 
+    Object Mapper (ODM). Há um número de variações desta biblioteca, incluindo implementações para 
+    `MongoDB <http://www.mongodb.org/>`_ e `CouchDB <http://couchdb.apache.org/>`_. Conheça os projetos do 
+    `Doctrine <http://www.doctrine-project.org/projects>`_ para maiores informações.
 
-    There is also a
-    `cookbook <http://symfony.com/doc/current/cookbook/doctrine/mongodb.html>`_
-    article that explains how to setup ODM with Symfony2.
+    Existe também um artigo
+    `CookBook <http://symfony.com/doc/current/cookbook/doctrine/mongodb.html>`_ que explica como configurar ODM com 
+    Symfony 2.
 
-The Blog Entity
+A Entidade Blog
 ~~~~~~~~~~~~~~~
 
-We will begin by creating the ``Blog`` entity class. We have already been introduced to
-entities in the previous chapter when we created the ``Enquiry`` entity.
-As the purpose of an entity is to hold data, it makes perfect sense to use
-one to represent a blog entry. By defining an entity we are not automatically
-saying the data will be mapped to the database. We saw this with our ``Enquiry``
-entity where the data held in the entity was just emailed to the webmaster.
+Vamos começar a criar a classe de entidade ``Blog``. Nós já sabemos sobre entidades mostrado no capítulo anterior, 
+quando criamos a entidade ``Enquiry``. Como o objetivo da entidade é armazenar dados, faz todo o sentido usar uma para 
+representar uma entrada do blog. Ao definir uma entidade, não estamos automaticamente dizendo que os dados serão 
+mapeados para o banco de dados. Vimos isso com a nossa entidade de ``Enquiry``, onde os dados contidos na entidade foram 
+apenas enviados para o E-mail de contato.
 
-Create a new file located at ``src/Blogger/BlogBundle/Entity/Blog.php`` and
-paste in the following.
+Crie um novo arquivo em ``src/Blogger/BlogBundle/Entidade/blog.php`` e cole o seguinte código:
 
 .. code-block:: php
 
@@ -110,22 +108,25 @@ paste in the following.
     }
 
 
-As you can see this is simple PHP class. It extends no parent and has no
-accessors. Each of the members is declared as protected so we are unable to
-access them when operating on an object of this class. We could declare the
-getters and setters for these attributes ourself, but Doctrine 2 provides a
-task to do this. After all, writing accessors is not the most exhilarating of
-coding tasks.
+Como você pôde perceber, esta é uma classe PHP simples. Ela não extende de ninguém e não tem nenhum assessor. Cada um 
+dos membros é declarado como protegido, assim, se tornam inacessíveis quando estivermos trabalhando com um objeto desta 
+classe. 
 
-Before we can run this task, we need to inform Doctrine 2 how the ``Blog``
-entity should be mapped to the database. The information is specified as metadata
-using Doctrine 2 mappings. The metadata can be specified in and number of formats
-including ``YAML``, ``PHP``, ``XML`` and ``Annotations``. We will use
-``Annotations`` in this tutorial. It is important to note that not all members
-in the entity need to be persisted, so we won't provide metadata for these.
-This gives us the flexibility to choose only the members we require Doctrine 2 to
-map to the database. Replace the content of the ``Blog`` entity class located at
-``src/Blogger/BlogBundle/Entity/Blog.php`` with the following.
+Poderíamos declarar os ``getters`` e ``setters`` manualmente, mas o Doctrine 2 tem uma funcionalidade que faz isso. 
+Afinal, escrever assessores não é uma tarefa de codificação empolgante.
+
+Antes de executar esta tarefa, precisamos informar ao Doctrine 2 como a entidade ``Blog`` deve ser mapeada para o banco 
+de dados. A informação é especificada como metadados usando mapeamentos do Doctrine 2. 
+
+Os metadados podem ser especificados em vários formatos incluindo ``YAML``, ``PHP``, ``XML`` e ``Anotations``. Usaremos 
+``Anotations`` neste tutorial. 
+
+É importante notar que nem todos os membros na entidade precisam ser persistentes, por isso não vamos fornecer metadados 
+para eles. Assim, conseguimos flexibilidade de escolher somente os membros que exigem mapeamento do Doctrine 2 para o 
+banco de dados. 
+
+Substitua o conteúdo da classe da entidade ``Blog`` localizada em ``src/Blogger/BlogBundle/Entidade/blog.php`` com o 
+seguinte código:
 
 .. code-block:: php
 
@@ -188,23 +189,22 @@ map to the database. Replace the content of the ``Blog`` entity class located at
     }
 
 
-First we import and alias the Doctrine 2 ORM Mappings namespace. This allows
-us to use ``annotations`` to describe the metadata for the entity. The
-metadata provides information on how the members should be mapped to the
-database.
+Primeiro importamos e linkamos o namespace do mapeamento ORM do Doctrine 2. Isto permite usar ``anotations`` para 
+descrever os metadados para a entidade. 
+
+Os metadados fornecem informações sobre como os membros devem ser mapeados para o banco de dados.
 
 .. tip::
 
-    We have only used a small subset of the provided Doctrine 2 mapping types.
-    A full list of
-    `mapping types <http://www.doctrine-project.org/docs/orm/2.0/en/reference/basic-mapping.html#doctrine-mapping-types>`_
-    can be found on the Doctrine 2 website. Other mapping types will
-    be introduced later in the tutorial.
+    Usamos somente um pequeno subconjunto dos tipos de mapeamento existentes para Doctrine 2. A lista completa de 
+    `Tpos de mapeamento <http://www.doctrine-project.org/docs/orm/2.0/en/reference/basic-mapping.html#doctrine-mapping-types>`_ 
+    pode ser encontrada no site do Doctrine 2. 
 
-The keen eyed among you may have noticed that the ``$comments`` member has no
-metadata attached. This is because we don't need this persisted, it will just
-provide a collection of comments related to a blog post. If you think of this without
-the database in mind it makes sense. The following code snippets will demonstrate this.
+    Outros tipos de mapeamento serão introduzidos mais tarde no tutorial.
+
+Se você prestou bem a atenção, os ``$comments`` não tem metadados anexados. Isto ocorre porque nós não precisamos de 
+persistir seus dados, ela só vai trazer uma coleção de comentários relacionados a um ``post`` do blog. Se você percebeu, 
+estamos sem banco de dados. Veja alguns exemplos:
 
 .. code-block:: php
 
@@ -219,9 +219,8 @@ the database in mind it makes sense. The following code snippets will demonstrat
     $comment->setComment("Symfony2 rocks!");
     $blog->addComment($comment);
 
-The above snippet demonstrates the normal behavior you'd want from a blog
-and comment class. Internally the ``$blog->addComment()`` method could be implemented
-as follows.
+O trecho acima demonstra o comportamento normal que você gostaria que uma classe ``blog`` e ``comment`` tivesse. 
+Internamente, o método ``$blog->addComment()`` poderia ser implementada como se segue:
 
 .. code-block:: php
 
@@ -235,8 +234,8 @@ as follows.
         }
     }
 
-The ``addComment`` method just adds a new comment object to the blog's ``$comments``
-member. Retrieving the comments would also be simple.
+O método ``addComment`` apenas adiciona um novo objeto comentário para a variável ``$comment`` do blog. Recuperar os 
+comentários também se torna bem simples.
 
 .. code-block:: php
 
@@ -250,110 +249,79 @@ member. Retrieving the comments would also be simple.
         }
     }
 
-As you can see the ``$comments`` member is just a list of ``Comment`` objects.
-Doctrine 2 doesn't change how this works. Doctrine 2 will be able to automatically
-populate this ``$comments`` member with objects related to the ``blog`` object.
+Como você pôde ver, a variável ``$comment`` é apenas uma lista de objetos ``Comment``.
+Doctrine 2 não escolhe como isso funciona. Doctrine 2 vai automaticamente preencher essa variável ``$comments`` com objetos relacionados com o objeto ``Blog``.
 
-Now that we have told Doctrine 2 how to map the entity members, we can generate
-the accessor methods using the following.
+Agora que dissemos como o Doctrine 2 deve mapear os membros da entidade, podemos gerar os métodos de acesso usando o seguinte código:
 
 .. code-block:: bash
 
     $ php app/console doctrine:generate:entities Blogger
 
 
-You will notice the ``Blog`` Entity has been updated with accessor methods. Each time
-we make a change to the ORM metadata for our entity classes we can run this to generate
-any additional acccessors. This command will not make amendments to accessors that
-already existing in the entity, so your existing accessor methods will never be overridden
-by this command. This is important as you may later customise some of the default
-accessors.
+Você vai perceber que a entidade ``Blog`` foi atualizada com os métodos de acesso. Cada vez que
+fizermos uma alteração nos metadados do ORM para nossa classe de entidade, temos que executar este código para gerar quaisquer métodos de acesso adicionais. Este comando não vai fazer alterações os assessores já existentes na entidade, então, seus métodos de acesso já existentes nunca serão substituídos por este comando. Isto é importante porque você pode personalizar mais tarde alguns assessores padrão.
 
 .. tip::
 
-    While we have used ``annotations`` in our entity, it is possible to convert
-    the mapping information into the other supported mapping formats using the
-    ``doctrine:mapping:convert`` task. For example, the following command will
-    convert the mappings in the above entity into the ``yaml`` format.
+    Embora tenhamos utilizado ``anotations`` no nosso entidade, é possível converter a informação de mapeamento para os outros formatos de mapeamento suportados usando o comando ``doctrine:mapping:converter``. Por exemplo, o seguinte comando converte os mapeamentos na entidade acima no formato ``yaml``.
 
     .. code-block:: bash
 
         $ php app/console doctrine:mapping:convert --namespace="Blogger\BlogBundle\Entity\Blog" yaml src/Blogger/BlogBundle/Resources/config/doctrine
 
-    This will create a file located at
-    ``src/Blogger/BlogBundle/Resources/config/doctrine/Blogger.BlogBundle.Entity.Blog.orm.yml``
-    that will contain the ``blog`` entity mappings in ``yaml`` format.
+     Isto irá criar um arquivo localizado em
+    ``src/Blogger/BlogBundle/Resources/config/doctrine/Blogger.BlogBundle.Entity.Blog.orm.yml ``
+    que conterá os mapeamentos da entidade do ``blog` no formato ``yaml``.
 
-The database
-~~~~~~~~~~~~
+O banco de dados
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Creating the database
+Criando o banco de dados
 .....................
 
-If you followed along in chapter 1 of the tutorial, you should have
-used the web configurator to set the database settings. If you didn't, update the
-``database_*`` options in the parameters file located at ``app/config/parameters.ini``.
+Assim como no capítulo 1, você deve ter usado o configurador web para definir as configurações de banco de dados. Se você não tiver feito isso, atualize as opções ``database_*`` no arquivo de parâmetros localizado em ``app/config/parameters.ini``.
 
-It's now time to create the database using another Doctrine 2 task. This task only
-creates the database, it does not create any tables inside the database.
-If a database with the same name already exists the task will throw an error and
-the existing database will be left intact.
+Agora é hora de criar o banco de dados usando outra funcionalidade do Doctrine 2. Esta, só
+cria o banco de dados, não cria as tabelas dentro dele. Se um banco de dados com o mesmo nome já existir, um erro será exibido e o banco de dados existente não será alterado.
 
 .. code-block:: bash
 
     $ php app/console doctrine:database:create
 
-We are now ready to create the ``Blog`` entity representation in the database.
-There are 2 ways we can achieve this. We can use the Doctrine 2 schema
-tasks to update the database or we can use the more powerful Doctrine 2
-migrations. For now we will use the schema task. Doctrine Migrations will
-be introduced in the following chapter.
+Agora estamos prontos para criar a representação da entidade do banco de dados do ``Blog``.
+Existem 2 maneiras para se fazer isso. Podemos usar os esquemas do Doctrine 2 para atualizar o banco de dados ou podemos usar as mais poderosas migrações do Doctrine 2. Por agora, vamos usar a funcionalidade de esquema. As Migrações do Doctrine, serão apresentadas no capítulo seguinte.
 
-Creating the blog table
+Criando a tabela blog
 .......................
 
-To create the blog table in our database we can run the following
-doctrine task.
+Para criar a tabela blog em nosso banco de dados podemos executar o seguinte comando Doctrine.
 
 .. code-block:: bash
 
     $ php app/console doctrine:schema:create
 
-This will execute the SQL needed to generate the database schema for the ``blog``
-entity. You can also pass in the ``--dump-sql`` option for the task to dump
-out the SQL instead of executing it against the database. If you view your
-database you will see the blog table has been created, with the fields we
-setup mapping information for.
+Esse comando executará o SQL necessário para gerar o esquema de banco de dados para a entidade do ``blog``. Você também pode passar a opção ``--dump sql`` para a tarefa de salvar o SQL em vez de executá-lo na base de dados. Se você ver o seu banco de dados, você verá que a tabela blog foi criada, com os campos que configuramos com informações do mapeamento.
 
 .. tip::
 
-    We have used a number of the Symfony2 command line task now, and in true
-    command line task format they all provide help by specifying the ``--help``
-    option. To see the help details for the ``doctrine:schema:create`` task,
-    run the following
+    Nós usamos vários comandos do Symfony 2agora, e, na verdade, cada comando tem uma ajuda associado, basta digitar a opção``--help``. Para ver os detalhes da ajuda para ``doctrine:schema:create``, execute o seguinte comando:
 
     .. code-block:: bash
 
         $ php app/console doctrine:schema:create --help
 
-    The help information will be output showing the usage, and available
-    options. Most tasks come with a number of options that can be set to
-    customise the running of the task.
+    As informações de ajuda serão exibidas mostrando o uso, e várias outras opções disponíveis. A maioria das funcionalidades vêm com uma série de opções que podem ser definidas para personalizar sua execução
 
-Integrating the Model with the View. Showing a blog entry
----------------------------------------------------------
+Integrando o Model com a Visão. Mostrando uma entrada de blog
+-------------------------------------------------- -------
 
-Now we have the ``Blog`` entity created, and the database updated to reflect this,
-we can start integrating the model into the view. We will start by building the
-show page of our blog.
+Agora temos a entidade ``Blog`` criada e o banco de dados atualizado. Podemos começar a integrar o Model com a View. Nós vamos começar construindo a página ``show`` do nosso blog.
 
-The Show Blog Route
-~~~~~~~~~~~~~~~~~~~
+A Rota da página show do Blog
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We begin by creating a route for the blog ``show`` action. A blog will be identified
-by its unique ID, so this ID will need to be present in the URL. Update the
-``BloggerBlogBundle`` routing located at ``src/Blogger/BlogBundle/Resources/config/routing.yml``
-with the following
+Começaremos criando a rota para a action ``show``. Um blog será identificados pelo seu ID único, de modo que este ID deverá estar presente na URL. Atualize o arquivo de rotas de ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` com o seguinte código:
 
 .. code-block:: yaml
 
@@ -365,26 +333,17 @@ with the following
             _method:  GET
             id: \d+
 
-As the blog ID must be present in the URL, we have specified an ``id`` placeholder.
-This means URLs like ``http://symblog.co.uk/1`` and ``http://symblog.co.uk/my-blog``
-will match this route. However, we know the blog ID must be a integer (it's defined this
-way in the entity mappings) so we can add a constraint that specifies this route
-only matches when the ``id`` parameter contains an integer. This is achieved with the
-``id: \d+`` route requirement. Now only the first URL example of the previous would match,
-``http://symblog.co.uk/my-blog`` would no longer match this route. You can also
-see a matching route will execute the ``show`` action of the ``BloggerBlogBundle``
-``Blog`` controller. This controller is yet to be created.
+Como o ID do blog deve estar presente na URL, especificamos um espaço reservado para o ``id``.
+Isto quer dizer que URLs como `` http://symblog.co.uk/1 `` e ``http://symblog.co.uk/my-blog`` irão
+corresponder a esta rota. No entanto, sabemos que o id do blog deve ser um inteiro (é definido desta forma nos mapeamentos de entidade), então devemos adicionar uma restrição para especificar que esta rota só pode coincidir apenas quando o parâmetro ``id`` contém um número inteiro. Isto é feito com a rota desejada ``id: \d+``. Agora, como exemplo, a URL anterior ``http://symblog.co.uk/my-blog`` deixaria de funcionar para esta rota. Você também pode ver que uma rota correspondente irá executar a ação ``show`` do controlador do ``Blog`` em ``BloggerBlogBundle``. Este controlador ainda está para ser criado.
 
-The Show Controller Action
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+A Ação Show do Controller
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-The glue between the Model and the View is the controller, so this is where we
-will begin creating the show page. We could add the ``show`` action to our existing
-``Page`` controller but as this page is concerned with showing ``blog`` entities
-it would be better suited in its own ``Blog`` controller.
+O responsável por ligar o modelo e a visão é o controlador, deste modo, aqui é o lugar onde nós
+começaremos a criar a página show. Poderíamos acrescentar a ação ``show`` em nosso controlador ``Page`` já existente, mas como esta página serve para mostrar as entidades do ``blog``, seria mais adequado criar a ação ``show`` no controlador ``Blog``.
 
-Create a new file located at ``src/Blogger/BlogBundle/Controller/BlogController.php``
-and paste in the following.
+Crie um novo arquivo em ``src/Blogger/BlogBundle/Controller/BlogController.php`` e cole o seguinte código:
 
 .. code-block:: php
 
@@ -419,18 +378,11 @@ and paste in the following.
         }
     }
 
-We have created a new Controller for the ``Blog`` entity and defined the ``show`` action.
-As we specified a ``id`` parameter in the ``BloggerBlogBundle_blog_show`` routing
-rule, it will be passed in as an argument to the ``showAction`` method. If we had specified
-more parameters in the routing rule, they would also be passed in as separate arguments.
+Nós criamos um novo controlador para a entidade ``Blog`` e definimos a ação ``show``. Como especificamos um parâmetro ``id`` na regra de rota ``BloggerBlogBundle_blog_show`` do arquivo de rotas, ele será passado como um argumento para o método ``showAction``. Se tivéssemos especificado mais parâmetros na regra de roteamento, eles também seriam passados ​​como argumentos separados.
 
 .. tip::
 
-    The controller actions will also pass over an object of
-    ``Symfony\Component\HttpFoundation\Request`` if you specify this as a parameter.
-    This can be useful when dealing with forms. We have already used a form
-    in chapter 2, but we did not use this method as we used one of the
-    ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` helper methods as follows.
+    As ações do controlador também vão passar por um objeto ``Symfony\Component\HttpFoundation\Request se você especificar isso como um parâmetro. Isto pode ser útil quando se lida com formulários. Formulários foram vistos no capítulo 2, mas nós não iremos usar esse método como foi utilizado em ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` utilizando métodos auxiliares como mostrado abaixo:
 
     .. code-block:: php
 
@@ -441,7 +393,7 @@ more parameters in the routing rule, they would also be passed in as separate ar
             $request = $this->getRequest();
         }
 
-    We could have instead written this as follows.
+    Poderíamos ter usado este:
 
     .. code-block:: php
 
@@ -454,30 +406,18 @@ more parameters in the routing rule, they would also be passed in as separate ar
             // ..
         }
     
-    Both methods achieve the same task. If your controller did not extend the
-    ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` helper class
-    you would not be able to use the first method.
+    Ambos fazem a mesma coisa. Se o controlador não estender a classe auxiliar 
+    ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` você não poderia utilizar o primeiro método.
 
-Next we need to retrieve the ``Blog`` entity from the database. We first
-use another helper method of the ``Symfony\Bundle\FrameworkBundle\Controller\Controller``
-class to get the Doctrine2 Entity Manager. The job of the
-`Entity Manager <http://www.doctrine-project.org/docs/orm/2.0/en/reference/working-with-objects.html>`_
-is to handle the retrieval and persistence of objects to and from the database. We
-then use the ``EntityManager`` object to get the Doctrine2 ``Repository`` for the
-``BloggerBlogBundle:Blog`` entity. The syntax specified here is simply
-a short cut that can be used with Doctrine 2 instead of specifying the full
-entity name, i.e. ``Blogger\BlogBundle\Entity\Blog``. With the repository object
-we call the ``find()`` method passing in the ``$id`` argument.
-This method will retrieve the object by its primary key.
+Agora, precisamos recuperar a entidade ``Blog`` do banco de dados . Nós, primeiramente, iremos usar outro método auxiliar da classe ``Symfony\Bundle\FrameworkBundle\Controller\Controller``
+para obter o Gerenciador de Entidade Doctrine 2. O trabalho do `Gerente de Entidade <http://www.doctrine-project.org/docs/orm/2.0/en/reference/working-with-objects.html>`_ é lidar com a recuperação e persistência de objetos de e para o banco de dados. Nós, em seguida, usaremos o objeto ``EntityManager`` para obter o ``Repositório`` do Doctrine 2 para a entidade ``BloggerBlogBundle:Blog``. A sintaxe especificado aqui é simplesmente uma amostra do que podemos usa ​​com Doctrine 2 ao invés de especificar o nome completo da entidade, ou seja, ``Blogger\BlogBundle\Entity\Blog``. Com o objeto repositório, podemos invocar o método``find()``   passando o argumento``$id``. Este método irá recuperar o objeto pela sua chave primária.
 
-Finally we check that an entity was found, and pass this entity over to the view.
-If no entity was found a ``createNotFoundException`` is thrown. This will
-ultimately generate a ``404 Not Found`` response.
+Finalmente verificamos se uma entidade foi encontrada e passamos esta entidade para a View.
+Se nenhuma entidade foi encontrada um ``createNotFoundException`` é exibido, ou seja,  um ``404 Not Found`` é exibido como resposta.
 
 .. tip::
 
-    The repository object gives you access to a number of useful helper methods
-    including
+    O objeto repositório dá acesso à uma série de métodos auxiliares úteis, incluindo:
 
     .. code-block:: php
 
@@ -487,17 +427,12 @@ ultimately generate a ``404 Not Found`` response.
         // Return one entity where 'slug' matches 'symblog-tutorial'
         $em->getRepository('BloggerBlogBundle:Blog')->findOneBySlug('symblog-tutorial');
 
-    We will create our own custom Repository classes in the next chapter
-    when we require more complex queries.
+    Nós vamos criar nossos próprios Repositório personalizados no próximo capítulo, quando precisarmos de pesquisas mais complexas.
 
-The View
-~~~~~~~~
+A View
+~ ~ ~ ~ ~ ~ ~ ~
 
-Now we have built the ``show`` action for the ``Blog`` controller we can focus
-on displaying the ``Blog`` entity. As specified in the ``show`` action the
-template ``BloggerBlogBundle:Blog:show.html.twig`` will be rendered. Let's create
-this template located at ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig``
-and paste in the following.
+Agora que temos a ação ``show`` para o controlador ``Blog``, podemos focar em apresentar a entidade do ``Blog``. Conforme especificado na ação ``show`, o template ``BloggerBlogBundle:Blog:show.html.twig`` será renderizado. Vamos criar este template em ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig`` e cole no seguinte código:
 
 .. code-block:: html
     
@@ -519,20 +454,12 @@ and paste in the following.
         </article>
     {% endblock %}
 
-As you'd expect we begin by extending the ``BloggerBlogBundle`` main layout.
-Next we override the page title with the title of the blog. This will
-be useful for SEO as the page title of the blog is more descriptive
-than the default title that is set. Lastly we override
-the body block to output the ``Blog`` entity conent. We use the ``asset`` function
-again here to render the blog image. The blog images should be placed in the
-``web/images`` folder.
+Como seria de esperar, começamos estendendo o layout principal de ``BloggerBlogBundle``. Em seguida, sobrescrevemos o título da página com o título do blog. Esta é útil para atividades de SEO pois o título da página do blog é mais descritiva do que o título padrão que está definido. Por último, substituimos o body block pelo conteúdo da entidade do ``Blog``. Nós usamos a função ``assets``novamente aqui para renderizar a imagem do blog. As imagens blog devem ser colocadas na pasta ``web/images``.
 
 CSS
 ...
 
-In order to ensure the blog show page looks beautiful, we need to add some styling.
-Update the stylesheet located at ``src/Blogger/BlogBundle/Resouces/public/css/blog.css``
-with the following.
+Para deixarmos a página ``show`` mais bonita, precisamos adicionar algum estilo. Atualize a folha de estilo em ``src/Blogger/BlogBundle/Resouces/public/css/blog.css`` com o seguinte código:
 
 .. code-block:: css
 
@@ -547,38 +474,28 @@ with the following.
 
 .. note::
 
-    If you are not using the symlink method for referencing bundle assets into the
-    ``web`` folder you must re-run the assets install task now to copy over the
-    changes to your CSS.
+    Se você não estiver usando o método de ligação simbólica para referenciar os pacotes de assets para a pasta ``web`` você deve re-executar o instalador de assets agora para copiar as alterações no seu CSS
 
     .. code-block:: bash
 
         $ php app/console assets:install web
 
 
-As we have now built the controller and the view for the ``show`` actions
-lets have a look at the show page. Point your browser to
-``http://symblog.dev/app_dev.php/1``. Not the page you were expecting?
+Como já construímos o controlador e a visão para a ação ``show`` vamos dar uma olhada na página de show. Acesse ``http://symblog.dev/app_dev.php/1``. Não é a página que você estava esperando?
 
 .. image:: /_static/images/part_3/404_not_found.jpg
     :align: center
     :alt: Symfony2 404 Not Found Exception
 
-Symfony2 has generated a ``404 Not Found`` response. This is because we
-have no data in our database, so no entity with ``id`` equal to 1 could be found.
+O Symfony 2 gerou uma resposta 404 ``Não Encontrado``. Isto aconteceu porque não temos dados em nosso banco de dados, assim, nenhuma entidade com `` id `` igual a 1 poderia ser encontrada.
 
-You could simply insert a row into the blog table of your database, but we will use
-a much better method; Data Fixtures.
+Você poderia simplesmente inserir uma linha na tabela blog de seu banco de dados, mas vamos usar
+um método muito melhor; Data Fixtures.
 
 Data Fixtures
 -------------
 
-We can use fixtures to populate the database with some sample/test data. To do this
-we use the Doctrine Fixtures extension and bundle. The Doctrine Fixtures
-extension and bundle do not come with the Symfony2 Standard Distribution, we need to
-manually install them. Fortunately this is an easy task. Open up the deps file located
-in the project root and add the Doctrine fixtures extension and bundle to it as
-follows.
+Podemos usar os Data Fixtures para popular o banco de dados com alguns dados de amostra / teste. Para fazer isso usamos o pacote de extensões Doctrine Data Fixtures. O pacote de extensões Doctrine Data Fixtures não vem com a distribuição Standard do Symfony 2, precisamos instalar manualmente. Felizmente, esta é uma tarefa fácil. Abra o arquivo deps localizado na raiz do projeto e adicione os pacotes e extensões Doctrine Data Fixtures como se segue:
 
 .. code-block:: text
 
@@ -589,32 +506,24 @@ follows.
         git=http://github.com/symfony/DoctrineFixturesBundle.git
         target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
 
-Next update the vendors to reflect these changes.
+Em seguida atualizar os vendors para atualizar essas alterações.
 
 .. code-block:: bash
 
     $ php bin/vendors install
 
-This will pull down the latest version of each of the repositories from Github and
-install them to the required location.
+Assim, faremos a atualização dos repositórios mais recente do Github e iremos instalá-los no local desejado.
 
 .. note::
 
-    If you are using a machine that does not have Git installed you will need to manually
-    download and install the extension and bundle.
+    Se você estiver usando uma máquina que não tem o Git instalado, você terá que baixar e instalar manualmente as extensões e pacotes.
 
-    doctrine-fixtures extension: `Download <https://github.com/doctrine/data-fixtures>`_
-    the current version of the package from GitHub and extract to the following location
-    ``vendor/doctrine-fixtures``.
+    doctrine-fixtures extension: Faça o `Download <https://github.com/doctrine/data-fixtures>`_ da versão atual do pacote e extraia ``vendor/doctrine-fixtures``.
 
-    DoctrineFixturesBundle: `Download <https://github.com/symfony/DoctrineFixturesBundle>`_
-    the current version of the package from GitHub and extract to the following location
+    DoctrineFixturesBundle: Faça o `Download  <https://github.com/symfony/DoctrineFixturesBundle>`_ da versão atual do pacote e extraia em
     ``vendor/bundles/Symfony/Bundle/DoctrineFixturesBundle``.
 
-Next update the ``app/autoloader.php`` file to register the new namespace.
-As DataFixtures are also in the ``Doctrine\Common`` namespace they must be placed above the existing
-``Doctrine\Common`` directive as they specify a new path. Namespaces are checked from top
-to bottom so more specific namespaces need to be registered before less specific ones.
+Depois, atualize o arquivo ``app/autoloader.php`` para registrar o novo namespace. Como DataFixtures também estão no namespace ``Doctrine \Common``, eles devem ser colocados acima da diretiva ``Doctrine\Common`` existente para especificar um novo caminho. Namespaces são verificados de cima para baixo. Para namespaces mais específicos, precisamos registrar antes dos menos específicos.
 
 .. code-block:: php
 
@@ -627,8 +536,7 @@ to bottom so more specific namespaces need to be registered before less specific
     // ...
     ));
 
-Now let's register the ``DoctrineFixturesBundle`` in the kernel located at
-``app/AppKernel.php``
+Agora vamos registrar o ``DoctrineFixturesBundle`` no kernel em ``app/AppKernel.php``
 
 .. code-block:: php
 
@@ -644,10 +552,9 @@ Now let's register the ``DoctrineFixturesBundle`` in the kernel located at
     }
 
 Blog Fixtures
-~~~~~~~~~~~~~
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We are now ready to define some fixtures for our blogs. Create a fixture file at
-``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php`` and add the following content:
+Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie um arquivo de fixture em ``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php`` e adicione o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -719,10 +626,9 @@ We are now ready to define some fixtures for our blogs. Create a fixture file at
     
     }
 
-The fixture file demonstrates a number of important features when using Doctrine 2,
-including how to persist entities to the database.
+O arquivo de fixtures demonstra uma série de características importantes quando se utiliza Doctrine 2, incluindo como persistir entidades para o banco de dados.
 
-Let's look at how we create one blog entry.
+Vejamos como podemos criar uma entrada no blog.
 
 .. code-block:: php
 
@@ -739,73 +645,40 @@ Let's look at how we create one blog entry.
 
     $manager->flush();
 
-We start by creating an object of ``Blog`` and setting some values for its
-members. At this point Doctrine 2 knows nothing about the ``Entity`` object. It's
-only when we make a call to ``$manager->persist($blog1)`` that we instruct
-Doctrine 2 to start managing this entity object. The ``$manager`` object here
-is an instance of the ``EntityManager`` object we saw earlier when retrieving
-entites from the database. It is important to note that while
-Doctrine 2 is now aware of the entity object, it is still not persisted to the
-database. A call to ``$manager->flush()`` is required for this. The flush
-method causes Doctrine 2 to actually interact with the database and action all the
-entities it is managing. For best performance you should group Doctrine 2
-operations together and flush all the actions in one go. This is how we have
-done so in our fixtures. We create each entity, ask Doctrine 2 to manage it and
-then flush all operations at the end.
+Começamos criando um objeto do ``Blog`` e definimos alguns valores para seus membros. Neste ponto, Doctrine 2 não sabe nada sobre o objeto ``Entity``. Só quando fazemos uma chamada ``$manager>persist($blog1)`` que instruimos o Doctrine 2 a começar a gerir o objeto da entidade. O objeto ``$manager`` aqui, é uma instância do objeto ``EntityManager`` que vimos anteriormente ao recuperar entidades do banco de dados. É importante notar que, enquanto Doctrine 2 está, agora, sabendo da existência do objeto de entidade, ainda não é mantido para o banco de dados. É  necessário fazer uma chamada para ``$manager->flush()``. O método flush faz o Doctrine 2 realmente interagir com o banco de dados e aciona todas as entidades que serão mantidas. Para um melhor desempenho, você deve agrupar as operações do Doctrine 2 em conjunto e executar todas as ações de uma só vez. É assim que temos feito em nossos Data Fixture. Criamos as entidade, pedimos ao Doctrine 2 para manipulados e, em seguida, executamos todas as operações no final.
 
 .. tip:
 
-    You may have noticed the setting of the ``created`` and ``updated`` members. This is not
-    an ideal way to set these fields as you'd expect them to be set automatically
-    when an object is created or updated. Doctrine 2 provides a way for us to achieve this
-    which we will explore shortly.
+    Você deve ter percebido a definição dos membros ``created`` e ``updated``. Esta não é a forma ideal de definir esses campos. Espera-se, que eles sejam atualizados automaticamente quando um objeto é criado ou atualizado. Doctrine 2 dispõe de uma método para que possamos alcançar este objetivo. Vamos explorar este método brevemente.
 
-Loading the fixtures
-~~~~~~~~~~~~~~~~~~~~
+Carregando os Data Fixtures
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We are now ready to load the fixtures into the database.
+Agora estamos prontos para carregar os fixtures para o banco de dados.
 
 .. code-block:: bash
 
     $ php app/console doctrine:fixtures:load
 
-If we have a look at the show page at ``http://symblog.dev/app_dev.php/1``
-you should see a blog the blog entry.
+Se recarregarmos a página de show do blog no navegador ``http://symblog.dev/app_dev.php/1``,
+veremos um blog completo e com estilos.
 
 .. image:: /_static/images/part_3/blog_show.jpg
     :align: center
     :alt: The symblog blog show page
 
-Try changing the ``id`` parameter in the URL to 2. You should see the next blog entry
-being shown.
+Tente alterar o parâmetro ``id`` na URL para 2. Você deve ver a outra entrada do blog.
 
-If you have a look at the URL ``http://symblog.dev/app_dev.php/100`` you should see
-a ``404 Not Found`` exception being thrown. You'd expect this as there is no ``Blog``
-entity with an ID of 100. Now try the URL ``http://symblog.dev/app_dev.php/symfony2-blog``.
-Why don't we get a ``404 Not Found`` exception? This is because the ``show`` action is
-never executed. The URL fails to match any route in the application because of the
-``\d+`` requirement we set on the ``BloggerBlogBundle_blog_show`` route. This
-is why you see a ``No route found for "GET /symfony2-blog"`` exception.
+Se você tentar acessar ``http://symblog.dev/app_dev.php/100`` você verá uma exceção ``404 Not Found``. Calro,  não há entidade de ``Blog`` com um ID de 100. Agora tente acessar ``http://symblog.dev/app_dev.php/symfony2-blog``. Por que não temos uma exceção ``404 Not Found``? Isto é porque a ação ``show`` nunca é executado. A URL falhou em coincidir qualquer rota na aplicação por causa da especificação ``\d+`` que definimos na rota ``BloggerBlogBundle_blog_show``. É por isso que você viu uma exceção ``No route found for "GET /symfony2-blog"``.
 
 Timestamps
 ----------
 
-Finally in this chapter we will look at the 2 timestamp members on the ``Blog`` entity;
-``created`` and ``updated``. The functionality for these 2 members is commonly referred to as
-the ``Timestampable`` behavior. These members hold the time the blog was created and
-the time the blog was last updated. As we don't want to have to manually set these fields
-each time we create or update a blog, we can use Doctrine 2 to help us.
+Finalmente, vamos analisar os 2 membros timestamp na entidade ``Blog``;
+``created `` e ``updated``. A funcionalidade destes 2 membros é referida como um comportamento ``Timestampable``. Estes membros guardam o horário em que o blog foi criado e atualizado, respectivamente. Como não queremos ter que configurar manualmente estes campos cada vez que criamos ou atualizamos uma entidade do blog, podemos utilizar o Doctrine 2 para nos ajudar.
 
-Doctrine 2 comes with an
-`Event System <http://www.doctrine-project.org/docs/orm/2.0/en/reference/events.html>`_
-that provides
-`Lifecycle Callbacks <http://www.doctrine-project.org/docs/orm/2.0/en/reference/events.html#lifecycle-callbacks>`_.
-We can use these callback events to register our entities to be notified of events
-during the entity lifetime. Some example of events we can be notified about
-include before an update happens, after a persist happens and after a remove happens.
-In order to use Lifecycle Callbacks on our entity we need to register the entity for them.
-This is done using metadata on the entity. Update the ``Blog`` entity located at
-``src/Blogger/BlogBundle/Entity/Blog.php`` with the following.
+Doctrine 2 vem com um `Sistema de Eventos <http://www.doctrine-project.org/docs/orm/2.0/en/reference/events.html>`_ que fornece `Callbacks do ciclo de vida <http://www.doctrine-project.org/docs/orm/2.0/en/reference/events.html#lifecycle-callbacks>`_.
+Podemos usar esses eventos de callbacks para registrar nossas entidades para ser notificado sobre  eventos durante o período de vida da entidade. Alguns exemplos de eventos de notificação são  utilizados para ilustrar que algo aconteceu antes de uma atualização, depois de uma persistência e depois de uma exclusão. Para utilizar Callbacks do ciclo de vida em nossa entidade temos que registrar a entidade para eles. Isso é feito usando metadados na entidade. Atualize a entidade ``Blog`` em ``src/Blogger/BlogBundle/Entity/blog.php`` com o seguinte código:
 
 .. code-block:: php
 
@@ -824,9 +697,8 @@ This is done using metadata on the entity. Update the ``Blog`` entity located at
         // ..
     }
 
-Now let's add a method in the ``Blog`` entity that registers for the ``preUpdate``
-event. We also add a constructor to set default values for the ``created`` and
-``updated`` members.
+Agora vamos adicionar um método na entidade ``Blog`` que registra o evento ``preUpdate``. Nós também adicionamos um construtor para definir valores padrão para os membros ``created`` e o 
+``updated``.
 
 .. code-block:: php
 
@@ -861,31 +733,17 @@ event. We also add a constructor to set default values for the ``created`` and
         // ..
     }
 
-We register the ``Blog`` entity to be notified on the ``preUpdate`` event to set the
-``updated`` member value. Now when you re-run the load fixtures task you will notice the
-``created`` and ``updated`` members are set automatically.
+Nós registramos a entidade ``Blog`` para ser notificado sobre o evento ``preUpdate`` para definir o valor de ``updated``. Agora, quando você executar novamente a inserção do fixtures, você vai notar que os membros ``created`` e ``updated`` são definidos automaticamente.
 
 .. tip::
 
-    As timestampable members are such a common requirement for entities, there is
-    a bundle available that supports them. The
-    `StofDoctrineExtensionsBundle <https://github.com/stof/StofDoctrineExtensionsBundle>`_
-    provides a number of useful Doctrine 2 extensions including Timestampable,
-    Sluggable, and Sortable.
+    Como membros Timestampable são membros comuns para as entidades, existe um pacote disponível que os suporta. O `StofDoctrineExtensionsBundle <https://github.com/stof/StofDoctrineExtensionsBundle>`_ fornece uma série de extensões úteis do  Doctrine 2, incluindo Timestampable, Sluggable e Sortable.
 
-    We will look at integrating this bundle later in the tutorial. The eager
-    ones among you can check the
-    `cookbook <http://symfony.com/doc/current/cookbook/doctrine/common_extensions.html>`_
-    for a chapter on this topic.
+    Vamos integrar este pacote mais tarde no tutorial. Fique a vontade para estudar a respeito deste tema. Vá até o `CookBokk <http://symfony.com/doc/current/cookbook/doctrine/common_extensions.html>`_.
 
-Conclusion
+Conclusão
 ----------
 
-We have covered a number of concepts for dealing with models in Doctrine 2.
-We also looked at defining Data fixtures to provide us will an easy way to get
-suitable test data into our application duration development and testing.
+Nós cobrimos uma série de conceitos para lidar com Model em Doctrine 2. Também vimos a definição de data fixtures que nos proporciona uma maneira fácil de inserir dados em nosso ambiente de desenvolvimento e teste.
 
-Next we will look at extending the model further by adding the comment entity.
-We will start to construct the homepage and create a custom Repository to do this.
-We will also introduce the concept of Doctrine Migrations and how forms
-interact with Doctrine 2 to allow comments to be posted for a blog.
+Vamos estender o Model um pouco mais, acrescentando a entidade comentário. Vamos construir uma página inicial e criar um repositório comum. Também vamos introduzir o conceito de Migrações do Doctrine e como formulários interagem com Doctrine 2 para permitir que os comentários sejam postados para um blog
