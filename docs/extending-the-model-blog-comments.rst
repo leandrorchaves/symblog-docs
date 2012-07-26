@@ -634,7 +634,7 @@ Felizmente, conseguimos facilmente ajustar as referências a objetos em um arqui
 Atualize a entidade ``Blog`` ``DataFixtures`` localizado em ``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php`` 
 com o código baixo. 
 
-As mudanças que devemos observados aqui são, a extensão da classe``AbstractFixture`` e a implementação do 
+As mudanças que devemos observados aqui são, a extensão da classe ``AbstractFixture`` e a implementação do 
 ``OrderedFixtureInterface``. Observe também o uso das declarações de importação dessas classes.
 
 .. code-block:: php
@@ -1096,7 +1096,7 @@ Exibindo o formulário de comentário
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
 Como queremos que o usuário adicione seus comentários da página de exibição do blog, poderíamos criar o formulário na 
-ação ``show`` do controlador ``Blog`` e renderizar o formulário diretamente no template``show``. No entanto, seria 
+ação ``show`` do controlador ``Blog`` e renderizar o formulário diretamente no template ``show``. No entanto, seria 
 melhor separar este código, como fizemos com a exibição dos comentários. 
 
 A diferença entre mostrar os comentários e apresentar o formulário de comentário é que o formulário de comentário 
@@ -1333,7 +1333,7 @@ template ``BloggerBlogBundle:Blog:show.html.twig``, veremos que o problema da li
     
 Se observarmos a mensagem de exceção, ela ainda nos dá mais algumas informações sobre o por que essa exceção foi causada.
 
-    ``Entities passed to the choice field must have a "__toString()" method defined``
+    Entities passed to the choice field must have a "__toString()" method defined
 
 Esta mensagem nos diz que um campo de escolha que nós estamos tentando renderizar, não tem um método ``__toString()`` 
 definido para a entidade, cujo campo de escolha está associado. 
@@ -1384,7 +1384,7 @@ personalizamos a classe ``CommentType`` gerada anteriormente.
     
     Isto é possível graças à capacidade do ``FormBuilder`` descobrir o tipo de campo do membro que está renderizando. 
     Ele consegue fazer isso baseado em metadados fornecidos. Como especificamos os metadados para a entidade 
-    ``Comment ``, o ``FormBuilder`` é capaz de fazer estimativas precisas dos tipos de campo.
+    ``Comment``, o ``FormBuilder`` é capaz de fazer estimativas precisas dos tipos de campo.
 
 Vamos, agora, atualizar esta classe, localizada em ``src/Blogger/BlogBundle/Form/CommentType.php`` para exibir somente 
 os campos que precisamos. 
