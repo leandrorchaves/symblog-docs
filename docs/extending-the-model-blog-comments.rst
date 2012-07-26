@@ -1,43 +1,24 @@
-[Part 4] - The Comments Model: Adding comments,  Doctrine Repositories and Migrations
-=====================================================================================
+[Parte 4] - O Model de Comentários: Adicionando comentários, Repositórios e Migrações do Doctrine 
+================================================== ===================================
 
-Overview
+Visão geral
 --------
 
-This chapter will build on the blog model we defined in the previous chapter. We
-will create the comment model, which will handle comments for blog posts. We
-will be introduced to creating relationships between models, as a blog post can
-contain many comments. We will use the Doctrine 2 QueryBuilder and Doctrine 2
-Repository classes to retrieve entities from the database. The concept of
-Doctrine 2 Migrations will also be explored which provide a programmatic way to
-deploy changes to the database. At the end of this chapter you will have created
-the comment model and linked it together with the blog model. We will also have
-created the homepage, and provided the ability for users to submit comments
-for a blog post.
+Este capítulo terá como base o model do blog, definida no capítulo anterior. Criaremos o model de comentário, que vai lidar com comentários dos posts do blog. Nós ilustraremos a criação de relações entre os models, já que um blog pode conter muitos comentários. Usaremos o Doctrine 2 QueryBuilder e suas classes de repositório para recuperar as entidades do banco de dados. O conceito das  Migrações do Doctrine 2 também serão exploradas para fornecer uma maneira mais programática para implantar as alterações no banco de dados. No final deste capítulo, você terá criado o model de comentário e irá relacionar com o model do blog. Criaremos uma página inicial, que permitam os usuários enviar comentários para um post do blog.
 
 
-The Homepage
+A Homepage
 ------------
 
-We will begin this chapter by building the homepage. In true blogger fashion it will
-display snippets of each blog post, ordered from newest to oldest. The full
-blog post will be available via links to the blog show page. As we have already
-built the route, controller and view for the homepage we can simply update these.
+Começaremos este capítulo com a construção da homepage. Em um blog de verdade, é exibido trechos de cada post do blog, ordenado  do mais novo para o mais antigo. O post completo
+do blog estará disponíveis através de links para a página de apresentação do blog. Como já temos
+a rota, o controlador e View e a página inicial, podemos simplesmente atualizar esta página inicial.
 
-Retrieving the blogs: Querying the model
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Recuperando os blogs: Consultando o model
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-In order to display the blogs, we need to retrieve them from the database.
-Doctrine 2 provides the
-`Doctrine Query Language <http://www.doctrine-project.org/docs/orm/2.1/en/reference/dql-doctrine-query-language.html>`_
-(DQL) and a
-`QueryBuilder <http://www.doctrine-project.org/docs/orm/2.1/en/reference/query-builder.html>`_
-to achieve this (You can also run raw SQL through Doctrine 2 but this method is
-discouraged as it takes away the database abstraction Doctrine 2 gives us).
-We will use the ``QueryBuilder`` as it provides a nice object oriented way for us to generate
-DQL, which we can use to query the database. Let's update the ``index`` action of the ``Page`` controller
-located at ``src/Blogger/BlogBundle/Controller/PageController.php``
-to pull the blogs from the database.
+Para exibir os blogs, precisamos recuperá-los do banco de dados. Doctrine 2 trabalha com a
+`Doctrine Query Language <http://www.doctrine-project.org/docs/orm/2.1/en/reference/dql-doctrine-query-language.html>`_ (DQL) e um `QueryBuilder <http://www.doctrine-project.org/docs/orm/2.1/en/reference/query-builder.html>`_ para conseguir isso (Você também pode executar SQL pelo Doctrine 2, mas este método é desencorajado, pois ele tira a abstração de banco de dados que o Doctrine 2 nos dá). Nós usaremos o ``QueryBuilder`` pois ele fornece uma maneira amigável de lidar com orientação a objetos gerados pelo DQL, para nos permitir consultar o banco de dados. Vamos atualizar a ação ``index`` do controlador ``Page`` localizado em ``src/Blogger/BlogBundle/Controller/PageController.php`` para trazer os blogs a partir do banco de dados.
 
 .. code-block:: php
 
@@ -64,30 +45,12 @@ to pull the blogs from the database.
         // ..
     }
 
-We begin by getting an instance of the ``QueryBuilder`` from the ``EntityManager``. This
-allows us to start constructing the query using the many methods the ``QueryBuilder``
-provides. The full list of available methods is available via the ``QueryBuilder``
-documentation. A good place to start is with the
-`helper methods <http://www.doctrine-project.org/docs/orm/2.1/en/reference/query-builder.html#helper-methods>`_.
-These are the methods we use, such as ``select()``, ``from()`` and ``addOrderBy()``.
-As with previous interactions with Doctrine 2, we can use the short hand notation
-to reference the ``Blog`` entity via ``BloggerBlogBundle:Blog`` (remember this
-is the same as doing ``Blogger\BlogBundle\Entity\Blog``). When we have finished
-specifying the criteria for the query, we call the ``getQuery()`` method which returns
-a ``DQL`` instance. We are not able to get results from the ``QueryBuilder`` object, we must
-always convert this to a ``DQL`` instance first. The ``DQL`` instance provides the ``getResult()``
-method that returns a collection of ``Blog`` entities. We will see later that the ``DQL`` instance
-has a
-`number of methods <http://www.doctrine-project.org/docs/orm/2.1/en/reference/dql-doctrine-query-language.html#query-result-formats>`_
-for returning results including ``getSingleResult()`` and ``getArrayResult()``.
+Começamos por obter uma instância do ``QueryBuilder`` do ``EntityManager``. O ``EntityManager`` nos permite construir a consulta usando os vários métodos que o ``QueryBuilder`` disponibiliza. A lista completa de métodos disponíveis está disponível na documentação do ``QueryBuilder``. Leia também sobre `Métodos auxiliares <http://www.doctrine-project.org/docs/orm/2.1/en/reference/query-builder.html#helper-methods>`_. Pois estes são os métodos que usamos, como ``select()``, ``from()`` e ``addOrderBy()``. Tal como acontece com as interações anteriores do Doctrine 2, podemos usar a notação de escrita curta para referenciar a entidade ``Blog`` através do ``BloggerBlogBundle:Blog`` (lembre-se que isto é o mesmo que fazer ``Blogger\BlogBundle\Entity\Blog``). Quando tivermos terminado de especificar os critérios para a consulta, chamaremos o método ``getQuery()`` que retorna uma instância do ``DQL``. Nós não somos capazes de obter resultados a partir do objeto ``QueryBuilder``, temos sempre que converter esse objeto para uma instância ``DQL`` primeiro. A instância ``DQL`` fornece um método ``getResult()`` que retorna uma coleção de entidades ``Blog``. Veremos mais tarde que a instância ``DQL`` tem vário `Métodos para retornar resultados <http://www.doctrine-project.org/docs/orm/2.1/en/reference/dql-doctrine-query-language.html#query-result-formats>`_ incluindo ``getSingleResult()`` e ``getArrayResult()``.
 
-The View
+A Visão (View)
 ........
 
-Now we have a collection of ``Blog`` entities we need to display them.
-Replace the content of the homepage template located at
-``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig``
-with the following.
+Agora que temos uma coleção de entidades ``blog``, precisamos exibi-los. Substitua o conteúdo do template inicial localizado em ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` pelo código abaixo:
 
 .. code-block:: html
     
@@ -119,9 +82,7 @@ with the following.
         {% endfor %}
     {% endblock %}
 
-We introduce one of the Twig control structures here, the ``for..else..endfor``
-structure. If you have not used a templating engine before you are probably
-familiar with the following PHP snippet.
+Nós usamos algumas estruturas de controle do Twig , a estrutura ``for..else..endfor``. Se você nunca usau um gerador de templates antes, você provavelmente está familiarizados com o trecho de código PHP abaixo:
 
 .. code-block:: php
 
@@ -134,24 +95,13 @@ familiar with the following PHP snippet.
         <p>There are no blog entries</p>
     <?php endif ?>
 
-The Twig ``for..else..endfor`` control structure is a much cleaner way of
-achieving this task. Most of the code within the homepage template is concerned with
-outputting the blog information in HTML. However, there are a few things we need
-to note. Firstly, we make use of the Twig ``path`` function to generate the
-routes for the blog show page. As the blog show page requires a blog ``ID`` to
-be present in the URL, we need to pass this as an argument into the ``path``
-function. This can be seen with the following.
+A estrutura de controle do Twig ``for..else..endfor``, é uma forma mais limpa de realizar esta tarefa. A maioria do código dentro do template da página inicial está concentrado em mostrar a informação do blog em HTML. No entanto, existem algumas coisas que precisamos perceber. Em primeiro lugar, fazemos uso da função do caminho ``path`` do Twig para gerar a rota para a página de apresentação do blog. Como a página de apresentação do blog exige um ``id`` do blog via URL,  precisamos passar este ``id`` como um argumento para a função ``path``. Faça o seguinte:
 
 .. code-block:: html
     
     <h2><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}">{{ blog.title }}</a></h2>
     
-Secondly we output the blog content using ``<p>{{ blog.blog(500) }}</p>``.
-The ``500`` argument we pass in, is the max length of the blog post we want to
-receive back from the function. For this to work we need to update the
-``getBlog`` method that Doctrine 2 generated for us previously. Update the
-``getBlog`` method in the ``Blog`` entity located at
-``src/Blogger/BlogBundle/Entity/Blog.php``.
+Em segundo lugar, imprimimos o conteúdo do blog usando ``<p>{{blog.blog (500)}}</ p>``. O argumento ``500`` que passamos, é o comprimento máximo do post do blog que queremos receber de retorno da função. Para que isso funcione é preciso atualizar o método ``getBlog`` que o Doctrine 2 gerou anteriormente para nós. Atualize o método ``getBlog`` da entidade ``Blog`` localizada em ``src/Blogger/BlogBundle/Entity/ blog.php``.
 
 .. code-block:: php
 
@@ -164,41 +114,26 @@ receive back from the function. For this to work we need to update the
             return $this->blog;
     }
 
-As the usual behavior of the ``getBlog`` method should be to return the entire blog
-post, we set the ``$length`` parameter to have a default of ``null``. If ``null``
-is passed in, the entire blog post is returned.
+Como o comportamento usual do método ``getBlog`` deve ser o de devolver uma entrada do post do  blog, definimos o parâmetro ``$length`` para ter um padrão ``null``. Se ``NULL`` é passado, então, a entrada do post do blog é retornado.
 
-Now if you point your browser to ``http://symblog.dev/app_dev.php/`` you should
-see the homepage displaying the latest blog post entries. You should also be able to navigate
-to the full blog post for each entry by clicking the blog title or the
-'continue reading...' link.
+Agora, se você acessar ``http://symblog.dev/app_dev.php/``, você deve ver a página mostrando as entradas dos posts do blog mais recentes. Você também deve ser capaz de navegar ir para a página do post do blog, clicando no título do blog ou clicando no link 'Continuar lendo ... '.
 
 .. image:: /_static/images/part_4/homepage.jpg
     :align: center
     :alt: symblog homepage
 
-While we can query for entities in the controller, it is not the best place to.
-The querying would be better placed outside of the controller for a number of reasons:
+Embora possamos criar consultas para entidades no controlador, aqui não é o melhor lugar para se fazer isso. Seria melhor colocar a consulta  fora do controlador por algumas razões:
 
-    1. We would be unable to reuse the query elsewhere in the application, without
-       duplicating the ``QueryBuilder`` code.
-    2. If we did duplicate the ``QueryBuilder`` code, we would have to make multiple
-       modifications in the future if the query needed changing.
-    3. Separating the query and the controller would allow us to test the query
-       independently of the controller.
+    1. Não poderiamos reutilizar a consulta em qualquer outra parte da aplicação, sem ter que duplicar o código ``QueryBuilder``.
+    2. Se duplicássemos o código ``QueryBuilder``, teríamos de fazer múltiplas modificações no futuro, se fosse preciso mudar a consulta.
+    3. Separar a consulta e o controlador nos permite testar a consulta independentemente do controlador.
 
-Doctrine 2 provides the Repository classes to facilitate this.
+Doctrine 2 possui classes de repositório para facilitar este processo.
 
-Doctrine 2 Repositories
+Repositórios Doctrine 2 
 -----------------------
 
-We have already been introduced to the Doctrine 2 Repository classes in the previous
-chapter when we created the blog show page. We used the default implementation of the
-``Doctrine\ORM\EntityRepository`` class to retrieve a blog entity from the
-database via the ``find()`` method. As we want to create a custom query, we
-need to create a custom repository. Doctrine 2 is able to assist in this task.
-Update the ``Blog`` entity metadata located in the file at
-``src/Blogger/BlogBundle/Entity/Blog.php``.
+Nós já vimos algo sobre as classes de repositórios do Doctrine 2 no capítulo anterior, quando criamos a página de apresentação do blog. Utilizamos a implementação padrão da classe ``Doctrine\ORM\EntityRepository`` para recuperar uma entidade blog do banco de dados através do método ``find()``. Como queremos criar uma consulta personalizada, precisamos criar um repositório personalizado. Doctrine 2 pode ajudar nessa tarefa. Atualize os metadados das entidades do ``Blog``, no arquivo ``src/Blogger/BlogBundle/Entity/blog.php``.
 
 
 .. code-block:: php
@@ -214,17 +149,13 @@ Update the ``Blog`` entity metadata located in the file at
         // ..
     }
 
-You can see we have specified the namespace location for the ``BlogRepository`` class
-that this entity is associated with. As we have updated the Doctrine 2 metadata
-for the ``Blog`` entity, we need to re-run the ``doctrine:generate:entities`` task
-as follows.
+Você viu que especificamos o local do namespace para a classe ``BlogRepository`` que esta entidade está relacionada. Como já atualizamos os metadados do Doctrine 2 para a entidade ``Blog``, precisamos re-executar o comando ``doctrine:generate:entities``, como é ilustrado abaixo.
 
 .. code-block:: bash
 
     $ php app/console doctrine:generate:entities Blogger
     
-Doctrine 2 will have created the shell class for the ``BlogRepository`` located at
-``src/Blogger/BlogBundle/Repository/BlogRepository.php``.
+Doctrine 2 criará a classe shell para o ``BlogRepository``, localizado em ``src/Blogger/BlogBundle/Repository/BlogRepository.php``.
 
 .. code-block:: php
 
@@ -246,10 +177,7 @@ Doctrine 2 will have created the shell class for the ``BlogRepository`` located 
 
     }
 
-The ``BlogRepository`` class extends the  ``EntityRepository``
-class which provides the ``find()`` method we used earlier. Let's update the
-``BlogRepository`` class, moving the ``QueryBuilder`` code from the ``Page``
-controller into it.
+A classe ``BlogRepository`` estende a classe ``EntityRepository`` que fornece o método ``find()`` que usamos anteriormente. Vamos atualizar a classe ``BlogRepository`` , movendo o código ``QueryBuilder`` do controlador ``Page``, para ``BlogRepository``.
 
 .. code-block:: php
 
@@ -282,16 +210,7 @@ controller into it.
         }
     }
 
-We have created the method ``getLatestBlogs`` which will return the
-latest blog entries, much in the same way the controller ``QueryBuilder`` code did.
-In the repository class we have direct access to the ``QueryBuilder`` via the
-``createQueryBuilder()`` method. We have also added a default ``$limit`` parameter
-so we can limit the number of results to return. The result of the query
-is much the same as it was in the controller. You may have noticed that we did not
-need to specify the entity to use via the ``from()`` method. That's because we
-are within the ``BlogRepository`` which is associated with the ``Blog`` entity.
-If we look at the implementation of the ``createQueryBuilder`` method in the
-``EntityRepository`` class we can see the ``from()`` method is called for us.
+Criamos o método ``getLatestBlogs`` que irá retornar as entradas mais recentes do blog, da mesma forma que o código do controlador ``QueryBuilder`` fez. Na classe repositório, temos acesso direto ao ``QueryBuilder`` através do método ``createQueryBuilder()``. Nós também adicionamos um parâmetro padrão ``$limit`` para que possamos limitar o número de resultados retornados. O resultado da consulta é muito semelhante ao que temos no controlador. Você deve ter notado que não especificamos qual entidade usar, no método ``from()``. Isso é porque nós estamos dentro do ``BlogRepository`` que está associado com a entidade ``Blog``. Se prestarmos atenção na implementação do método ``createQueryBuilder`` na classe ``EntityRepository``, poderemos ver o método ``from()`` sendo invocado.
 
 .. code-block:: php
     
@@ -303,7 +222,7 @@ If we look at the implementation of the ``createQueryBuilder`` method in the
             ->from($this->_entityName, $alias);
     }
 
-Finally let's update the ``Page`` controller ``index`` action to use the ``BlogRepository``.
+Finalmente vamos atualizar a ação ``index`` do controlador ``Page`` para usar o ``BlogRepository``.
 
 .. code-block:: php
 
@@ -326,20 +245,14 @@ Finally let's update the ``Page`` controller ``index`` action to use the ``BlogR
         // ..
     }
 
-Now when you refresh the homepage it should display exactly the same as before.
-All we have done is refactored our code so the correct classes are performing
-the correct tasks.
+Agora, quando você atualizar a página inicial, deve ser exibido exatamente o mesmo de antes. Tudo o que nós fizemos foi colocar nosso código nas classes corretas para que possam realizar as tarefas corretas.
 
-More on the Model: Creating the Comment Entity
+Mais sobre o Model: Criando a Entidade Comentário
 ----------------------------------------------
 
-Blogs are only half the story when it comes to blogging. We also need to allow readers
-the ability to comment on blog posts. These comments also need to be persisted, and linked
-to the ``Blog`` entity as a blog can contain many comments.
+Os blogs são apenas metade da história. Precisamos permitir que os leitores comentem os posts do blog. Estes comentários também precisam ser persistentes e ligados à entidade ``Blog`` pois um blog pode conter muitos comentários.
 
-We will start by defining the basics of the ``Comment`` Entity class.
-Create a new file located at ``src/Blogger/BlogBundle/Entity/Comment.php`` and
-paste in the following.
+Vamos começar por definir os conceitos básicos da classe de entidade ``Comment``. Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Entity/Comment.php`` e cole o seguinte código:
 
 .. code-block:: php
 
@@ -412,14 +325,7 @@ paste in the following.
         }
     }
 
-Most of what you see here, we have already covered in the previous chapter,
-however we have used metadata to set up a link to the ``Blog`` entity. As a
-comment is for a blog, we have setup a link in the ``Comment`` entity to
-the ``Blog`` entity it belongs to. We do this by specify a ``ManyToOne`` link targeting the
-``Blog`` entity. We also specify that the inverse of this link will be available
-via ``comments``. To create this inverse, we need to update the ``Blog`` entity
-so Doctrine 2 knows that a blog can contain many comments. Update the ``Blog``
-entity located at ``src/Blogger/BlogBundle/Entity/Blog.php`` to add this mapping.
+O conteúdo do código acima, já foi abordado no capítulo anterior, porém, usamos metadados para criar um link para a entidade ``Blog``. Como comentário é para um post de um blog, temos que configurar um link na entidade ``Comment`` pertencer à entidade ``Blog``. Especificamos um link ``ManyToOne`` visando a entidade ``Blog``. Nós também especificamos que o inverso estará disponível ``comments``. Para isso, precisamos atualizar a entidade ``Blog`` para que o Doctrine 2 saiba que um blog pode conter muitos comentários. Atualize a entidade ``Blog`` localizada em ``src/Blogger/BlogBundle/Entity/blog.php`` para adicionar este mapeamento:
 
 .. code-block:: php
 
@@ -458,43 +364,30 @@ entity located at ``src/Blogger/BlogBundle/Entity/Blog.php`` to add this mapping
         // ..
     }
 
-There are a few changes to point out here. First we add metadata to the ``$comments``
-member. Remember in the previous chapter we didn't add any metadata for this member
-because we didn't want Doctrine 2 to persist it. This is still true, however, we
-do want Doctrine 2 to be able to populate this member with the relevant ``Comment``
-entities. That is what the metadata achieves. Secondly, Doctrine 2 requires
-that we default the ``$comments`` member to an ``ArrayCollection`` object.
-We do this in the ``constructor``. Also, note the ``use`` statement to import the
-``ArrayCollection`` class.
+Existem algumas considerações aqui. 
 
-As we have now created the ``Comment`` entity, and updated the ``Blog`` entity,
-let's get Doctrine 2 to generate the accessors. Run the following Doctrine 2
-task as before to achieve this.
+Primeiro, adicionamos metadados aos membros ``$comments``. Lembre-se, no capítulo anterior, não adicionamos qualquer metadado para este membro porque nós não queriamos que o Doctrine 2 os manipulasse. Isso ainda é verdade, mas, queremos que o Doctrine 2 possa preencher esse membro com a entidade ``Comment`` relativa. Isso é o que ativa os metadados. 
+
+Segundo, Doctrine 2 pede que nós transformemos os membros ``$comments`` em um objeto  ``ArrayCollection``. Isso deve ser feito no ``construtor``. Além disso, observe a declaração de ``use`` importar a classe ``ArrayCollection``.
+
+Como criamos a entidade ``Comment``, e atualizamos a entidade ``Blog``, vamos deixar que o Doctrine 2 gere os assessores. Execute o seguinte comando Doctrine 2:
 
 .. code-block:: bash
 
     $ php app/console doctrine:generate:entities Blogger
     
-Both entities should now be up-to-date with the correct accessor methods. You will
-also notice the ``CommentRepository`` class has been created at
-``src/Blogger/BlogBundle/Repository/CommentRepository.php`` as we specified this in the
-metadata.
+Ambas as entidades devem estar atualizadas com os métodos de acesso corretos. Você irá notar que a classe ``CommentRepository`` foi criada em ``src/Blogger/BlogBundle/Repository/CommentRepository.php`` como nós especificado nos metadados.
 
-Finally we need to update the database to reflect the changes to our entities. We
-could use the ``doctrine:schema:update`` task as follows to do this, but instead
-we will introduce Doctrine 2 Migrations.
+Finalmente, precisamos atualizar o banco de dados para refletir as mudanças de nossas entidades. Nós podemos usar a funcionalidade ``doctrine:schema:update`` da seguinte forma, mas em vez disso, vamos introduzir as migrações do Doctrine 2.
 
 .. code-block:: bash
 
     $ php app/console doctrine:schema:update --force
 
-Doctrine 2 Migrations
+Migrações Doctrine 2 (Doctrine 2 Migrations)
 -------------------
 
-The Doctrine 2 Migrations extension and bundle do not come with the Symfony2 Standard
-Distribution, we need to manually install them as we did with the Data Fixtures
-extension and bundle. Open up the ``deps`` file located in the project root and add the
-Doctrine 2 Migrations extension and bundle to it as follows.
+As extensões e pacotes das Migrações do Doctrine 2, não vem com a distribuição Standard do Symfony 2, é preciso instalá-las manualmente como fizemos com as extensões e pacotes dos data Fixtures. Abra o arquivo ``deps`` localizado na raiz do projeto e adicione a extensão e pacotes das Migrações do Doctrine 2, como se segue abaixo:
 
 .. code-block:: text
     
@@ -505,32 +398,23 @@ Doctrine 2 Migrations extension and bundle to it as follows.
         git=http://github.com/symfony/DoctrineMigrationsBundle.git
         target=/bundles/Symfony/Bundle/DoctrineMigrationsBundle
 
-Next update the vendors to reflect these changes.
+Em seguida, atualizamos os ``Vendors`` para refletir essas alterações.
 
 .. code-block:: bash
 
     $ php bin/vendors install
 
-This will pull down the latest version of each of the repositories from GitHub and
-install them to the required locations.
+Isso vai baixar e instalar a versão mais recente de cada um dos repositórios do GitHub nos locais necessários.
 
 .. note::
 
-    If you are using a machine that does not have Git installed you will need to manually
-    download and install the extension and bundle.
+    Se você estiver usando uma máquina que não tem Git instalado, você terá que baixar e instalar a extensão e o pacote manualmente.
 
-    doctrine-migrations extension: `Download <http://github.com/doctrine/migrations>`_
-    the current version of the package from GitHub and extract to the following location:
-    ``vendor/doctrine-migrations``.
+    Extensão doctrine-migrations: `Faça o download <http://github.com/doctrine/migrations>`_ da versão atual do pacote e extraia para na seguinte localização: ``vendor/doctrine-migrations``.
 
-    DoctrineMigrationsBundle: `Download <http://github.com/symfony/DoctrineMigrationsBundle>`_
-    the current version of the package from GitHub and extract to the following location:
-    ``vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle``.
+    DoctrineMigrationsBundle: `Faça o download <http://github.com/symfony/DoctrineMigrationsBundle>`_ da versão atual do pacote e extraia para a seguinte localização:  ``vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle``.
 
-Next update the ``app/autoload.php`` file to register the new namespace.
-As Doctrine 2 Migrations are also in the ``Doctrine\DBAL`` namespace they must be placed above the existing
-``Doctrine\DBAL`` setting as they specify a new path. Namespaces are checked from top
-to bottom so more specific namespaces need to be registered before less specific ones.
+Atualize o arquivo ``app/autoload.php`` para registrar o novo namespace. Como as migrações do Doctrine 2 estão no namespace ``Doctrine\DBAL``, eles devem ser colocados acima das configurações ``Doctrine\DBAL`` existentes especificando um novo caminho. Namespaces são verificados de cima para baixo para namespaces. Mas namespaces específicos precisam ser registrados antes que os menos específicos.
 
 .. code-block:: php
 
@@ -543,7 +427,7 @@ to bottom so more specific namespaces need to be registered before less specific
     // ...
     ));
 
-Now let's register the bundle in the kernel located at ``app/AppKernel.php``.
+Agora, vamos registrar o pacote no kernel. Vá em ``app/AppKernel.php``.
 
 .. code-block:: php
 
@@ -560,68 +444,42 @@ Now let's register the bundle in the kernel located at ``app/AppKernel.php``.
 
 .. warning::
 
-    The Doctrine 2 Migrations library is still in alpha state so its use on
-    production servers should be discouraged for now.
+    A biblioteca Doctrine 2 Migrations ainda está em em fase de teste. Seu uso em servidores de produção deve ser desencorajado, por enquanto.
 
-We are now ready to update the database to reflect the entity changes. This
-is a 2 step process. First we need to get Doctrine 2 Migrations to work out the differences
-between the entities and the current database schema. This is done with the 
-``doctrine:migrations:diff`` task. Secondly we need to actually perform the migration
-based on the previously created diff. This is done with the
-``doctrine:migrations:migrate`` task.
+Agora estamos prontos para atualizar o banco de dados para refletir as alterações da entidade. Este
+é o segundo passo do processo. 
 
-Run the following 2 commands to update the database schema.
+Primeiro, precisamos fazer com que as Migrações do Doctrine 2 trabalhem as diferenças entre as entidades e o esquema de banco de dados atual. Isto é feito com a funcionalidade ``doctrine:migrations:diff ``. 
+Segundo, precisamos realmente fazer a migração com base no dif criado anteriormente. Isto é feito com a funcionalidade ``doctrine:migrations: migrate``.
+
+Execute os comandos abaixo para atualizar o esquema de banco de dados.
 
 .. code-block:: bash
 
     $ php app/console doctrine:migrations:diff
     $ php app/console doctrine:migrations:migrate
 
-Your database will now reflect the latest entity changes and contain the new
-comment table.
+Seu banco de dados vai refletir as alterações mais recentes das entidade e irá conter a nova tabela comment.
 
 .. note::
 
-    You will also notice a new table in the database called ``migration_versions``.
-    This stores the migration version numbers so the migration task is able to
-    see what the current version of the database is.
+    Você deve ter notado uma nova tabela no banco de dados chamado ``migration_versions``.
+    Isto armazena os números das versões das migrações para a funcionalidade de migração ser capaz de saber qual é a versão atual do banco de dados.
     
 .. tip::
 
-    Doctrine 2 Migrations are a great way to update the production database as
-    the changes can be done programatically. This means we can integrate this
-    task into a deployment script so the database is updated automatically when
-    we deploy a new release of the application. Doctrine 2 Migrations also allow
-    us to roll back the changes as every created Migration has a ``up`` and ``down``
-    method. To roll back to a previous version you need to specify the version number
-    you would like to roll back to using the following task.
+    As migrações do Doctrine 2 são uma ótima maneira de atualizar o banco de dados de produção como pois as mudanças podem ser feitas de forma programada. Isto significa que podemos integrar esta funcionalidade em um script de desenvolvimento para que o banco de dados seja atualizado automaticamente quando implantamos de uma nova versão da aplicação. As migrações do Doctrine 2 permitem reverter as alterações pois cada migração tem criado um método``up`` e ``down``. Para reverter para uma versão anterior, você precisa especificar o número da versão que você gostaria de reverter a usar, executando o seguinte código:
     
     .. code-block:: bash
     
         $ php app/console doctrine:migrations:migrate 20110806183439
         
-Data Fixtures: Revisited
+Data Fixtures: Revisão
 -------------------------
 
-Now we have the ``Comment`` entity created, let's add some fixtures for it.
-It is always a good idea to add some fixtures each time you create an entity.
-We know that a comment must have a related ``Blog`` entity set as it is setup
-this way in the metadata, therefore when creating fixtures for ``Comment`` entities
-we will need to specify the ``Blog`` entity. We have already created the fixtures
-for the ``Blog`` entity so we could simply update this file to add the ``Comment``
-entities. This may be manageable for now, but what happens when we later add users,
-blog categories, and a whole load of other entities to our bundle? A better way
-would be to create a new file for the ``Comment`` entity fixtures. The problem
-with this approach is how do we access the ``Blog`` entities from the blog
-fixtures.
+Agora temos a entidade ``Comment`` criada, vamos adicionar alguns fixtures para ela. É sempre uma boa ideia adicionar alguns fixtures cada vez que você criar uma entidade. Sabemos que um comentário deve ter uma entidade ``Blog`` relacionada, de acordo com o que foi configurado nos metadados, portanto, quando criamos Data Fixtures para a entidade``Comments`` vamos ter de especificar a entidade ``Blog``. já criamos os fixtures para a entidade ``Blog``, então, vamos  simplesmente atualizar esse arquivo para adicionar a entidade ``comment``. Isso pode ser viável para agora, mas o que acontece quando, posteriormente, adicionarmos usuários, categorias do blog, e outras entidades para o nosso pacote? A melhor maneira seria criar um novo arquivo para a entidade ``Comment``. O problema com esta abordagem é como é que vamos acessar a entidade ``blog`` através dos fixtues do blog.
 
-Fortunately this can be achieved easily by setting references to objects in one
-fixture file that other fixtures can access. Update the ``Blog`` entity
-``DataFixtures`` located at
-``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php`` with the following.
-The changes to note here are the extension of the ``AbstractFixture`` class and
-the implementation of the ``OrderedFixtureInterface``. Also note the 2 new use
-statements to import these classes.
+Felizmente, conseguimos facilmente ajustar as referências a objetos em um arquivo de fixture para que possa ser acessado. Atualize a entidade ``Blog`` ``DataFixtures`` localizado em ``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php`` com o código baixo. As mudanças que devemos observados aqui são, a extensão da classe``AbstractFixture`` e a implementação do ``OrderedFixtureInterface``. Observe também o uso das declarações de importação dessas classes.
 
 .. code-block:: php
 
@@ -656,17 +514,12 @@ statements to import these classes.
         }
     }
 
-We add references to the blog entities using the ``addReference()`` method.
-This first parameter is a reference identifier we can use the retrieve the object
-later. Finally we must implement the ``getOrder()`` method to specify the loading order
-of the fixtures. Blogs must be loaded before comments so we return 1.
+Adicionamos as referências às entidades de blog usando o método ``addReference()``. Este primeiro parâmetro é um identificador de referência que podemos usar para recuperar o objeto a qualquer momento. Finalmente, implementamos o método ``getOrder()`` para especificar a ordem de carregamento dos fixtures. Blogs deve ser carregado antes dos comentários para que retorne 1.
 
-Comment Fixtures
-~~~~~~~~~~~~~~~~
+Fixtures de Comentários
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We are now ready to define some fixtures for our ``Comment`` entity. Create a fixtures file
-at ``src/Blogger/BlogBundle/DataFixtures/ORM/CommentFixtures.php`` and add the
-following content:
+Agora estamos prontos para definir alguns fixtures para a nossa entidade ``Comment``. Crie um arquivo de fixture em ``src/Blogger/BlogBundle/DataFixtures/ORM/CommentFixtures.php`` e adicione o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -799,37 +652,30 @@ following content:
         }
     }
         
-As with the modifications we made the ``BlogFixtures`` class, the ``CommentFixtures``
-class also extends the ``AbstractFixture`` class and  implements the ``OrderedFixtureInterface``.
-This means we must also implement the ``getOrder()`` method. This time we set the
-return value to 2, ensuring these fixtures will be loaded after the blog fixtures.
+Tal como acontece com as modificações que fizemos na classe ``BlogFixtures``, a classe ``CommentFixtures`` também estende a classe ``AbstractFixture`` e implementa a ``OrderedFixtureInterface``. Isso significa que também devemos implementar o método ``getOrder()``. Desta vez, vamos definir o valor de retorno para 2, garantindo que esses fixtures serão carregados depois dos fixtures do blog.
 
-We can also see how the references to the ``Blog`` entities we created earlier
-are being used.
+Podemos ver como as referências para a entidade ``Blog``, que criamos anteriormente, estão sendo utilizadas.
 
 .. code-block:: php
 
     $comment->setBlog($manager->merge($this->getReference('blog-2')));
 
-We are now ready to load the fixtures into the database.
+Agora estamos prontos para carregar os fixtures para o banco de dados.
 
 .. code-block:: bash
 
     $ php app/console doctrine:fixtures:load
     
-Displaying Comments
+Exibindo Comentários
 -------------------
 
-We can now display the comments related to each blog post. We begin by
-updating the ``CommentRepository`` with a method to retrieve the latest approved
-comments for a blog post.
+Agora podemos exibir os comentários relacionados a cada post do blog. Vamos atualizar o ``CommentRepository`` com um método para recuperar os comentários aprovados mais recentes de um post do blog.
 
-Comment Repository
-~~~~~~~~~~~~~~~~~~
+Repositório de Comentários 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Open the ``CommentRepository`` class located at
-``src/Blogger/BlogBundle/Repository/CommentRepository.php`` and replace its
-content with the following.
+Abra a classe ``CommentRepository``, localizada em ``src/Blogger/BlogBundle/Repository/CommentRepository.php`` e substitua o seu
+conteúdo pelo seguinte código:
 
 .. code-block:: php
 
@@ -865,24 +711,19 @@ content with the following.
         }
     }
     
-The method we have created will retrieve comments for a blog post. To do this
-we need to add a where clause to our query. The where clause uses a named parameter
-that is set using the ``setParameter()`` method. You should always use parameters
-instead of setting the values directly in the query like so
+O método que criamos irá recuperar comentários de um post do blog. Para fazer isso, precisamos adicionar uma cláusula ``where`` em nossa consulta. A cláusula ``where`` usa um parâmetro nomeado que é definida usando o método ``setParameter()``. Você deve sempre usar parâmetros
+em vez de definir os valores diretamente na consulta, como o exemplo abaixo:
     
 .. code-block:: php
 
     ->where('c.blog = ' . blogId)
 
-In this example the value of ``$blogId`` will not be sanitized and could leave the
-query open to an `SQL injection <http://en.wikipedia.org/wiki/SQL_injection>`_ attack.
+Neste exemplo, o valor de ``$blogId`` não será tratado e poderia deixar a consulta aberta para um ataque de`SQL injection <http://en.wikipedia.org/wiki/SQL_injection>`_.
 
-Blog Controller
+O Controlador do Blog
 ---------------
 
-Next we need to update the ``show`` action of the ``Blog`` controller to retrieve
-the comments for the blog. Update the ``Blog`` controller located at
-``src/Blogger/BlogBundle/Controller/BlogController.php`` with the following.
+Agora, precisamos atualizar a ação ``show`` do controlador do ``Blog`` para recuperar os comentários. Atualize o controlador do ``Blog`` localizado em ``src/Blogger/BlogBundle/controller/BlogController.php`` com o seguinte código.
 
 .. code-block:: php
     
@@ -905,20 +746,14 @@ the comments for the blog. Update the ``Blog`` controller located at
         ));
     }
 
-We use the new method on the ``CommentRepository`` to retrieve the approved comments
-for the blog. The ``$comments`` collection is also passed into the template.
+Usamos o novo método ``CommentRepository`` para recuperar os comentários aprovados
+para o blog. A coleção ``$comments`` também é passado para o template.
 
-Blog show template
-~~~~~~~~~~~~~~~~~~
+O template Show do Blog
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Now we have a list of comments for the blog we can update the blog show template
-to display the comments. We could simply place the rendering of the comments
-directly in the blog show template, but as comments are their own entity, it would
-be better to separate the rendering into another template, and include that
-template. This would allow us to reuse the comment rendering template elsewhere in the
-application. Update the blog show template located at
-``src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig`` with the
-following.
+Agora que temos uma lista dos comentários para o blog, podemos atualizar o template ``show`` do blog para exibir os comentários. Nós poderíamos simplesmente colocar a renderização dos comentários diretamente no template ``show`` do blog, mas, como os comentários tem a sua própria entidade, seria melhor separar a renderização em outro template para a inclusão do comentário. Com isso, é possível reutilizar o template renderizado de comentários em outras partes do
+aplicação. Atualize o template ``show`` do blog localizado em ``src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig`` com o seguinte código:
 
 .. code-block:: html
 
@@ -937,19 +772,14 @@ following.
         </section>
     {% endblock %}
     
-You can see the use of a new Twig tag, the ``include`` tag. This will include the
-content of the template specified by ``BloggerBlogBundle:Comment:index.html.twig``.
-We can also pass over any number of arguments to the template. In this case, we need
-to pass over a collection of ``Comment`` entities to render.
+Como você pôde ver, usamos uma nova tag do Twig , a tag ``include``. Assim iremo incluir o
+conteúdo do template especificado por ``BloggerBlogBundle:Comment:index.html.twig``.
+Podemos passar qualquer número de argumentos para o template. Neste caso, foi passado uma coleção de entidades de ``Comment`` para ser renderizado.
 
-Comment show template
-~~~~~~~~~~~~~~~~~~~~~
+O Template Show dos Comentarios
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-The ``BloggerBlogBundle:Comment:index.html.twig`` we are including above does
-not exist yet so we need to create it. As this is just a template, we don't need
-to create a route or a controller for this, we only need the template file. Create
-a new file located at ``src/Blogger/BlogBundle/Resources/views/Comment/index.html.twig``
-and paste in the following.
+O ``BloggerBlogBundle:Comment:index.html.twig``, que estavamos incluindo acima, ainda não existe, precisamos criá-lo. Como é apenas um template, não precisamos criar uma rota ou um controlador para isso, precisamos apenas do arquivo de template. Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Recursos/views/Resources/index.html.twig`` e cole o seguinte código:
 
 .. code-block:: html
 
@@ -966,22 +796,12 @@ and paste in the following.
         <p>There are no comments for this post. Be the first to comment...</p>
     {% endfor %}
 
-As you can see we iterate over a collection of ``Comment`` entities and display
-the comments. We also introduce one of the other nice Twig functions, the ``cycle``
-function. This function will cycle through the values in the array you
-pass it as each iteration of the loop progresses. The current loop iteration value
-is obtained via the special ``loop.index0`` variable. This keeps a count of the
-loop iterations, starting at 0. There are a number of other
-`special variables <http://www.twig-project.org/doc/templates.html#for>`_
-available when we are within a loop code block. You may also notice the setting
-of an HTML ID to the ``article`` element. This will allow us to later create
-permalinks to created comments.
+Como você pôde ver, que iteramos uma coleção de entidades ``Comment`` entidades e exibimos os comentários. Mostramos também uma outra função útil do ​Twig, a função de ``ciclo``. Esta função irá percorrer os valores do array passado em cada iteração da execução do loop. O valor atual da iteração do loop é obtido através da variável especial ``loop.index0``. Esta variável mantém uma contagem de iterações do loop, começando de 0. Temos outras `Variáveis ​​especiais <http://www.twig-project.org/doc/templates.html#for>`_ disponíveis quando precisamos usar um bloco de código de loop. Você também pôde perceber que precisamos informar um ID para o elemento HTML ``article``. Assim, podemos criar links para os comentário criados quando necessário.
 
-Comment show CSS
-~~~~~~~~~~~~~~~~
+CSS do template Show dos Comentários
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Finally let's add some CSS to keep the comments looking stylish. Update the stylesheet
-located at ``src/Blogger/BlogBundle/Resorces/public/css/blog.css`` with the following.
+Finalmente vamos adicionar um pouco de CSS para manter o layout dos comentários mais elegante. Atualize a folha de estilos localizada em ``src/Blogger/BlogBundle/Resorces/public/css/blog.css`` com o seguinte código:
 
 .. code-block:: css
 
@@ -995,45 +815,35 @@ located at ``src/Blogger/BlogBundle/Resorces/public/css/blog.css`` with the foll
 
 .. note::
 
-    If you are not using the symlink method for referencing bundle assets into the
-    ``web`` folder you must re-run the assets install task now to copy over the
-    changes to your CSS.
+    Se você não estiver usando o método de link simbólico para referenciar os ``assets`` do pacote para a pasta ``web``, você deve re-instalar os ``assets`` para aplicar as alterações no seu CSS.
 
     .. code-block:: bash
 
         $ php app/console assets:install web
         
-If you now have a look at one of the blog show pages, e.g.
-``http://symblog.dev/app_dev.php/2`` you should see the blog comments output.
+Se você der uma olhada em uma das páginas de exibição do blog, por exemplo, ``http://symblog.dev/app_dev.php/2``, você deve ver a página de comentários do blog parecida como:
 
 .. image:: /_static/images/part_4/comments.jpg
     :align: center
     :alt: symblog show blog comments
     
-Adding Comments
+Adicionando comentários
 ---------------
 
-The last part of this chapter will add the functionality for users to add
-comments to a blog post. This will be possible via a form on the blog show page. We
-have already been introduced to creating forms in Symfony2 when we created the
-contact form. Rather than creating the comment form manually, we can use Symfony2
-to do this for us. Run the following task to generate the ``CommentType`` class for
-the ``Comment`` entity.
+Para a última parte deste capítulo, iremo adicionar a funcionalidade para os usuários poderem adicionar comentários a um post do blog. Isso será possível através de um formulário na página de apresentação do blog. Nós já sabemos como criar um formulários em Symfony 2, isso foi mostrado quando criamos o formulário de contato. Em vez de criar manualmente o formulário de comentário, podemos usar Symfony 2 para fazer isso. Execute o seguinte código para gerar a classe  ``CommentType`` para a entidade ``Comment``.
 
 .. code-block:: bash
     
     $ php app/console generate:doctrine:form BloggerBlogBundle:Comment
     
-You'll notice again here, the use of the short hand version to specify the
-``Comment`` entity.
+Perceba, novamente, a utilização de atalho para especificar a entidade ``Comment``.
 
 .. tip::
 
-    You may have noticed the task ``doctrine:generate:form`` is also available.
-    This is the same task just namespaced differently.
+    Você deve ter percebido que a funcionalidade ``doctrine:generate:form`` também está disponível.
+    É a mesma coisa, só foi adicionado o namespace de forma diferente.
     
-The generate form task has created the ``CommentType`` class located at
-``src/Blogger/BlogBundle/Form/CommentType.php``.
+A classe ``CommentType`` do formulário foi criada em ``src/Blogger/BlogBundle/Form/CommentType.php``.
 
 .. code-block:: php
 
@@ -1065,27 +875,19 @@ The generate form task has created the ``CommentType`` class located at
         }
     }
 
-We have already explored what is happening here in the previous ``EnquiryType``
-class. We could begin by customising this class now, but let's move onto displaying
-the form first. 
+Já vimos o que acontece aqui, ao criar a classe ``EnquiryType``. Poderíamos personalizar esta classe agora, mas vamos passar para a exibição do formulário primeiro.
 
-Displaying the Comment Form
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exibindo o formulário de comentário
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-As we want the user to add comments from the show blog page, we could create the
-form in the ``show`` action of the ``Blog`` controller and render the form
-directly in the ``show`` template. However, it would be better to separate this
-code as we did with displaying the comments. The difference between showing
-the comments and displaying the comment form is the comment form needs
-processing, so this time a controller is required. This introduces a method
-slightly different to the above where we just included a template.
+Como queremos que o usuário adicione seus comentários, da página de exibição do blog, poderíamos criar o formulário na ação ``show`` do controlador ``Blog`` e renderizar o formulário
+diretamente no template``show``. No entanto, seria melhor separar este código como fizemos com a exibição dos comentários. A diferença entre mostrar os comentários e apresentar o formulário de comentário é que o formulário de comentário precisa ser processado, então, um controlador é necessário. Esse método é ligeiramente diferente do abordado acima, por isso, vamos apenas incluir o template.
 
-Routing
-~~~~~~~
+Rota
+~ ~ ~ ~ ~ ~ ~
 
-We need to create a new route to handle the processing of submitted forms. Add
-a new route to  the routing file located at
-``src/Blogger/BlogBundle/Resources/config/routing.yml``.
+Precisamos criar uma nova rota para lidar com o processamento dos formulários enviados. Adicione
+uma nova rota no arquivo de rota localizado em ``src/Blogger/BlogBundle/resources/config/routing.yml``.
 
 .. code-block:: yaml
 
@@ -1096,12 +898,10 @@ a new route to  the routing file located at
             _method:  POST
             blog_id: \d+
         
-The controller
-~~~~~~~~~~~~~~
+O controlador
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Next, we need to create the new ``Comment`` controller we have referenced above.
-Create a file located at ``src/Blogger/BlogBundle/Controller/CommentController.php`` and
-paste in the following.
+Agora, precisamos criar o novo controlador ``Comment`` que mencionamos acima. Crie um arquivo localizado em ``src/Blogger/BlogBundle/controller/CommentController.php`` e cole o seguinte código:
 
 .. code-block:: php
 
@@ -1174,22 +974,12 @@ paste in the following.
        
     }
     
-We create 2 actions in the ``Comment`` controller, one for ``new`` and one for
-``create``. The ``new`` action is concerned with displaying the comment form,
-the ``create`` action is concerned with processing the submission of the comment
-form. While this may seem like a big chuck of code, there is nothing new here,
-everything was covered in chapter 2 when we created the contact form. However,
-before moving on make sure you fully understand what is happening in the
-``Comment`` controller.
+Nós criamos 2 ações no controlador ``Comment``, uma para ``new`` e um para ``create``. A ação ``new`` está preocupada em exibir o formulário de comentário, a ação ``create`` está preocupada em processar a apresentação do formulário de comentário. Embora isso possa parecer estranho, não há nada novo aqui, tudo foi abordado no capítulo 2, quando criamos o formulário de contato. No entanto, antes de seguirmos, certifique-se de ter entendido completamente o que está acontecendo no controlador ``Comment``.
 
-Form Validation
-~~~~~~~~~~~~~~~
+Validação do formulário
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We don't want users to be able to submit blog comments with blank ``user`` or
-``comment`` values. To achieve this we look back to the validators we were
-introduced to in part 2 when creating the enquiry form. Update the ``Comment``
-entity located at ``src/Blogger/BlogBundle/Entity/Comment.php`` with the
-following.
+Não queremos que os usuários enviem comentários do blog com o ``usuário`` ou ``comentário`` com  valores em branco ou vazios. Assim, voltemos aos validadores que foram mostrados na parte 2 ao criar o formulário de contato. Atualize a entidade ``Comment`` localizada em ``src/Blogger/BlogBundle/Entity/Comment.php`` com o seguinte código:
 
 .. code-block:: php
     
@@ -1219,18 +1009,13 @@ following.
         // ..
     }
 
-The constraints ensure that both the user and comment members must not be blank.
-We have also set the ``message`` option for both constraints to override the
-default ones. Remember to add the namespace for ``ClassMetadata`` and
-``NotBlank`` as shown above.
+As restrições garantem que, tanto o usuário e o comentário, não possam ser passados em branco.
+Temos também que definir as opções das ``mensagems`` para estas restrições para substituir o as mensagens padrões. Lembre-se de adicionar o namespace para ``ClassMetadata`` e ``NotBlank`` como mostrado acima.
 
-The view
-~~~~~~~~
+A View
+~ ~ ~ ~ ~ ~ ~ ~
 
-Next we need to create the 2 templates for the ``new`` and ``create`` controller
-actions. First create  a new file
-located at ``src/Blogger/BlogBundle/Resources/views/Comment/form.html.twig``
-and paste in the following.
+Precisamos criar os 2 templates para as 2 ações do controlador ``new`` e ``create``. Crie um novo arquivo em ``src/Blogger/BlogBundle/Resources/views/Comment/form.html.twig`` e cole o seguinte código:
 
 .. code-block:: html
     
@@ -1243,13 +1028,9 @@ and paste in the following.
         </p>
     </form>
 
-The purpose of this template is simple, it just renders the comment form. You'll
-also notice the ``action`` of the form is to ``POST`` to the new route we created
-``BloggerBlogBundle_comment_create``.
+O objetivo deste template é simples, ele apenas renderiza o formulário de comentário. Perceba que a ``ação`` do formulário é``POST`` para a nova rota que criamos em ``BloggerBlogBundle_comment_create``.
 
-Next let's add the template for the ``create`` view. Create a new file located at
-``src/Blogger/BlogBundle/Resources/views/Comment/create.html.twig``
-and paste in the following.
+Agora, vamos adicionar o template para o ``create``. Crie um novo arquivo em ``src/Blogger/BlogBundle/Resources/views/Comment/create.html.twig`` e cole o seguinte código:
 
 .. code-block:: html
 
@@ -1262,14 +1043,9 @@ and paste in the following.
         {% include 'BloggerBlogBundle:Comment:form.html.twig' with { 'form': form } %}    
     {% endblock %}
 
-As the ``create`` action of the ``Comment`` controller deals with processing
-the form, it also needs to be able to display it, as there could be errors in the
-form. We reuse the ``BloggerBlogBundle:Comment:form.html.twig`` to render the
-actual form to prevent code duplication.
+À medida que a ação ``create`` do controlador ``Comment`` processa o formulário, ela também precisa ser capaz de exibi-lo, caso existam erros. Reutilizaremos o ``BloggerBlogBundle:Comment:form.html.twig`` para renderizar o formulário atual para evitar a duplicação de código.
 
-Now let's update the blog show template to render the add blog form. Update the
-template located at ``src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig``
-with the following.
+Agora vamos atualizar o template de exibição do blog para renderizar o formulário de inserção de comentário do blog. Atualize o template localizado em ``src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig`` com o seguinte código:
 
 .. code-block:: html
 
@@ -1289,50 +1065,30 @@ with the following.
         </section>
     {% endblock %}
 
-We use another new Twig tag here, the ``render`` tag. This tag will render
-the contents of a controller into the template. In our case we render the 
-contents of the ``BloggerBlogBundle:Comment:new`` controller action.
+Usamos uma outra tag nova do Twig, a tag ``render``. Esta tag irá processar o conteúdo de um controlador para o template. No nosso caso, renderizamos o conteúdo da ação ``BloggerBlogBundle:Comment:new`` do controlador.
 
-If you now have a look at one of the blog show pages, such as
-``http://symblog.dev/app_dev.php/2`` you'll notice a Symfony2 exception is thrown.
+Se você acessar uma das páginas de exibição do blog, como ``http://symblog.dev/app_dev.php/2``, você verá uma página de exceção do Symfony 2.
 
 .. image:: /_static/images/part_4/to_string_error.jpg
     :align: center
     :alt: toString() Symfony2 Exception
     
-This exception is being thrown by the ``BloggerBlogBundle:Blog:show.html.twig``
-template. If we look at line 25 of the ``BloggerBlogBundle:Blog:show.html.twig``
-template we can see it's the following line showing that the problem actually exists
-in the process of embedding the ``BloggerBlogBundle:Comment:create`` controller.
+Essa exceção está sendo lançada pelo template ``BloggerBlogBundle:Blog:show.html.twig``. Se formos para a linha 25 do template ``BloggerBlogBundle:Blog:show.html.twig``, veremos que o problema da linha realmente existe no controlador.
 
 .. code-block:: html
 
     {% render 'BloggerBlogBundle:Comment:create' with { 'blog_id': blog.id } %}
     
-If we look at the exception message further it gives us some more information
-about the nature of why the exception was caused.
+Se observarmos a mensagem de exceção, ela ainda nos dá mais algumas informações sobre o por que essa exceção foi causada.
 
     Entities passed to the choice field must have a "__toString()" method defined
 
-This is telling us that a choice field that we are trying to render doesn't have
-a ``__toString()`` method set for the entity the choice field is associated with.
-A choice field is a form element that gives the user a number of choices,
-such as a ``select`` (drop down) element. You may be wondering where are we rendering
-a choice field in the comment form? If you look at the comment form template again you will notice
-we render the form using the ``{{ form_widget(form) }}`` Twig function. This
-function outputs the entire form in its basic form. So let's go back to the class
-the form is created from, the ``CommentType`` class. We can see that a number of
-fields are being added to the form via the ``FormBuilder`` object. In particular
-we are adding a ``blog`` field.
+Esta mensagem nos diz que um campo de escolha que nós estamos tentando renderizar não tem
+um método ``__toString()`` definido para a entidade cujo campo de escolha está associado. Um campo de escolha é um elemento de formulário que dá ao usuário uma série de escolhas, como um ``select`` (dropdown). Você pode estar se perguntando onde estamos renderizando o campo de escolha do formulário de comentário? Se você observar o template do formulário de comentário novamente, você vai perceber que renderizamos o formulário usando a função Twig ``{{form_widget (form)}}``. Esta função gera todos os elementos básicos do formulário. Então, vamos voltar para a classe que cria o formulário ``CommentType``. Podemos ver que uma série de
+campos estão sendo adicionados ao formulário através do objeto ``FormBuilder``. Em particular,
+estamos adicionando um campo do ``blog``.
 
-If you remember from chapter 2, we spoke about how the ``FormBuilder`` will try
-to guess the field type to output based on metadata related to the field. As we
-setup a relationship between ``Comment`` and ``Blog`` entities, the
-``FormBuilder`` has guessed the comment should be a ``choice`` field, which
-would allow the user to specify the blog post to attach the comment to. That is
-why we have a ``choice`` field in the form, and why the Symfony2 exception is
-being thrown. We can fix this problem by implementing the ``__toString()``
-method in the ``Blog`` entity.
+Se você se lembra do capítulo 2, falamos sobre como o ``FormBuilder`` vai tentar adivinhar o tipo de campo para exibir, com base em metadados relacionados ao campo. À medida que configuramos uma relação entre as entidades ``Comment`` e ``Blog``, o ``FormBuilder`` adivinhou que o comentário poderia ser um ``campo de escolha``, que permite o usuário escolha que o comentário vai para um determinado post do blog. Isso ocorre porque temos um ``campo de escolha`` no formmulário, gerando a exceção do Symfony 2. Podemos resolver este problema através da aplicação do método ``__toString()`` na entidade ``Blog``.
 
 .. code-block:: php
     
@@ -1344,31 +1100,19 @@ method in the ``Blog`` entity.
 
 .. tip::
 
-    The Symfony2 error messages are very informative when describing the problem
-    that has occurred. Always read the error messages as they will usually make
-    the debugging process a lot easier. The error messages also provide a full
-    stack trace so you can see the steps that were taken to cause the error.
+    As mensagens de erro do Symfony 2 são bem informativas quando se trata de descrever o problema que ocorreu. Leia sempre as mensagens de erro pois elas tornam o processo de depuração muito mais fácil. As mensagens de erro também fornecer uma relação completa do que causou o erro.
     
-Now when you refresh the page you should see the comment form output. You will
-also notice that some undesirable fields have been output such as ``approved``,
-``created``, ``updated`` and ``blog``. This is because we did not customise
-the generated ``CommentType`` class earlier.
+Agora, quando você atualizar a página que você deve ver o formulário de comentário. Você irá 
+notar que alguns campos indesejáveis foram retornados, como ``approved``, ``create``, ``updated`` e ``blog``. Isto é porque nós não personalizamos a classe ``CommentType`` gerada anteriormente.
 
 .. tip::
 
-    The fields being rendered all seem to be output as the correct type of fields.
-    The ``user`` fields is an ``text`` field, the ``comment`` field is a ``textarea``,
-    the 2 ``DateTime`` fields are a number of ``select`` fields allowing us to specify the
-    time, etc.
+    Os campos a serem renderizados terão a saída correta de acordo com o tipo de campos. O campo ``user`` é um campo de texto ``text``, o campo ``comment`` é um ``textarea``, os 2 campos ``datetime`` são um número de campos ``select`` permitindo especificar o tempo, etc
     
-    This is because of the ability of ``FormBuilder`` to guess the type of field
-    the member it is rendering requires. It is able to do this based on the metadata
-    you provide. As we have specified quite specific metadata for the ``Comment``
-    entity, the ``FormBuilder`` is able to make accurate guesses of the field types.
-    
-Let's now update this class located at
-``src/Blogger/BlogBundle/Form/CommentType.php`` to output only the fields we
-need. 
+    Isto é possível graças à capacidade do ``FormBuilder`` descobrir o tipo de campo do membro que está renderizando. Ele consegue fazer isso baseado em metadados fornecidos. Como especificamos os metadados específicos para a entidade ``Comment ``, o ``FormBuilder`` é capaz de fazer estimativas precisas dos tipos de campo.
+
+Vamos, agora, atualizar esta classe, localizada em ``src/Blogger/BlogBundle/Form/CommentType.php`` para escrever somente os campos que
+precisamos. 
 
 .. code-block:: php
 
@@ -1389,13 +1133,7 @@ need.
         // ..
     }
 
-Now when you refresh the page only the user and comment fields are output. If
-you were to submit the form now, the comment would not actually be saved to the
-database. That's because the form controller does nothing with the ``Comment`` entity
-if the form passes validation. So how do we persist the ``Comment`` entity to the database?
-You have already seen how to do this when creating ``DataFixtures``. Update the
-``create`` action of the ``Comment`` controller to persist the ``Comment`` entity
-to the database.
+Agora, quando você atualizar a página, somente o usuário e campos de comentários são exibidos. Se você enviar o formulário agora, o comentário não seria realmente salvo no banco de dados. Isso ocorre porque o controlador do formulário não faz nada com a entidade ``Comment`` para que possa ser validado. Então, como vamos trabalhar com a entidade ``Comment`` para usar o banco de dados? Você já viu como fazer isso ao criar ``DataFixtures``. Atualize a ação ``create`` do controlador ``Comment`` para trabalhar cm a entidade do banco de dados ``Comment``.
 
 .. code-block:: php
 
@@ -1425,29 +1163,18 @@ to the database.
         }
     }
 
-Persisting the ``Comment`` entity is as simple as a call to ``persist()`` and ``flush()``.
-Remember, the form just deals with PHP objects, and Doctrine 2 manages and persists
-these objects. There is no direct connection between submitting a form, and
-the submitted data being persisted to the database.
 
-You should now be able to add comments to the blog posts.
+
+Agora você deve ser capaz de adicionar comentários aos posts do blog.Persistir a entidade ``Comment`` é tão simples quanto chamar ``persist()`` e ``flush()``. Lembre-se, o formulário só lida com objetos do PHP, e Doctrine 2 gerencia a persistência desses objetos. Não há conexão direta entre a apresentação de um formulário e os dados apresentados sendo trabalhado no banco de dados.
 
 .. image:: /_static/images/part_4/add_comments.jpg
     :align: center
     :alt: symblog add blog comments
     
-Conclusion
+Conclusão
 ----------
 
-We have made good progress in this chapter. Our blogging website is starting to
-function more like you'd expect. We now have the basics of the homepage created
-and the comment entity. Users can now post comments on blogs and read comments
-left by other user. We saw how to create fixtures that could be referenced
-across multiple fixture files and used Doctrine 2 Migrations to keep the database
-schema inline with the entity changes.
+Nós progredimos bem neste capítulo. Nosso site está começando a do jeito que esperamos que funcione. Agora temos o básico da página inicial criada e a entidade do comentário. Os usuários agora podem postar comentários em blogs e ler os comentários deixado por outro utilizador. Vimos como criar fixtures que podem ser referenciados em multiplos arquivos de fixtures e usamos as Migrações do Doctrine 2 para manipular o esquema do banco de dados com as alterações da entidade.
 
-Next we will look at building the sidebar to include The Tag Cloud and Recent
-Comments. We will also extend Twig by creating our own custom filters. Finally
-we will look at using the Assetic asset library to assist us in managing our
-assets.
+No próximo capítulo, vamos construir a barra lateral para incluir a nuvem de tags e os comentários recentes. Vamos estender o Twig criando nossos próprios filtros personalizados. Finalmente, vamos usar a biblioteca ``asset`` para nos auxiliar na gestão da nossos assets.
     
