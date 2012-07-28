@@ -1,32 +1,15 @@
-[Part 5] - Customising the view: Twig extensions, The sidebar and Assetic
-=========================================================================
+[Parte 5] – Customizando a View: Extensões do Twig, a barra lateral e o Assetic
+================================================== =======================
 
-Overview
+Visão geral
 --------
 
-This chapter will continue to build on the frontend of symblog. We will tweak
-the homepage to display information regarding comments for a blog post along
-with addressing SEO by adding the blog title to the URL. We will also begin work
-on the sidebar to add 2 common blog components; The Tag Cloud and the Latest
-Comments. We will explore the various environments in Symfony2 and learn how to
-run symblog in the production environment. The Twig templating engine will be
-extended to provide a new filter, and we introduce Assetic to manage the
-website asset files. At the end of this chapter you will have integrated
-comments into the homepage, have a Tag Cloud and Latest Comments component on the
-sidebar and will have used Assetic to manage the asset files. You will also have seen
-symblog running in the production environment.
+Este capítulo continua trabalhando com o frontend do Symblog. Vamos ajustar a página para exibir informações sobre comentários de um post do blog, juntamente com endereçamento SEO, adicionando o título do blog para a URL. Também iremos trabalhar na barra lateral para adicionar 2 componentes comuns de blogs, a Nuvem de Tags e os Últimos Comentários. Vamos explorar os vários ambientes do Symfony 2 e aprender a executar o Symblog no ambiente de produção. Iremos  estender os templates com Twig para utilizar um novo filtro e trabalharemos com Assetic para gerenciar os arquivos assetics do site. No final deste capítulo, você terá integrado comentários  na página inicial, um componente de nuvem de Tags e últimos comentários na barra lateral e terá usado Assetic para gerenciar os arquivos assetics. Você conseguirá executar o Symblog no ambiente de produção.
 
-The Homepage - Blogs and Comments
+A Homepage - Blogs e Comentários
 ---------------------------------
 
-So far the homepage lists the latest blog entries but it doesn't give any
-information regarding the comments for those blogs. Now that we have the
-``Comment`` entity built we can revisit the homepage to provide this information.
-As we have set up the link between ``Blog`` and ``Comment`` entities we know
-Doctrine 2 will be able to retrieve the comments for a blog (remember we added a
-``$comments`` member to the ``Blog`` entity). Let's update the homepage view template
-located at ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` with
-the following.
+Até agora, a página inicial lista as entradas mais recentes do blog, mas não dá qualquer informação sobre os comentários para os blogs. Agora que temos a entidade ``Comment`` construída, podemos voltar à página inicial para inserir essas informações. Como configuramos as ligações entre as  entidades ``Blog`` e``Comment``,  sabemos  que o Doctrine 2 irá recuperar os comentários relativos a um blog (lembre-se, nós adicionamos um membro ``$comments`` à entidade ``Blog``). Vamos atualizar o template da visualização da página inicial localizado em ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` com o seguinte código.
 
 .. code-block:: html
 
@@ -42,15 +25,10 @@ the following.
     
     {# .. #}
 
-We have used the ``comments`` getter to retrieve the blog comments and then passed
-the collection through the Twig ``length`` filter. If you have a look
-at the homepage now via ``http://symblog.dev/app_dev.php/`` you will see the
-number of comments for each blog being displayed.
+Temos utilizado os métodos getter de ``comments`` para recuperar os comentários do blog e, depois, passamos a coleção através do filtro ``length`` do Twig. Acesse a página inicial agora ``http://symblog.dev/app_dev.php/`` e você verá o número de comentários para cada blog sendo exibido.
 
-As explained above, we already informed Doctrine 2 that the ``$comments`` member of the
-``Blog`` entity is mapped to the ``Comment`` entity. We achieved this in the previous chapter
-with the following metadata in the ``Blog`` entity located at
-``src/Blogger/BlogBundle/Entity/Blog.php``.
+Como explicado acima, já informamos ao Doctrine 2 que o membro ``$comments``, da entidade 
+``Blog``,  é mapeado para a entidade ``Comment``. Vimos isso no capítulo anterior com o seguinte metadado da entidade ``Blog``, localizada em ``src/Blogger/BlogBundle/Entity/blog.php``.
 
 .. code-block:: php
 
@@ -61,10 +39,7 @@ with the following metadata in the ``Blog`` entity located at
      */
     protected $comments;
 
-So we know Doctrine 2 is aware of the relationship between blogs and comments, but
-how did it populate the ``$comments`` member with the related ``Comment``
-entities? If you remember back to the ``BlogRepository`` method we created (shown
-below) to get the homepage blogs we made no selection to retrieve the related ``Comment`` entities.
+Então, nós sabemos que Doctrine 2 é consciente da relação entre blogs e comentários, mas como é que vamos preencher o membro ``$comments`` com a entidade ``Comment`` relacionada? Se você se lembra do método ``BlogRepository`` que criamos (mostrado abaixo) para obter os blogs para a página inicial, não fizemos nenhuma seleção para recuperar o a entidade ``Comment`` relacionada.
 
 .. code-block:: php
 
@@ -83,45 +58,25 @@ below) to get the homepage blogs we made no selection to retrieve the related ``
                   ->getResult();
     }
     
-However, Doctrine 2 uses a process called lazy loading where the ``Comment`` entities are
-retrieved from the database as and when required, in our case when the call to
-``{{ blog.comments|length }}`` is made. We can demonstrate this process using
-the developer toolbar. We have already started to explore the basics of the developer
-toolbar and it's now time to introduce one of its most useful features, the Doctrine 2
-profiler. The Doctrine 2 profiler can be accessed by clicking the last icon in
-the developer toolbar. The number next to this icon shows the number of queries
-executed on the database for the current HTTP request.
+No entanto, o Doctrine 2 usa um processo chamado de ``carregamento lento`` onde a entidade ``Comment`` é recuperada do banco de dados como e quando necessário, no nosso caso, quando a chamada para ``{{Blog.comments | length}}`` é feita. Podemos demonstrar este processo utilizando
+a barra de ferramentas do desenvolvedor. Nós já começaram a explorar os conceitos básicos da barra de ferramentas do desenvolvedor e agora é hora de introduzir uma de suas características mais úteis, o Doctrine 2 profiler. O Doctrine 2 profiler pode ser acessada clicando no último ícone a barra de ferramentas do desenvolvedor. O número ao lado deste ícone mostra o número de consultas executadas no banco de dados para a solicitação HTTP atual.
 
 .. image:: /_static/images/part_5/doctrine_2_toolbar_icon.jpg
     :align: center
     :alt: Developer toolbar - Doctrine 2 icon
 
-If you click the Doctrine 2 icon you will be presented with information
-regarding the queries that were executed by Doctrine 2 on the database for the
-current HTTP request.
+Após clicar no ícone, você visualizará informações sobre as consultas que foram executadas pelo Doctrine 2 no banco de dados para o solicitação HTTP atual.
 
 .. image:: /_static/images/part_5/doctrine_2_toolbar_queries.jpg
     :align: center
     :alt: Developer toolbar - Doctrine 2 queries
 
-As you can see in the above screen shot, there are a number of queries executed
-for a request to the homepage. The second query executed retrieves the blog
-entities from the database and is executed as a result of the
-``getLatestBlogs()`` method on the ``BlogRepository`` class. Following this
-query you will notice a number of queries that pull comments from the database,
-one blog at a time. We can see this because of the ``WHERE t0.blog_id = ?`` in
-each of the queries, where the ``?`` is replaced by the Parameter value (the blog
-Id) on the following line. Each of these queries are as a result of the calls to
-``{{ blog.comments }}`` in the homepage template. Each time this function is
-executed, Doctrine 2 has to lazily load the ``Comment`` entities that relate to
-the ``Blog`` entity.
+Como você pôde ver na captura de tela acima, há uma série de consultas realizadas para um pedido para a página inicial. A segunda consulta executada recupera as entidades do blog do banco de dados e é executado como um resultado do método ``getLatestBlogs()`` na classe ``BlogRepository``. Após esta consulta, você irá notar uma série de outras consultas que recebem os  comentários do banco de dados, um blog de cada vez. Isso é possível por causa do ``WHERE t0.blog_id =? `` em cada uma das consultas, onde o ``? `` é substituído pelo valor do parâmetro (o blog Id) na linha seguinte. Cada uma destas consultas é proveniente das chamadas para ``{{Blog.comments}}`` no template da página inicial. Cada vez que esta função é
+executada, o Doctrine 2 carrega lentamente a entidade ``Comment``  que se relaciona com a entidade ``Blog ``. 
 
-While lazy loading is very effective at retrieving related entities from the database,
-it's not always the most efficient way to perform this task. Doctrine 2 provides the ability
-to ``join`` related entities together when querying the database. This way we can
-pull the ``Blog`` and related ``Comment`` entities out from the database in one query.
-Update the ``QueryBuilder`` code in the ``BlogRepository`` located at
-``src/Blogger/BlogBundle/Repository/BlogRepository.php`` to join on the comments.
+Embora o ``Lazy loading`` seja muito eficaz na recuperação de entidades relacionadas do banco de dados, nem sempre é a maneira mais eficiente. Doctrine 2 consegue ``juntar`` entidades relacionadas quando consultamos o banco de dados. Dessa forma, podemos resgatar o ``Blog`` e as entidades ``Comments``  relacionadas fora do banco de dados em uma consulta.
+Atualize o código do ``QueryBuilder`` no ``BlogRepository`` localizado em 
+``src/Blogger/BlogBundle/Repository/BlogRepository.php`` para juntarmos os comentários.
 
 .. code-block:: php
 
@@ -141,24 +96,14 @@ Update the ``QueryBuilder`` code in the ``BlogRepository`` located at
                   ->getResult();
     }
 
-If you now refresh the homepage and examine the Doctrine 2 output in the developer
-toolbar you will notice the number of queries has dropped. You can also see the comment
-table has been joined to the blog table.
+Se você atualizar a página e examinar as saídas do Doctrine 2 na barra de ferramentas do desenvolvedor, você vai notar que o número de consultas caiu. Você também pode ver que a tabela de comentário foi unificada à tabela de blog.
 
-Lazy loading and joining related entities are both very powerful concepts but
-they need to be used correctly. The correct balance between the 2 needs to be
-found to ensure your application is running as efficiently as possible. At first
-it might seem great to join on every related entity so you never need to lazy
-load and your database query count will always remain low. However, it's
-important to remember that the more information you retrieve from the database,
-the more processing needs to be done by Doctrine 2 to hydrate this into the
-entity objects. More data also means more memory is used by the server to store
-the entity objects.
+``Lazy loading`` e ``join`` entre entidades relacionadas são dois conceitos muito poderosos, mas
+eles precisam ser usados ​​corretamente. O equilíbrio correto entre os 2 deve ser encontrado para garantir que sua aplicação está funcionando tão eficientemente quanto possível. A princípio, pode parecer bem interessante juntar isso tudo em cada entidade relacionada, para que você nunca precise usar o ``Lazy loading`` e a contagem de consultas a banco de dados fique sempre baixa. No entanto, é importante lembrar que quanto mais informações você recuperar do banco de dados, o Doctrine 2 precisará de mais processamento para preencher os presentes objetos da entidade. Mais dados, também significa mais de memória usada pelo servidor para armazenar os objetos da entidade.
 
-Before moving on let's make one minor addition to the homepage template for the
-number of comments we have just added. Update the homepage template located at
-``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` to add a link to
-show the blog comments.
+Antes de prosseguirmos, vamos fazer uma pequena adição ao template da página inicial para a
+número de comentários que acabamo de adicionar. Atualizar o template da página inicial localizado em ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` para adicionar um link para
+mostrar os comentários do blog.
 
 .. code-block:: html
 
@@ -174,20 +119,15 @@ show the blog comments.
     
     {# .. #}
             
-The Sidebar
+A barra lateral
 -----------
 
-Currently the sidebar of symblog is looking a bit empty. We will update this
-with 2 common blog components, the Tag Cloud and a list of the Latest Comments.
+Atualmente, a barra lateral do symblog está parecendo um pouco vazia. Atualizaremos a barra lateral com 2 componentes comuns de blog, a Nuvem de Tags e uma lista dos Últimos Comentários.
 
-Tag Cloud
-~~~~~~~~~
+A Nuvem de Tag
+~ ~ ~ ~ ~ ~ ~ ~ ~
 
-The Tag Cloud shows tags for each blog emphasized in a way that displays the
-more common tags bolder. To achieve this we need a way to retrieve all the tags
-for all the blogs. Let's create some new methods in the ``BlogRepository`` class
-to do this. Update the ``BlogRepository`` class located at
-``src/Blogger/BlogBundle/Repository/BlogRepository.php`` with the following.
+A Nuvem de Tag mostra tags para cada blog enfatizado de forma a mostrar a s tags mais comuns. Para conseguir isso, precisamos de uma maneira de recuperar todas as tags de todos os blogs. Vamos criar alguns novos métodos na classe ``BlogRepository`` do arquivo localizado em ``src/Blogger/BlogBundle/Repository/BlogRepository.php``. Copie e cole o seguinte código.
 
 .. code-block:: php
 
@@ -241,15 +181,10 @@ to do this. Update the ``BlogRepository`` class located at
         return $tagWeights;
     }
 
-As the tags are stored in the database as comma separated values (CSV) we need a
-way to split them and return them as an array. This is achieved by the ``getTags()``
-method. The ``getTagWeights()`` method is then able to use an array of tags to calculate
-the weight of each tag based on its popularity within the array. The tags are also
-shuffled to randomise their display on the page.
+Como as tags são armazenadas no banco de dados como valores separados por vírgula (CSV), precisamos de uma maneira de dividi-los e devolvê-los como um array. Isto é realizado pelo método ``getTags()``. O método ``getTagWeights()`` também consegue usar um array de tags para calcular
+``o peso`` de cada tag com base na sua popularidade dentro do array. As tags também são  embaralhadas para exibi-las na página de forma aleatória.
 
-Now we are able to generate the Tag Cloud, we need to display it. Create a new
-action in the ``PageController`` located at
-``src/Blogger/BlogBundle/Controller/PageController.php`` to handle the sidebar.
+Agora, temos a Nuvem de Tags, precisamos exibi-la. Criar uma nova ação no ``PageController`` em``src/Blogger/BlogBundle/Controller/PageController.php`` para trabalhar com a barra lateral.
 
 .. code-block:: php
 
@@ -271,9 +206,7 @@ action in the ``PageController`` located at
         ));
     }
 
-The action is very simple, it uses the 2 new ``BlogRepository`` methods to generate
-the Tag Cloud, and passes this over to the view. Now let's create this view located at
-``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig``.
+A ação é muito simples, ele usa os 2 novos métodos do ``BlogRepository`` para gerar a Nuvem de Tag e passar esta nuivem para a visão (View). Agora vamos criar esta View em ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig``.
 
 .. code-block:: html
 
@@ -292,19 +225,10 @@ the Tag Cloud, and passes this over to the view. Now let's create this view loca
         </p>
     </section>
 
-The template is also very simple. It just iterates over the various tags
-setting a class to the weight of the tag. The ``for`` loop introduces how to
-access the ``key`` and ``value`` pairs of the array, with ``tag`` being the key
-and ``weight`` being the value. There are a number of variations of how to use
-the ``for`` loop provided in the
-`Twig documentation <http://twig.sensiolabs.org/doc/templates.html#for>`_.
+O template também é muito simples. Ele só interage com as várias tags definindo uma classe para o peso da tag. O loop ``for`` nos mostra como acessar o par  ``chave`` e ``valor`` do array, com ``tag`` sendo a chave e ``peso`` sendo o valor. Há um número de variações de como utilizar o loop ``for`` na `Documentação do Twig <http://twig.sensiolabs.org/doc/templates.html#for>`_.
 
-If you look back at the ``BloggerBlogBundle`` main layout template located at
-``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` you will notice
-we put a placeholder in for the sidebar block. Let's replace this now by rendering
-the new sidebar action. Remember from the previous chapter that the Twig ``render``
-method will render the contents from a controller action, in this case
-the ``sidebar`` action of the ``Page`` controller.
+Se você voltar ao layout do tamplate principal ``BloggerBlogBundle``, localizado em ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``, você vai perceber que colocamos um espaço reservado para o bloco da barra lateral. Vamos substituir este bloco agora, renderizando
+a nova ação da barra lateral. Lembre-se do capítulo anterior, o método ``render`` do Twig irá processar o conteúdo a partir de uma ação do controlador, neste caso, a ação ``sidebar`` do controlador ``Page``.
 
 .. code-block:: html
 
@@ -316,8 +240,7 @@ the ``sidebar`` action of the ``Page`` controller.
         {% render "BloggerBlogBundle:Page:sidebar" %}
     {% endblock %}
 
-Finally let's add the CSS for the tag cloud. Add a new stylesheet located at
-``src/Blogger/BlogBundle/Resources/public/css/sidebar.css``.
+Finalmente, vamos adicionar o CSS para a Nuvem de Tags. Adicione uma folha de estilo nova em ``src/Blogger/BlogBundle/Resources/public/css/sidebar.css``.
 
 .. code-block:: css
 
@@ -337,9 +260,7 @@ Finally let's add the CSS for the tag cloud. Add a new stylesheet located at
     .sidebar .tags .weight-4 { font-size: 21px; }
     .sidebar .tags .weight-5 { font-size: 24px; }
 
-As we have added a new stylesheet we need to include it. Update the
-``BloggerBlogBundle`` main layout template located at
-``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` with the following.
+Como nós adicionamos uma nova folha de estilo, precisamos incluí-lo. Atualize o layout do template principal ``BloggerBlogBundle``, localizado em ``src/Blogger/BlogBundle/Recursos/views/layout.html.twig`` com o seguinte código:
 
 .. code-block:: html
     
@@ -357,27 +278,21 @@ As we have added a new stylesheet we need to include it. Update the
 
 .. note::
 
-    If you are not using the symlink method for referencing bundle assets into the
-    ``web`` folder you must re-run the assets install task now to copy over the
-    new CSS file.
+    Se você não estiver usando o método de link simbólico para referenciar o pacote assets para a pasta ``web``, você deve re-executar o comando para intalar os assets para copiar a novo arquivo CSS.
 
     .. code-block:: bash
 
         $ php app/console assets:install web
         
-If you now refresh the symblog website you will see the Tag Cloud rendered in the sidebar.
-In order to get the tags to render with different weights, you may need to update
-the blog fixtures so some tags are used more than others.
+Se você atualizar o site Symblog, você vai ver a Nuvem de Tags renderizados na barra lateral. A fim de obter as tags com peso diferente para renderizar, você pode precisar atualizar as fixtures do blog para que algumas tags fiquem mais usadas mais do que outras.
 
-Recent Comments
-~~~~~~~~~~~~~~~
+Comentários Recentes
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Now the Tag Cloud is in place, let's also add the Latest Comments component to the
-sidebar.
+Agora que a Nuvem de Tags está no no seu devido lugar, vamos adicionar o componente dos Comentários mais Recentes à barra lateral.
 
-First we need a way to retrieve the latest comments for the blogs. To do this
-we will add a new method to the ``CommentRepository`` located at
-``src/Blogger/BlogBundle/Repository/CommentRepository.php``.
+Primeiro, precisamos de uma forma para recuperar os últimos comentários dos blogs. Para isso,
+vamos adicionar um novo método para ``CommentRepository`` localizado em ``src/Blogger/BlogBundle/Repository/CommentRepository.php``.
 
 .. code-block:: php
 
@@ -397,8 +312,7 @@ we will add a new method to the ``CommentRepository`` located at
                   ->getResult();
     }
 
-Next update the sidebar action located at ``src/Blogger/BlogBundle/Controller/PageController.php``
-to retrieve the latest comments and pass them over to the view.
+Agora,  atualize a ação ``sidebar`` em ``src/Blogger/BlogBundle/controller/PageController.php`` para recuperar os últimos comentários e passá-los para a View.
 
 .. code-block:: php
 
@@ -419,11 +333,7 @@ to retrieve the latest comments and pass them over to the view.
         ));
     }
 
-You will notice we have used a new parameter called
-``blogger_blog.comments.latest_comment_limit`` to limit the number of comments
-retrieved. To create this parameter
-update the config located at
-``src/Blogger/BlogBundle/Resources/config/config.yml`` with the following.
+Perceba que usamos um novo parâmetro chamado ``Blogger_blog.comments.latest_comment_limit`` para limitar o número de comentários recuperados. Para criar este parâmetro, atualize o arquivo de configuração em ``src/Blogger/BlogBundle/Resources/config/config.yml`` com o seguinte código:
 
 .. code-block:: yaml
 
@@ -435,9 +345,8 @@ update the config located at
         # Blogger max latest comments
         blogger_blog.comments.latest_comment_limit: 10
 
-Finally we need to render the latest comments in the sidebar template. Update the
-template located at ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig``
-with the following.
+Finalmente, precisamos renderizar os últimos comentários na barra lateral do template. Atualize o
+templete localizado em ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig`` com o seguinte código:
 
 .. code-block:: html
 
@@ -467,43 +376,32 @@ with the following.
         {% endfor %}
     </section>
 
-If you now refresh the symblog website you will see the Latest Comments
-being displayed in the sidebar under the Tag Cloud.
+Se você atualizar o site Symblog, você verá os Últimas Comentários sendo exibidos na barra lateral abaixo  da Nuvem de Tags.
 
 .. image:: /_static/images/part_5/sidebar.jpg
     :align: center
     :alt: Sidebar - Tag Cloud and Latest Comments
 
-Twig Extensions
+Extensões Twig
 ---------------
 
-So far we have been displaying the posted at dates for blog comments in a standard date format
-such as `2011-04-21`. A much nicer approach would be to display comment dates in terms
-of how long ago the comment was posted, such as `posted 3 hours ago`. We could
-add a method to the ``Comment`` entity to achieve this and change the templates
-to use this method instead of ``{{ comment.created|date('Y-m-d h:iA') }}``.
+Até agora, estamos apresentando as datas dos comentários do posts publicados no blog em um formato padrão, como `2011-04-21 '. Uma abordagem interessante, seria exibir as datas dos comentários em termos de há quanto tempo o comentário foi publicado, como `postado 3 horas atrás`. Poderíamos adicionar um método para a entidade ``Comment`` e alterar os templates para usar este método ao invés de ``{{comment.created | date ('Ymd h: iA')}}``.
 
-As we may want to use this functionality elsewhere it would make more sense to
-move it out of the ``Comment`` entity. As transforming the date is specifically
-a view layer task, we should implement this using the Twig templating engine.
-Twig give us this ability by providing an Extension interface.
+Como podemos usar essa funcionalidade em outros lugares, faria mais sentido movê-lo para fora da entidade ``Comment``. Como transformar a data é especificamente uma tarefa da camada de visão, devemos implementar isso usando o gerador de templates do Twig. O Twig disponibiliza uma Interface de Extensão.
 
-We can use the `extension <http://www.twig-project.org/doc/extensions.html>`_
-interface in Twig to extend the default functionality it provides. We are
-going to create a new Twig filter extension that can be used as follows.
+Podemos usar a `Interface de Extensão <http://www.twig-project.org/doc/extensions.html>`_
+no Twig para estender a funcionalidade padrão que ele proporciona. Vamos criar um novo filtro de extensão do Twig que pode ser usado como se segue:
 
 .. code-block:: html
     
     {{ comment.created|created_ago }}
     
-This would return the comment created date in a format such as `posted 2 days ago`.
+Isto iria retornar o comentário criado com a data em um formato como `postado 2 dias atrás`.
     
-The Extension
-~~~~~~~~~~~~~
+A Extensão
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Create a file for the Twig extension located at
-``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogExtension.php`` and updated with
-the following content.
+Crie um arquivo para a extensão do Twig em ``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogExtension.php`` e atualize-o com o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -562,18 +460,12 @@ the following content.
         }
     }
 
-Creating the extension is quite simple. We override the ``getFilters()`` method
-to return any number of filters we want to be available. In this case
-we are creating the ``created_ago`` filter. This filter is then registered to use the
-``createdAgo`` method, which simply transforms a ``DateTime`` object into a
-string representing the duration passed since the value stored in the ``DateTime`` object.
+Criar uma extensão é bastante simples. Nós substituímos o método ``getFilters()`` para retornar qualquer número de filtros que queremos estar disponibilizando. Neste caso, estamos criando o filtro ``created_ago``. Este filtro é então registado para usar o método ``createdAgo``, que simplesmente transforma um objeto ``DateTime`` em uma string representando a duração passada desde quando o valor foi armazenado no objeto ``DateTime``.
 
-Registering the Extension
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Registrando a Extensão
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-To make the Twig extension available we need to update the services file
-located at ``src/Blogger/BlogBundle/Resources/config/services.yml`` with
-the following.
+Para fazer a extensão do Twig ficar disponível, precisamos atualizar o arquivo de serviços localizado em ``src/Blogger/BlogBundle/Resources/config/services.yml`` com o seguinte código:
 
 .. code-block:: yaml
 
@@ -583,15 +475,12 @@ the following.
             tags:
                 - { name: twig.extension }
 
-You can see this is registering a new service using the ``BloggerBlogExtension``
-Twig extension class we have just created.
+Você pôde ver que estamos registrando um novo serviço usando a classe de extensão do Twig ``BloggerBlogExtension`` que acabamos de criar.
 
-Updating the view
-~~~~~~~~~~~~~~~~~
-
-The new Twig filter is now ready to be used. Let's update the sidebar Latest Comments
-list to use the ``created_ago`` filter. Update the sidebar template located at
-``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig`` with the following.
+Atualizando a View
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+    
+O novo filtro do Twig está pronto para ser usado. Vamos atualizar a lista Comentários mais Recentes da barra lateral para usar o filtro ``created_ago``. Atualize o template da barra lateral  localizado em ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig`` com o seguinte código:
 
 
 .. code-block:: html
@@ -611,13 +500,9 @@ list to use the ``created_ago`` filter. Update the sidebar template located at
         {% endfor %}
     </section>
 
-If you now point your browser to ``http://symblog.dev/app_dev.php/`` you will
-see the latest comment dates are using the Twig filter to render the duration
-since the comment was posted.
+Se você acessar  ``http://symblog.dev/app_dev.php/``, você vai ver que as datas dos últimos comentários estão usando o filtro Twig para renderizar a duração, desde quando o comentário foi postado.
 
-Let's also update the comments listed on the blog show page to use the new
-filter. Replace the content in the template located at
-``src/Blogger/BlogBundle/Resources/views/Comment/index.html.twig`` with the following.
+Vamos atualizar os comentários listados na página de exibição do blog para usar o novo filtro. Substitua o conteúdo do templete localizado em ``src/Blogger/BlogBundle/Resources/views/Comment/index.html.twig`` com o seguinte código:
 
 .. code-block:: html
 
@@ -636,27 +521,19 @@ filter. Replace the content in the template located at
 
 .. tip::
 
-    There are a number of useful Twig extensions available via the
-    `Twig-Extensions <https://github.com/fabpot/Twig-extensions>`_  library on GitHub.
-    If you create a useful extension send over a pull request for this repository and
-    it may get included for other people to use.
+    Há várias extensões do Twig úteis, disponíveis na biblioteca  `Extensões do Twig <https://github.com/fabpot/Twig-extensions>`_  no GitHub. Se você criar uma extensão útil, envie uma solicitação de recebimento para este repositório e ele pode ser incluído para que outras pessoas usem.
 
-Slugifying the URL
+Fazendo o Slug da URL
 ------------------
 
-Currently the URL for each blog post only shows the blog ID. While this is
-perfectly acceptable from a functional point of view, it's not great for SEO.
-For example, the URL ``http://symblog.dev/1`` doesn't give any information away about
-the content of the blog, something like ``http://symblog.dev/1/a-day-with-symfony2``
-would be much better. To achieve this we will slugify the blog title and use it
-as part of this URL. Slugifying the title will remove all non ASCII characters
-and replace them with a ``-``.
+Atualmente, a URL para cada post do blog só mostra o id do blog. Enquanto essa abordagem é
+perfeitamente aceitável do ponto de vista funcional, não é grande coisa para trabalhos com SEO.
+Por exemplo,a URL ``http://symblog.dev/1`` não dá qualquer informação sobre o conteúdo do blog, algo como ``http://symblog.dev/1/a-day-with-symfony2``  seria muito melhor. Assim, vamos fazer um slug do título do blog e usá-lo como parte desta URL. Esse Slug do título irá remover todos os caracteres, não ASCII, e substituí-los com um ``-``.
 
-Update the routing
-~~~~~~~~~~~~~~~~~~
+Atualizando a rota
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-To begin let's modify the routing rule for the blog show page to add the slug component.
-Update the routing rule located at ``src/Blogger/BlogBundle/Resources/config/routing.yml``
+Para começar, vamos modificar a regra de roteamento para a página de exibição do blog para adicionar o componente slug. Atualize a regra de roteamento localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml``.
 
 .. code-block:: yaml
 
@@ -669,13 +546,11 @@ Update the routing rule located at ``src/Blogger/BlogBundle/Resources/config/rou
             _method:  GET
             id: \d+
 
-The controller
-~~~~~~~~~~~~~~
+O controlador
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-As with the existing ``id`` component, the new ``slug`` component will be passed
-into the controller action as an argument, so let's update the controller
-located at ``src/Blogger/BlogBundle/Controller/BlogController.php`` to reflect
-this.
+Tal como acontece com o componente ``id`` existente, o novo componente ``slug`` será passado
+para a ação do controlador como um argumento, então vamos atualizar o controlador localizado em ``src/Blogger/BlogBundle/Controller/BlogController.php``.
 
 .. code-block:: php
 
@@ -688,12 +563,7 @@ this.
 
 .. tip::
 
-    The order in which the arguments are passed into the controller action
-    doesn't matter, only the name of them does. Symfony2 is able to match up the
-    routing arguments with the parameter list for us. While we haven't yet used
-    default component values it's worth mentioning them here. If we added another
-    component onto the routing rule we can specify a default value for the component
-    using the ``defaults`` option.
+    A ordem na qual os argumentos são passados ​​para a ação do controlador não importa, somente os nomes dos argumentos. O Symfony2 é capaz de combinar os argumentos da rota com a lista de parâmetros passados. Embora ainda não tenhamos utilizado os valores padrão dos componentes, vale a pena mencioná-los aqui. Se nós adicionamos outro componente para a regra de rota, podemos especificar um valor padrão para o componente usando as opções ``padrões`` opção.
 
     .. code-block:: yaml
 
@@ -711,21 +581,17 @@ this.
             // ..
         }
 
-    Using this method, a request to ``http://symblog.dev/1/symfony2-blog`` would
-    result in ``$comments`` being set to true in the ``showAction``.
+    Usando este método, uma requisição para ``http://symblog.dev/1/symfony2-blog``, resultaria em ``$comments`` sendo definido como true na ``showAction``.
 
-Slugifying the title
-~~~~~~~~~~~~~~~~~~~~
+Fazendo o Slug do título
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-As we want to generate the slug from the blog title, we will auto generate the slug 
-value. We could simply perform this operation at run time on the title field
-but instead we will store the slug in the ``Blog`` entity and persist it to the database.
+Como queremos gerar o slug do título do blog, vamos gerar o valor do slug automaticamente. Nós poderíamos simplesmente executar esta operação em tempo de execução no campo de título, mas vamos guardar o slug da entidade``Blog`` e mantê-lo no banco de dados.
 
-Updating the Blog entity
-~~~~~~~~~~~~~~~~~~~~~~~~
+Atualizando a entidade Blog
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Let's add a new member to the ``Blog`` entity to store the slug. Update the ``Blog``
-entity located at ``src/Blogger/BlogBundle/Entity/Blog.php``
+Vamos adicionar um novo membro para a entidade ``Blog`` para armazenar o slug. Atualize a entidade ``Blog`` localizada em ``src/Blogger/BlogBundle/Entity/blog.php`` com o seguinte código:
 
 .. code-block:: php
 
@@ -743,23 +609,20 @@ entity located at ``src/Blogger/BlogBundle/Entity/Blog.php``
         // ..
     }
 
-Now generate the accessors for the new ``$slug`` member. As before run the following task.
+Agora gere os assessores para o novo membro``$slug``. Como antes, execute o comando abaixo:
 
 .. code-block:: bash
 
     $ php app/console doctrine:generate:entities Blogger
 
-Next, let's update the database schema.
+Em seguida, vamos atualizar o esquema do banco de dados.
 
 .. code-block:: bash
 
     $ php app/console doctrine:migrations:diff
     $ php app/console doctrine:migrations:migrate
 
-To generate the slug value we will use the slugify method from the symfony 1
-`Jobeet <http://www.symfony-project.org/jobeet/1_4/Propel/en/08>`_ tutorial.
-Add the ``slugify`` method to the  the ``Blog`` entity located at
-``src/Blogger/BlogBundle/Entity/Blog.php``
+Para gerar o valor do slug, vamos utilizar o método ``slugify`` do tutorial do Symfony 1 `Jobeet <http://www.symfony-project.org/jobeet/1_4/Propel/en/08>`_ . Adicione o método ``slugify`` para a entidade do ``Blog`` localizada em ``src/Blogger/BlogBundle/Entity/blog.php``.
 
 .. code-block:: php
 
@@ -793,10 +656,7 @@ Add the ``slugify`` method to the  the ``Blog`` entity located at
         return $text;
     }
 
-As we want to auto generate the slug from the title we can generate the slug when
-the value of the title is set. For this we can update the ``setTitle`` accessor
-to also set the value of the slug. Update the ``Blog`` entity located at
-``src/Blogger/BlogBundle/Entity/Blog.php`` with the following.
+Como queremos gerar automaticamente o slug do título, podemos gerar o slug quando o valor do título é definido. Para isso, podemos atualizar o acessor ``setTitle`` para definir também o valor do slig. Atualize a entidade ``Blog``, localizada em ``src/Blogger/BlogBundle/setTitle/blog.php`` com o seguinte código:
 
 .. code-block:: php
 
@@ -809,7 +669,7 @@ to also set the value of the slug. Update the ``Blog`` entity located at
         $this->setSlug($this->title);
     }
 
-Next update the ``setSlug`` method to slugify the slug before it is set.
+Agora atualize o método ``setSlug`` para fazer o slug do slug antes de ser definido.
 
 .. code-block:: php
 
@@ -820,23 +680,18 @@ Next update the ``setSlug`` method to slugify the slug before it is set.
         $this->slug = $this->slugify($slug);
     }
 
-Now reload the data fixtures to generate the blog slugs.
+Agora, recarregue o Data Fixtures para criar os slugs do blog.
 
 .. code-block:: bash
 
     $ php app/console doctrine:fixtures:load
 
-Updating the generated routes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Atualizando as rotas geradas
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Finally we need to update the existing calls for generating routes to the blog
-show page. There are a number of locations where this needs to be updated.
+Finalmente, precisamos atualizar as chamadas existentes para a geração de rotas para a página de exibição do blog. Há uma variedade de lugares onde este item tem de ser atualizado.
 
-Open the homepage template located at
-``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` and replace its
-contents with the following. There have been 3 edits to the generation of the
-``BloggerBlogBundle_blog_show`` route in this template. The edits simply
-pass in the blog slug to the Twig ``path`` function.
+Abra o template da página inicial localizada em ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig`` e substitua o seu conteúdo com o seguinte código. Houve três modificações para a geração da rota ``BloggerBlogBundle_blog_show`` neste template. As edições simplesmente passam o slug do blog para a função ``path`` do Twig.
 
 .. code-block:: html
 
@@ -869,8 +724,7 @@ pass in the blog slug to the Twig ``path`` function.
         {% endfor %}
     {% endblock %}
 
-Also, one update needs to be made to the Latest Comments section of the sidebar
-template located at ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig``.
+Além disso, uma atualização precisa ser feita para a seção Comentários mais Recentes da barra lateral, template localizado em ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.twig``.
 
 .. code-block:: html
 
@@ -884,10 +738,8 @@ template located at ``src/Blogger/BlogBundle/Resources/views/Page/sidebar.html.t
 
     {# .. #}
 
-Finally the ``createAction`` of the ``CommentController`` needs to be updated
-when redirecting to the blog show page on a successful comment posting. Update
-the ``CommentController`` located at ``src/Blogger/BlogBundle/Controller/CommentController.php``
-with the following.
+Finalmente, a função ``createAction`` do ``CommentController`` precisa ser atualizado
+ao redirecionar para a página de exibição do blog em uma postagem de comentário bem-sucedido. Atualize o ``CommentController`` localizado em ``src/Blogger/BlogBundle/Controller/CommentController.php`` com o seguinte código:
 
 .. code-block:: php
 
@@ -910,92 +762,56 @@ with the following.
         // ..
     }
 
-Now if you navigate to the symblog homepage at ``http://symblog.dev/app_dev.php/``
-and click one of the blog titles you will see the blog slug has been
-appended to the end of the URL.
+Agora, se você navegarmos para a página inicial do Symblog ``http://symblog.dev/app_dev.php/``
+e clicar em um dos títulos posts do blog, você vai ver que o slug do blog foi acrescentado ao final da URL.
 
-Environments
+Ambientes
 ------------
 
-Environments are a very powerful, yet simple feature provided by Symfony2. You may
-not be aware, but you have been using environments from part 1 of this tutorial.
-With environments we can configure various aspects of Symfony2 and the application
-to run differently depending on the specific needs during the applications life cycle.
-By default Symfony2 comes configured with 3 environments:
+Os ambientes são um poderoso recurso, ainda que simples, mantido no Symfony 2. Você pode
+não estar ciente, mas vêm vindo utilizando os ambientes desde a parte 1 deste tutorial. Com ambientes, podemos configurar vários aspectos do Symfony 2 e a aplicação, para executar de forma diferente, dependendo das necessidades específicas durante o ciclo de vida aplicação. Por padrão, Symfony 2 vem configurado com 3 ambientes:
 
-1. ``dev`` - Development
-2. ``test`` - Test
-3. ``prod`` - Production
+1. ``Dev`` - Desenvolvimento
+2. ``Test`` - Teste
+3. ``Prod`` - Produção
 
-The purpose of these environments is self explanatory, but what about these environments
-would be configured differently for their individual needs. When developing the
-application it's useful to have the developer toolbar on screen with descriptive
-exceptions and errors being displayed, while in production you don't want any
-of this. In fact, having this information displayed would be a security risk as a lot of
-details regarding the internals of the application and the server would be
-exposed. In production it would be better to display customised error pages
-with simplified messages, while quietly logging this information to text files.
-It would also be useful to have the caching layer enabled to ensure the
-application is running at its best. Having the caching layer enabled in the
-``development`` environment would be a pain as you would need to empty the cache
-each time you made changes to config files, etc.
+O objetivo desses ambientes é auto-explicativo, mas estes ambientes podem ser configurados de forma diferente para suas necessidades individuais. Ao desenvolver o aplicação, é útil ter a barra de ferramentas do desenvolvedor na tela exibindo exceções e/ou erros que estão acontecendo, enquanto na produção, você não quer qualquer exibir erros e/ou exceções pois, exibir essas informações, seria um risco de segurança pois um monte de detalhes sobre informações internas da aplicação e do servidor, estariam expostas. Na produção, seria melhor exibir páginas personalizadas de erro com mensagens simplificadas, enquanto registra-se essas exceções e/ou erros em arquivos de texto. Também é útil ter o cache ativado para assegurar que o aplicativo está sendo executado da melhor forma possível. O cache estando habilitado no ambiente de ``Desenvolvimento``, seria trabalhoso se fosse preciso esvaziar o cache cada vez que você faz alterações em arquivos de configuração, etc.
 
-The other environment is the ``test`` environment. This is used when running
-tests on the application such as unit or functional test. We haven't covered
-testing yet, but rest assured it will be covered in depth in the coming chapters.
+O outro ambiente é o ``test``. Este é usado quando estamos executando testes sobre a aplicação, tais como testes de unidade ou testes funcionais. Não cobrimos testes ainda, mas a certeza de que será abordado em profundidade no próximo capítulo.
 
-Front Controllers
-~~~~~~~~~~~~~~~~~
+Controladores de Frente (Front Controllers)
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-So far through this tutorial we have been using the ``development`` environment
-only. We have been specifying to run in the ``development`` environment by using the
-``app_dev.php`` front controller when making requests to symblog, eg
-``http://symblog.dev/app_dev.php/about``. If we have a look at the front
-controller located at ``web/app_dev.php`` you will see the following line:
+Até agora, temos utilizado somente o ambiente de ``desenvolvimento``. Especificamos isso executando o controlador de frente ``app_dev.php`` ao fazermos requisições ao Symblog, por exemplo, ``http://symblog.dev/app_dev.php/about``. Se verificarmos o controlador de frente  localizado em ``web/app_dev.php``, você verá a seguinte linha:
 
 .. code-block:: php
 
     $kernel = new AppKernel('dev', true);
 
-This line is what kick starts Symfony2 going. It instantiates a new instance of
-the Symfony2 ``AppKernel`` and sets the environment to ``dev``.
+Esta linha é que inicia o Symfony 2. Ela cria uma nova instância de ``AppKernel`` do Symfony 2  e define o ambiente como ``dev``.
 
-In contrast, if we look at the front controller for the ``production`` environment
-located at ``web/app.php`` we see the following:
+Entretanto, se verificarmos o controlador de frente para o ambiente de ``produção`` localizado em ``web/ app.php`` veremos a seguinte linha:
 
 .. code-block:: php
 
     $kernel = new AppKernel('prod', false);
 
-You can see the ``prod`` environment is passed into the ``AppKernel`` in this instance.
+Note que o ambiente ``prod`` é passado para o ``AppKernel``, neste caso.
 
-The test environment is not supposed to be run via the web browser which is why there
-is no ``app_test.php`` front controller.
+O ambiente de teste supostamente não será executado através do browser web pois não há
+há o controlador de frente ``app_test.php``.
 
-Configuration Settings
-~~~~~~~~~~~~~~~~~~~~~~
+Configurações
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We have seen above how the front controllers are utilised to change the environment
-the application runs under. Now we will explore how the various settings are
-modified while running under each environment. If you have a look at the files in 
-``app/config`` you will see a number of ``config.yml`` files. Specifically
-there is one main one, called ``config.yml`` and 3 others all suffixed with the
-name of an environment; ``config_dev.yml``, ``config_test.yml`` and ``config_prod.yml``.
-Each of these files is loaded depending on the current environment. If we explore the
-``config_dev.yml`` file you will see the following lines at the top.
+Vimos acima, como os front controllers são utilizados para mudar o ambiente do aplicativo que é executado. Agora, vamos explorar como as diversas definições são modificado durante a execução do aplicativo em cada ambiente. Se você verificar os arquivos em ``app/config``, você verá vários arquivos ``config.yml``. Especificamente, há um principal, chamado ``config.yml`` e outros 3 sufixados com o nome de um ambiente; ``config_dev.yml``, ``config_test.yml`` e ``config_prod.yml``. Cada um desses arquivos é carregado, dependendo do ambiente atual. Se explorarmos o arquivo ``config_dev.yml``, você verá as seguintes linhas do topo do arquivo:
 
 .. code-block:: yaml
 
     imports:
         - { resource: config.yml }
 
-The ``imports`` directive will cause the ``config.yml`` file to be included into
-this file. The same ``imports`` directive can be found at the top of the other 2
-environment config files, ``config_test.yml`` and ``config_prod.yml``. By
-including a common set of config settings defined in ``config.yml`` we are able
-to override specific settings for each environment. We can
-see in the ``development`` config file located at ``app/config/config_dev.yml``
-the following lines configuring the use of the developer toolbar.
+As diretivas de ``importação`` farão com que o arquivo ``config.yml`` seja incluído nestes arquivos. As mesmas diretivas de ``importação``, podem ser encontradas na parte superior do 2 outros arquivos de configuração de ambiente, ``config_test.yml`` e ``config_prod.yml``. Por um conjunto comum de definições de configuração estar sendo incluindo em ``config.yml``, podemos substituir as configurações específicas para cada ambiente. Podemos ver, no arquivo de configuração do ambiente de ``desenvolvimento``, localizado em ``app/config/config_dev.yml``, as seguintes linhas configurando o uso da barra de ferramentas do desenvolvedor.
 
 .. code-block:: yaml
 
@@ -1004,29 +820,26 @@ the following lines configuring the use of the developer toolbar.
     web_profiler:
         toolbar: true
 
-This setting is absent from the ``production`` config file as we don't want the
-developer toolbar displayed.
+Esta configuração está ausente do arquivo de configuração de ``produção`` pois não queremos que a
+Developer Toolbar seja exibida.
 
-Running in Production
-~~~~~~~~~~~~~~~~~~~~~~
+Executando em Ambiente de Produção
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-For those of you eager to see your site running in the ``production`` environment
-now is the time.
+Para os ansiosos por ver o site funcionando no ambiente de ``produção``, agora é a hora.
 
-First we need to clear the cache using one of the Symfony2 tasks.
+Primeiro, precisamos limpar o cache usando um dos comandos do Symfony 2.
 
 .. code-block:: bash
 
     $ php app/console cache:clear --env=prod
 
-Now point your browser to ``http://symblog.dev/``. Notice the ``app_dev.php`` front
-controller is missing.
+Agora, acesse ``http://symblog.dev/``. Observe que o controlador de frente ``app_dev.php`` está ausente.
 
 .. note::
     
-    For those of you using the Dynamic Virtual Hosts configuration as linked to in
-    part 1, you will need to add the following to the .htaccess file located
-    at ``web/.htaccess``.
+    Para aqueles de vocês que estão usando a configuração dinâmica de hosts virtuais como feito na
+    parte 1, você precisa adicionar o seguinte trecho de código no arquivo .htaccess localizado  em ``web/.htaccess``.
     
     .. code-block:: text
     
@@ -1035,105 +848,67 @@ controller is missing.
             # ..
         </IfModule>
         
-
-You will notice the site looks pretty much the same, but a few important
-features are different. The developer toolbar is now gone and the detailed
-exception message are no longer displayed, try going to ``http://symblog.dev/999``.
+Você perceberá que o site parece praticamente o mesmo, mas algumas poucas, mas, importantes características estão diferentes. A barra de ferramentas do desenvolvedor não está mais presente e as detalhadas mensagens de exceção não são mais exibidas, tente acessar `` http://symblog.dev/999 ``.
 
 .. image:: /_static/images/part_5/production_error.jpg
     :align: center
     :alt: Production - 404 Error
     
-The detailed exception message has been replaced by a simplified message informing
-the user of the problem. These exception screens can be customised to match the look
-and feel of your application. We will explore this in later chapters.
+A mensagem excepção detalhada foi substituída por uma mensagem simplificada informando o utilizador do problema. Essas telas de exceção pode ser personalizado para se parecer com sua aplicação. Vamos explorar isso no próximo capítulo.
 
-Furthermore, you'll notice the ``app/logs/prod.log`` file is filling up with logs regarding
-the execution of the application. This is a useful point of call when you have
-issues with the application in ``production`` as errors and exceptions won't be displayed on
-the screen any more.
+Além disso, você notará que o arquivo ``/logs/prod.log`` do aplicativo está se enchendo de registros sobre a execução da aplicação. Isso é útil quando se tem problemas com a aplicação, em ambiente de ``produção``, com erros e exceções não sendo mais exibidos na tela.
 
 .. tip::
 
-    How did the request to ``http://symblog.dev/`` end up being routed through the
-    file ``app.php``? I'm sure you're all used to creating files such as ``index.html``
-    and ``index.php`` that act as the site's index, but how would ``app.php``
-    become this? This is thanks to a RewriteRule in the file ``web/.htaccess``
+    Como a requisição para ``http://symblog.dev/`` foi encaminhado pelo arquivo de rota para ``app.php``? Tenho certeza de que criamos arquivos, como ``index.html`` ou ``index.php`` que agem como índice do site, mas como ``app.php`` faz isso? Isso acontece graças a um RewriteRule no arquivo ``web/.htaccess``
 
     .. code-block:: text
 
         RewriteRule ^(.*)$ app.php [QSA,L]
 
-    We can see that this line has a regular expression that matches any text,
-    denoted by ``^(.*)$`` and passes this to ``app.php``.
+    Podemos ver que esta linha tem uma expressão regular que combina com qualquer texto,
+    mostrado por ``^ (. *) $`` e passa para ``app.php``.
 
-    You may be on an Apache server that doesn't have the ``mod_rewrite.c``
-    enabled. If this is the case you can simply add ``app.php`` to the URL such as
-    ``http://symblog.dev/app.php/``.
+    Você pode estar em um servidor Apache que não tem o ``mod_rewrite.c`` habilitado. Se este for o caso, você pode simplesmente adicionar ``app.php`` na URL, como em ``http://symblog.dev/app.php/``.
 
-While we have covered the basics of the ``production`` environment, we have not
-covered many other ``production`` related tasks such as customising
-error pages, and deployment to the ``production`` server using tools such as
-`capifony <http://capifony.org/>`_. These topics will be covered in later chapters.
+Enquanto cobrimos o básico do ambiente de ``produção``, não cobrimos muitas outras atividades relacionadas com o ambiente de ``produção``, como a personalização das páginas de erro e de implantação para o servidor de produção usando ferramentas como `Capifony <http://capifony.org/>`_. Estes tópicos serão abordados no próximo capítulo.
 
-Creating New Environments
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Criando Novos Ambientes
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Finally it's worth noting that you can setup your own environments easily in Symfony2.
-For example, you may want a staging environment that would run on the production
-server, but output some of the debugging information such as exceptions. This
-would allow the platform to be tested manually on the actual production server
-as production and development configurations of servers can differ.
+Finalmente, vale a pena lembrar que você pode configurar seus próprios ambientes, facilmente, em Symfony 2. Por exemplo, você pode querer que um ambiente de teste serja executado no servidor de  produção, mas exibindo algumas informações de depuração, como exceções. Isso permitiria que a plataforma fosse testada manualmente no servidor de produção com configurações de produção e desenvolvimento, que o servidor pudesse diferenciar.
 
-While creating a new environment is a simple task, it is outside the scope of this
-tutorial. There is an excellent
-`article <http://symfony.com/doc/current/cookbook/configuration/environments.html>`_
-in the Symfony2 cookbook that covers this.
+Como criar um novo ambiente é uma tarefa simples, ele está fora do escopo deste tutorial. Existe uma excelente `Artigo <http://symfony.com/doc/current/cookbook/configuration/environments.html>`_ no livro do Symfony 2 que cobre este assunto.
 
 Assetic
 -------
 
-The Symfony2 Standard Distribution is bundled with a library for assets
-management called `Assetic <https://github.com/kriswallsmith/assetic>`_. The library was
-developed by `Kris Wallsmith <https://twitter.com/#!/kriswallsmith>`_ and was
-inspired by the Python library `webassets
-<http://elsdoerfer.name/files/docs/webassets/>`_.
+A distribuição Standard do Symfony 2 vem com uma biblioteca para tratar assets chamada `Assetic <https://github.com/kriswallsmith/assetic>`_. A biblioteca foi desenvolvida por `Kris Wallsmith <https://twitter.com/#!/kriswallsmith>`_ e foi inspirado a biblioteca do Python `Webassets
+<http://elsdoerfer.name/files/docs/webassets/> _.
 
-Assetic deals with 2 parts of asset management, the assets such as images,
-stylesheets and JavaScript and the filters that can be applied to these assets.
-These filters are able to perform useful tasks such as minifying your CSS and
-JavaScript, passing `CoffeeScript <http://jashkenas.github.com/coffee-script/>`_
-files through the CoffeeScript compiler, and combining asset files together to
-reduce the number of HTTP requests made to the server.
+Assetic lida com 2 partes de gerenciamento de assets, assets como imagens, folhas de estilo e JavaScript e os filtros que podem ser aplicadas a esses assets. Estes filtros são capazes de realizar tarefas úteis como ``minifying`` seu CSS e JavaScript, passando arquivos `CoffeeScript <http://jashkenas.github.com/coffee-script/>`_ para o compilador CoffeeScript combinando-os em conjunto para reduzir o número de requisições HTTP, feitas para o servidor.
 
-Currently we have been using the Twig ``asset`` function to include assets into
-the template as follows.
+Atualmente, temos utilizado a função ``asset`` do Twig para incluir assets no template, como se segue abaixo:
 
 .. code-block:: html
     
     <link href="{{ asset('bundles/bloggerblog/css/blog.css') }}" type="text/css" rel="stylesheet" />
 
-The calls to the ``asset`` function will be replaced by Assetic.
+As chamadas para a função ``asset`` será substituído por Assetic.
 
 Assets
-~~~~~~
+~ ~ ~ ~ ~ ~
 
-The Assetic library describes an asset as follows:
+A biblioteca Assetic descreve um asset como:
 
-`An Assetic asset is something with filterable content that can be loaded and
-dumped. An asset also includes metadata, some of which can be manipulated and
-some of which is immutable.`
+`Um Assetic asset, é algo com conteúdo filtrável que pode ser carregado e despejado. Um asset também inclui metadados, alguns dos quais podem ser manipulados e alguns dos quais são imutáveis. `
 
-Put simply, the assets are the resources the application uses such as stylesheets
-and images.
+Simplificando, os ativos são os recursos que o aplicativo usa, tais como folhas de estilo e imagens.
 
-Stylesheets
+Folhas de Estilo
 ...........
 
-Let's begin by replacing the current calls to ``asset`` for the stylesheets
-in the ``BloggerBlogBundle`` main layout template. Update the content of the template
-located at ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``
-with the following.
+Vamos começar pela substituição das chamadas atuais para os ``assets`` folhas de estilo no layout do template principal ``BloggerBlogBundle``. Atualize o conteúdo do template localizado em ``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` com o seguinte código:
 
 .. code-block:: html
     
@@ -1153,14 +928,7 @@ with the following.
     
     {# .. #}
 
-We have replaced the 2 previous links for CSS files with some Assetic
-functionality. Using ``stylesheets`` from Assetic we have specified that all CSS
-files in the location ``src/Blogger/BlogBundle/Resources/public/css`` should be
-combined into 1 file and then output. Combining files is a very simple but
-effective way to optimise your website frontend by reducing the number of files
-needed. Fewer files means fewer HTTP requests to the server. While we used the
-``*`` to specify all files in the ``css`` directory we could have simply listed
-each file individually as follows.
+Nós substituímos os 2 links anteriores para arquivos CSS com algumas funcionalidades Assetic. Usando ``folhas de estilo`` Assetic, especificamos que todos os arquivos CSS localizados em ``src/Blogger/BlogBundle/Resources/public/css``, devem ser combinadas em um arquivo e depois exibí-lo. Combinar arquivos é muito simples, mas ganhamos uma efetiva otimização do frontend do site, reduzindo o número de arquivos necessários. Menos arquivos, significa menos requisições HTTP para o servidor. Foi utilizado o ``*`` para especificar todos os arquivos no diretório ``css``. Poderíamos ter, simplesmente, listado cada arquivo individualmente, como se segue:
 
 .. code-block:: html
     
@@ -1181,24 +949,17 @@ each file individually as follows.
 
     {# .. #}
     
-The end result in both cases is the same. The first option using the ``*`` ensures
-that when new CSS files are added to the directory, they will always be included in the combined CSS
-file by Assetic. This may not be the desired functionality for your website, so
-use either method above to suit your needs.
+O resultado final em ambos os casos é o mesmo. A primeira opção, usando ``*``, garante que quando novos arquivos CSS são adicionados ao diretório, eles serão sempre incluídos no arquivo CSS combinado pelo Assetic. Isto pode não ser a funcionalidade desejada para o seu site, mas,
+use o método acima para atender às suas necessidades de momento ou futuras.
     
-If you have a look at the HTML output via ``http://symblog.dev/app_dev.php/``
-you will see the CSS has been included something like this (Notice we
-are running back in the ``development`` environment again).
+Se você tiver observar a saída HTML de  ``http://symblog.dev/app_dev.php/``, você vai ver o CSS incluído (Note que nós estamos executando o ambiente de ``desenvolvimento`` novamente).
 
 .. code-block:: html
     
     <link href="/app_dev.php/css/d8f44a4_part_1_blog_1.css" rel="stylesheet" media="screen" />
     <link href="/app_dev.php/css/d8f44a4_part_1_sidebar_2.css" rel="stylesheet" media="screen" />
     
-Firstly you may be wondering why there are 2 files. Above it was stated that Assetic
-would combine the files into 1 CSS file. This is because we are running symblog
-in the ``development`` environment. We can ask Assetic to run in non-debug mode
-by setting the debug flag to false as follows.
+Em primeiro lugar, você deve estar se perguntando por que há 2 arquivos. Acima foi dito que Assetic combinaria os arquivos em um único arquivo CSS. Isto é porque estamos executando o Symblog no ambiente de ``desenvolvimento``. Podemos pedir ao Assetic para ser executado em modo não-debug, definindo o sinalizador de depuração para false, como se segue:
 
 .. code-block:: html
 
@@ -1215,16 +976,13 @@ by setting the debug flag to false as follows.
 
     {# .. #}
     
-Now if you look at the rendered HTML you will see something like this.
+Agora, se você atualizar o HTML renderizado, você verá algo como:
 
 .. code-block:: html
 
     <link href="/app_dev.php/css/3c7da45.css" rel="stylesheet" media="screen" />
     
-If you view the contents of this file you will see the 2 CSS files, ``blog.css``
-and ``sidebar.css`` have been combined into 1 file. The filename given to the generated
-CSS file is randomly generated by Assetic. If you would like to control the name
-given to the generated file use the ``output`` option as follows.
+Se você visualizar o conteúdo deste arquivo, você vai ver que os 2 arquivos CSS, ``blog.css`` e ``sidebar.css``, foram combinados em um único arquivo. O nome dado ao arquivo CSS gerado, é criado aleatoriamente pelo Assetic. Se você gostaria de controlar o nome dado para o arquivo gerado, use a opção de ``saída`` como se segue:
 
 .. code-block:: html
 
@@ -1235,11 +993,9 @@ given to the generated file use the ``output`` option as follows.
         <link href="{{ asset_url }}" rel="stylesheet" media="screen" />
     {% endstylesheets %}
 
-Before you continue remove the debug flag from the previous snippet as we want
-to resume default behavior on the assets.
+Antes de continuar, remova o sinalizador de depuração do trecho anterior, pois queremos retomar o comportamento padrão dos assets.
 
-We also need to update the applications base template located at
-``app/Resources/views/base.html.twig``.
+Precisamos também de atualizar o template básico das aplicações, localizado em ``app/Resources/views/base.html.twig``.
 
 .. code-block:: html
 
@@ -1262,8 +1018,8 @@ We also need to update the applications base template located at
 JavaScripts
 ...........
 
-While we currently don't have any JavaScipt files in our application, its usage in
-Assetic is much the same as using stylesheets.
+Embora atualmente não possuimos arquivos Javascript em nossa aplicação, a sua utilização em
+Assetic é a mesma coisa das folhas de estilo.
 
 .. code-block:: html
 
@@ -1273,33 +1029,26 @@ Assetic is much the same as using stylesheets.
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-Filters
-~~~~~~~
+Filtros
+~ ~ ~ ~ ~ ~ ~
 
-The real power in Assetic comes from the filters. Filters can be applied to assets
-or collections of assets. There are a large number of filters
-provided within the core of the library including the following common filters:
+O verdadeiro poder do Assetic vem dos filtros. Os filtros podem ser aplicados a assets ou coleção de assets. Existe uma série de filtros disponibilizados na biblioteca, incluindo os seguintes filtros:
 
-1. ``CssMinFilter``: minifies CSS
-2. ``JpegoptimFilter``: optimize your JPEGs
-3. ``Yui\CssCompressorFilter``: compresses CSS using the YUI compressor
-4. ``Yui\JsCompressorFilter``: compresses JavaScript using the YUI compressor
-5. ``CoffeeScriptFilter``: compiles CoffeeScript into JavaScript
+1. ``CssMinFilter``: coloca o conteúdo do CSS em uma única linha
+2. ``JpegoptimFilter``: otimiza seus JPEGs
+3. ``Yui\CssCompressorFilter``: comprime CSS usando o compressor YUI
+4. ``Yui\JsCompressorFilter``: comprime o JavaScript usando o compressor YUI
+5. ``CoffeeScriptFilter``: compila CoffeeScript em JavaScript
 
-There is a full list of available filters in the
-`Assetic Readme <https://github.com/kriswallsmith/assetic/blob/master/README.md>`_.
+Há uma lista completa de filtros disponíveis no
+`Leia-me do Assetic <https://github.com/kriswallsmith/assetic/blob/master/README.md>`_.
 
-Many of these filters pass the actual task onto another program or library, such
-as YUI Compressor, so you may need to install/configure the appropriate libraries
-to use some of the filters.
+Muitos destes filtros passar a tarefa real para outro programa ou biblioteca, tal como YUI Compressor, assim você pode precisar instalar/configurar as bibliotecas apropriadas para usar alguns dos filtros.
 
-Download the `YUI Compressor <http://yuilibrary.com/download/yuicompressor/>`_, extract
-the archive and copy the file located in the ``build`` directory to
-``app/Resources/java/yuicompressor-2.4.6.jar``. This assumes you downloaded the
-``2.4.6`` version of the YUI Compressor. If not change your version number accordingly.
+Baixe o  `YUI Compressor <http://yuilibrary.com/download/yuicompressor/>`_, descompacte o arquivo e copie o arquivo do ``diretório criado`` para ``app/Resources/java/yuicompressor-2.4.6.jar``. Assumimos que você baixou a versão ``2.4.6`` do YUI Compressor. Se não, mude o número da versão ilustrada para a que você baixou.
 
-Next we will configure an Assetic filter to minify the CSS using the YUI Compressor.
-Update the application config located at ``app/config/config.yml`` with the following.
+Em seguida, vamos configurar um filtro Assetic para comprimir o CSS usando o YUI Compressor.
+Atualize o arquivo de configuração dos aplicativos localizado em `` app/config/config.yml`` com o seguinte código:
 
 .. code-block:: yaml
     
@@ -1314,11 +1063,8 @@ Update the application config located at ``app/config/config.yml`` with the foll
     
     # ..
     
-We have configured a filter called ``yui_css`` that will use the YUI Compressor
-Java executable we placed in the applications resources directory. In order
-to use the filter you need to specify which assets you want the filter applied to.
-Update the template located at ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``
-to apply the ``yui_css`` filter.
+Nós temos configurado um filtro chamado ``yui_css`` que irá utilizar o YUI Compressor,
+Executável Java, que colocamos no diretório de recursos da aplicação. Para usar o filtro, você precisa especificar quais os assets que você deseja que o filtro seja aplicado. Atualize o template localizado em ``src/Blogger/BlogBundle/Recursos/views/layout.html.twig`` para aplicar o filtro ``yui_css``.
 
 .. code-block:: html
 
@@ -1336,11 +1082,7 @@ to apply the ``yui_css`` filter.
 
     {# .. #}
 
-Now if you refresh the symblog website and view the files output by Assetic you
-will notice they have been minified. While minification is great for production
-servers, it can make debugging difficult, especially when JavaScript is
-minified. We can disable the minification when running in the ``development``
-environment by prefixing the filter with a ``?`` as follows.
+Agora, se você atualizar o site Symblog e ver a saída dos arquivos Assetic, você vai notar que eles foram comprimidos. Enquanto a minimização/compressão, é uma boa para os servidores de produção, ele pode tornar a depuração difícil, especialmente quando o JavaScript é minimizado. Podemos desativar a minimização, quando o ambiente de ``desenvolvimento`` for executado, pela junção do filtro com um ``?`` como se segue:
 
 .. code-block:: html
     
@@ -1352,71 +1094,47 @@ environment by prefixing the filter with a ``?`` as follows.
         <link href="{{ asset_url }}" rel="stylesheet" media="screen" />
     {% endstylesheets %}
 
-Dumping the assets for production
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Inserindo os assets para a o ambiente de produção
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-In production we can dump the asset files using Assetic so they become actual
-resources on disk ready to be served by the web server. The process of creating
-the assets through Assetic with every page request can be quite slow,
-especially when filters are being applied to the assets. Dumping the assets
-for ``production`` ensures that Assetic is not used to serve the assets and instead
-the pre-processed asset files are served directly by the web server. Run the following
-task to create dump the asset files.
+Na produção, podemos inserir os arquivos assets usando a biblioteca Assetic. Assim, eles se tornam recursos atuais no disco, prontos para serem disponibilizados pelo servidor web. O processo de criação dos assets através do Assetic, com cada requisição de página, pode ser bastante lento, especialmente quando os filtros estão sendo aplicadas aos assets. Inserção dos assets para o ambiente de ``produção``, garante que Assetic não é usada para servir os assets e, em vez disso,
+os arquivos pré-processados ​​de assets são servidos diretamente pelo servidor web. Execute o seguinte comando para criar a inserção dos arquivos assets.
 
 .. code-block:: bash
 
     $ app/console --env=prod assetic:dump
 
-You will notice a number of CSS files were created at ``web/css`` including the
-combined ``blogger.css`` file. Now if you run the symblog website in the ``production``
-environment via ``http://symblog.dev/`` the files will be served directly
-from this folder.
+Você vai perceber que vários arquivos CSS foram criados em ``web/css``, incluindo o arquivo combinado ``blogger.css``. Agora, se você executar o site Symblog no ambiente de ``produção`` acessando ``http://symblog.dev/``,  os arquivos serão disponibilizados diretamente da pasta ``web/css``.
 
 .. note::
 
-    If you dump the asset files to disk and want to revert back to the
-    ``development`` environment, you will need to clean up the created asset
-    files in ``web/`` to allow Assetic to recreate them.
+    Se você inserir os arquivos assets para o disco e quer voltar para o ``Ambiente de desenvolvimento``, você terá que limpar os arquivos assets criados em ``web/`` para permitir que  Assetic recrie os arquivos.
 
-Additional Reading
-~~~~~~~~~~~~~~~~~~
+Leitura adicional
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We have only scratched the surface at what Assetic can perform. There are more resources
-available online especially in the Symfony2 cookbook including:
+Nós apenas ilustramos o que Assetic pode executar. Há mais recursos disponíveis on-line, especialmente no livro do Symfony 2, incluindo:
 
-`How to Use Assetic for Asset Management <http://symfony.com/doc/current/cookbook/assetic/asset_management.html>`_
+`Como usar Assetic para Manter Assets <http://symfony.com/doc/current/cookbook/assetic/asset_management.html>`_
+`Como Minimizar (Minify) JavaScripts e folhas de estilo com YUI Compressor <http://symfony.com/doc/current/cookbook/assetic/yuicompressor.html>`_
+`Como usar Assetic Para Otimização de Imagem com Funções Twig <http://symfony.com/doc/current/cookbook/assetic/jpeg_optimize.html>`_
+`Como Aplicar um filtro Assetic a uma extensão de arquivo específica <http://symfony.com/doc/current/cookbook/assetic/apply_to_option.html>`_
 
-`How to Minify JavaScripts and Stylesheets with YUI Compressor <http://symfony.com/doc/current/cookbook/assetic/yuicompressor.html>`_
+Há, também, uma série de grandes artigos escritos por Richard Miller `<https://twitter.com/#!/mr_r_miller>`_, incluindo:
 
-`How to Use Assetic For Image Optimization with Twig Functions <http://symfony.com/doc/current/cookbook/assetic/jpeg_optimize.html>`_
-
-`How to Apply an Assetic Filter to a Specific File Extension <http://symfony.com/doc/current/cookbook/assetic/apply_to_option.html>`_
-
-There are also a number of great article written by `Richard Miller <https://twitter.com/#!/mr_r_miller>`_
-including:
-
-`Symfony2: Using CoffeeScript with Assetic <http://miller.limethinking.co.uk/2011/05/16/symfony2-using-coffeescript-with-assetic/>`_
-
-`Symfony2: A Few Assetic Notes <http://miller.limethinking.co.uk/2011/06/02/symfony2-a-few-assetic-notes/>`_
-
-`Symfony2: Assetic Twig Functions <http://miller.limethinking.co.uk/2011/06/23/symfony2-assetic-twig-functions/>`_
+`Symfony 2: Usando CoffeeScript com Assetic <http://miller.limethinking.co.uk/2011/05/16/symfony2-using-coffeescript-with-assetic/>`_
+`Symfony 2: Algumas notas sobre Assetic 
+<http://miller.limethinking.co.uk/2011/06/02/symfony2-a-few-assetic-notes/>`_
+`Symfony 2: Funções Assetic Twig 
+<http://miller.limethinking.co.uk/2011/06/23/symfony2-assetic-twig-functions/>`_
 
 .. tip::
 
-    It's worth mentioning here that Richard Miller has a collection of excellent articles
-    regarding a number of Symfony2 areas on his site including Dependency Injection,
-    Services and the above mentioned Assetic guides. Just search for posts
-    tagged with `symfony2 <http://miller.limethinking.co.uk/tag/symfony2/>`_
+    Vale a pena mencionar aqui que, Richard Miller, tem uma coleção de excelentes artigos a respeito de várias áreas do Symfony 2 em seu site, incluindo injeção de dependência, Serviços e os guias acima mencionados sobre Assetic. Basta pesquisar por posts com a tag `symfony2 <http://miller.limethinking.co.uk/tag/symfony2/>`_
 
-Conclusion
+Conclusão
 ----------
 
-We have covered a number of new areas with regards to Symfony2 including
-the Symfony2 environments and how to use the Assetic asset library. We also
-made improvements to the homepage and added some components to the sidebar.
+Cobrimos uma série de novas áreas com relação ao Symfony 2 incluindo os ambientes do Symfony 2 e como usar a biblioteca Assetic. Fizemos melhorias para a página inicial e acrescentamos alguns componentes para a barra lateral.
 
-In the next chapter we will move on to testing. We will explore both unit
-and functional testing using PHPUnit. We will see how Symfony2 comes complete
-with a number of classes to assist in writing functional tests that simulate
-web requests, allow us to populate forms and click links and then inspect the
-returned response.
+No próximo capítulo, vamos abordar os testes. Vamos explorar tanto o teste de unidade quanto o teste funcional usando PHPUnit. Veremos como Symfony 2 vem completo com uma variedade de classes para auxiliar na escrita de testes funcionais que simulam solicitações da Web, nos permitindo preencher formulários e clicar em links e então inspecionar a resposta retornada.
