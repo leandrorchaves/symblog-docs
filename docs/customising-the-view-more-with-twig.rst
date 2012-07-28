@@ -26,7 +26,7 @@ Até agora, a página inicial lista as entradas mais recentes do blog, mas não 
 para os posts dos blogs. Agora que temos a entidade ``Comment`` construída, podemos voltar à página inicial para inserir 
 essas informações. 
 
-Como configuramos as ligações entre as entidades ``Blog`` e``Comment``, sabemos que o Doctrine 2 irá recuperar os 
+Como configuramos as ligações entre as entidades ``Blog`` e ``Comment``, sabemos que o Doctrine 2 irá recuperar os 
 comentários relativos a um blog (lembre-se, nós adicionamos um membro ``$comments`` à entidade ``Blog``). 
 
 Vamos atualizar o template da visualização da página inicial localizado em 
@@ -110,12 +110,12 @@ Como você pôde ver na captura de tela acima, há uma série de consultas reali
 
 A segunda consulta executada, recupera as entidades do blog do banco de dados e é executado como um resultado do método 
 ``getLatestBlogs()`` na classe ``BlogRepository``. Após esta consulta, você irá notar uma série de outras consultas que 
-recebem os comentários do banco de dados, um blog de cada vez. Isso é possível por causa do ``WHERE t0.blog_id =? `` em 
-cada uma das consultas, onde o ``? `` é substituído pelo valor do parâmetro (o blog Id) na linha seguinte. 
+recebem os comentários do banco de dados, um blog de cada vez. Isso é possível por causa do ``WHERE t0.blog_id =?`` em 
+cada uma das consultas, onde o ``?`` é substituído pelo valor do parâmetro (o blog Id) na linha seguinte. 
 
 Cada uma destas consultas é proveniente das chamadas para ``{{Blog.comments}}`` no template da página inicial. Cada vez 
 que esta função é executada, o Doctrine 2 carrega lentamente a entidade ``Comment``  que se relaciona com a entidade 
-``Blog ``. 
+``Blog``. 
 
 Embora o ``Lazy loading`` seja muito eficaz na recuperação de entidades relacionadas do banco de dados, nem sempre é a 
 maneira mais eficiente. Doctrine 2 consegue ``juntar`` entidades relacionadas quando consultamos o banco de dados. 
@@ -478,7 +478,7 @@ Extensões Twig
 ---------------
 
 Até agora, estamos apresentando as datas dos comentários do posts publicados no blog em um formato padrão, como 
-`2011-04-21 '. Uma abordagem interessante, seria exibir as datas dos comentários em termos de há quanto tempo o 
+`2011-04-21`. Uma abordagem interessante, seria exibir as datas dos comentários em termos de há quanto tempo o 
 comentário foi publicado, como `postado 3 horas atrás`. 
 
 Poderíamos adicionar um método para a entidade ``Comment`` e alterar os templates para usar este método ao invés de 
@@ -1040,7 +1040,7 @@ Você perceberá que o site parece praticamente o mesmo, mas algumas poucas, mas
 diferentes. 
 
 A barra de ferramentas do desenvolvedor não está mais presente e as detalhadas mensagens de exceção não são mais 
-exibidas, tente acessar `` http://symblog.dev/999 ``.
+exibidas, tente acessar ``http://symblog.dev/999``.
 
 .. image:: /_static/images/part_5/production_error.jpg
     :align: center
@@ -1116,7 +1116,7 @@ Assets
 A biblioteca Assetic descreve um asset como:
 
     `Um Assetic asset, é algo com conteúdo filtrável que pode ser carregado e despejado. Um asset também inclui 
-    metadados, alguns dos quais podem ser manipulados e alguns dos quais são imutáveis. `
+    metadados, alguns dos quais podem ser manipulados e alguns dos quais são imutáveis.`
 
 Simplificando, os ativos são os recursos que o aplicativo usa, tais como folhas de estilo e imagens.
 
@@ -1292,7 +1292,7 @@ do YUI Compressor. Se não, mude o número da versão ilustrada para a que você
 
 Em seguida, vamos configurar um filtro Assetic para comprimir o CSS usando o YUI Compressor.
 
-Atualize o arquivo de configuração dos aplicativos localizado em `` app/config/config.yml`` com o seguinte código:
+Atualize o arquivo de configuração dos aplicativos localizado em ``app/config/config.yml`` com o seguinte código:
 
 .. code-block:: yaml
     
@@ -1381,17 +1381,20 @@ Nós apenas ilustramos o que Assetic pode executar. Há mais recursos disponíve
 Symfony 2, incluindo:
 
 `Como usar Assetic para Manter Assets <http://symfony.com/doc/current/cookbook/assetic/asset_management.html>`_
+
 `Como Minimizar (Minify) JavaScripts e folhas de estilo com YUI Compressor <http://symfony.com/doc/current/cookbook/assetic/yuicompressor.html>`_
+
 `Como usar Assetic Para Otimização de Imagem com Funções Twig <http://symfony.com/doc/current/cookbook/assetic/jpeg_optimize.html>`_
+
 `Como Aplicar um filtro Assetic a uma extensão de arquivo específica <http://symfony.com/doc/current/cookbook/assetic/apply_to_option.html>`_
 
 Há, também, uma série de grandes artigos escritos por `Richard Miller <https://twitter.com/#!/mr_r_miller>`_, incluindo:
 
 `Symfony 2: Usando CoffeeScript com Assetic <http://miller.limethinking.co.uk/2011/05/16/symfony2-using-coffeescript-with-assetic/>`_
-`Symfony 2: Algumas notas sobre Assetic 
-<http://miller.limethinking.co.uk/2011/06/02/symfony2-a-few-assetic-notes/>`_
-`Symfony 2: Funções Assetic Twig 
-<http://miller.limethinking.co.uk/2011/06/23/symfony2-assetic-twig-functions/>`_
+
+`Symfony 2: Algumas notas sobre Assetic <http://miller.limethinking.co.uk/2011/06/02/symfony2-a-few-assetic-notes/>`_
+
+`Symfony 2: Funções Assetic Twig <http://miller.limethinking.co.uk/2011/06/23/symfony2-assetic-twig-functions/>`_
 
 .. tip::
 
