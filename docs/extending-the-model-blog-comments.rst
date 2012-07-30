@@ -14,7 +14,7 @@ O conceito das  Migrações do Doctrine 2 ``Doctrine 2 Migrations`` também ser�
 programática para implantar as alterações no banco de dados. 
 
 No final deste capítulo, você terá criado o model de comentário e irá relacioná-lo com o model do blog. Criaremos uma 
-página inicial, que permita os usuários enviar comentários para um post do blog.
+página inicial, que permita os usuários enviar comentários para um post do blog. 
 
 
 A Homepage
