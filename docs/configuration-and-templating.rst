@@ -36,10 +36,6 @@ Como não queremos repetir a excelente documentação fornecida pelo livro do Sy
 detalhes, como por exemplo, como instalar os vendors necessários, e como designar corretamente as permissões para as 
 pastas corretas.
 
-.. worning::
-    
-    teste
-
 .. warning:: 
     
     É importante prestar atenção em 
@@ -235,7 +231,7 @@ Estrutura padrão
 O pacote foi criado no diretório ``src`` com uma estrutura padrão começando no nível mais alto com a pasta ``Blogger`` 
 que mapeia diretamente para o namespace do pacote que criamos dentro de ``Blogger``. 
 
-Dentro desta pasta temos a pasta``BlogBundle`` que contém o pacote atual. Os conteúdos desta pasta serão analisados com 
+Dentro desta pasta temos a pasta ``BlogBundle`` que contém o pacote atual. Os conteúdos desta pasta serão analisados com 
 o aprofundamento do tutorial. 
 
 Se você já é familiarizado com a estrutura MVC, algumas das pastas serão auto-explicativas. 
@@ -266,7 +262,7 @@ O roteamento é composto de um padrão e outras opções padrão.
 
 O padrão é verificado em relação a URL, e as opções padrão dizem para o controlador executar se as rotas coincidirem. 
 
-No padrão ``/Hello/{nome}``, o ``{nome}`` é um local específico que irá corresponder a qualquer valor uma vez que os 
+No padrão ``/Hello/{name}``, o ``{name}`` é um local específico que irá corresponder a qualquer valor uma vez que os 
 requisitos específicos não foram definidos. 
 
 A rota também não especifica os métodos de língua ou HTTP. Como não temos métodos HTTP definidos, as solicitações de GET, 
@@ -345,16 +341,16 @@ Você poderia optar por não utilizar as opções citadas acima e escolher usar 
 
 Iremos utilizar Twig para gerar nossos layouts por alguns motivos: 
 
-    1. Twig é rápido – Templates feitos com Twig tem um baixo custo para compilar as classes PHP o que gera pouca 
-       sobrecarga. 
-    2. Twig é conciso - Twig nos permite executar a funcionalidade de templates com pouco código. Compare isso com o PHP, 
-       onde algumas declarações tornam-se muito detalhadas. 
-    3. Twig suporta herança de templates – Templates têm a capacidade de ampliar e substituir outros templates 
-       permitindo templates filhos alterar os padrões estabelecidos pelos templates de seus pais. 
-    4. Twig é seguro - Twig tem saída ativa por padrão e ainda fornece um pacote de ambientes para templates importados. 
-    5. Twig é extensível - Twig vem com um monte de funcionalidades comuns que você esperava de um gerador de templates, 
-       mas para aquelas ocasiões em que você precisa de mais algumas funcionalidades extras, o Twig pode ser facilmente 
-       estendido. 
+ 1. Twig é rápido – Templates feitos com Twig tem um baixo custo para compilar as classes PHP o que gera pouca 
+    sobrecarga. 
+ 2. Twig é conciso - Twig nos permite executar a funcionalidade de templates com pouco código. Compare isso com o PHP, 
+    onde algumas declarações tornam-se muito detalhadas. 
+ 3. Twig suporta herança de templates – Templates têm a capacidade de ampliar e substituir outros templates 
+    permitindo templates filhos alterar os padrões estabelecidos pelos templates de seus pais. 
+ 4. Twig é seguro - Twig tem saída ativa por padrão e ainda fornece um pacote de ambientes para templates importados. 
+ 5. Twig é extensível - Twig vem com um monte de funcionalidades comuns que você esperava de um gerador de templates, 
+    mas para aquelas ocasiões em que você precisa de mais algumas funcionalidades extras, o Twig pode ser facilmente 
+    estendido. 
 
 Estes são apenas alguns dos benefícios do Twig. Para mais motivos pelos quais você deve usar Twig, veja o site oficial 
 do `Twig <http://www.twig-project.org/>`_. 
@@ -745,15 +741,13 @@ Você deve sempre usar as regras de roteamento do Symfony 2. Nunca em sua aplica
 Você pode estar se perguntando o que há de errado com esta abordagem, pode ser o jeito que você sempre vinculou suas 
 páginas em conjunto. No entanto, há um certo número de problemas com esta abordagem. 
 
-    1. Ele usa um link absoluto e ignora o sistema de roteamento Symfony 2 inteiramente. Se você quiser mudar a 
-       localização da página Sobre em qualquer ponto você teria que encontrar todas as referências para o link e 
-       alterá-las. 
-    2. Ele vai ignorar seus controladores de ambiente. Ambiente é algo que realmente não explicamos ainda mas você tem 
-       de usá-los. O controlador de frente ``app_dev.php`` nos dá acesso a nossa aplicação no ambiente ``dev``. Se você 
-       quisesse substituir o ``app_dev.php`` por ``app.php``, você vai estar executando a aplicação no ambiente ``prod``. 
-       A importância desses ambientes será explicada neste tutorial, mas por agora, é importante notar que o link 
-       absoluto definido acima não mantem o ambiente atual que estamos e que o controlador de frente não é prefixado na 
-       URL. 
+ 1. Ele usa um link absoluto e ignora o sistema de roteamento Symfony 2 inteiramente. Se você quiser mudar a localização 
+    da página Sobre em qualquer ponto você teria que encontrar todas as referências para o link e alterá-las. 
+ 2. Ele vai ignorar seus controladores de ambiente. Ambiente é algo que realmente não explicamos ainda mas você tem de 
+    usá-los. O controlador de frente ``app_dev.php`` nos dá acesso a nossa aplicação no ambiente ``dev``. Se você 
+    quisesse substituir o ``app_dev.php`` por ``app.php``, você vai estar executando a aplicação no ambiente ``prod``. 
+    A importância desses ambientes será explicada neste tutorial, mas por agora, é importante notar que o link 
+    absoluto definido acima não mantem o ambiente atual que estamos e que o controlador de frente não é prefixado na URL. 
 
 A maneira correta de vincular páginas em conjunto é com os métodos fornecidos pelo Twig ``path`` e ``url``. Os 2 são 
 muito semelhante, exceto o método ``url`` que irá nos fornecer URLs absolutas. 
