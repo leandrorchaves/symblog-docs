@@ -18,7 +18,7 @@ funcionais. Você terá simulado solicitações do navegador, terá preenchido f
 respostas para garantir que as páginas do site retornam as saídas da forma correta. Você ainda poderá verificar o quanto 
 seus testes são eficazes no código base de suas aplicações.
 
-Testes em Symfony2
+Testes em Symfony2 
 ------------------
 
 `PHPUnit <http://www.phpunit.de/manual/current/en/>`_ tornou-se o padrão para a escrita de testes em PHP, então, esta 
