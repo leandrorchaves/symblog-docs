@@ -208,15 +208,15 @@ estamos sem banco de dados. Veja alguns exemplos:
 
 .. code-block:: php
 
-    // Create a blog object.
+    // Criando um objeto do blog.
     $blog = new Blog();
-    $blog->setTitle("symblog - A Symfony2 Tutorial");
+    $blog->setTitle("Symblog - Um tutorial de Symfony 2");
     $blog->setAuthor("dsyph3r");
-    $blog->setBlog("symblog is a fully featured blogging website ...");
+    $blog->setBlog("Symblog é um site de blogs com todos os recursos ...");
 
-    // Create a comment and add it to our blog
+    // Criando um comentário e adicionando-o ao nosso blog
     $comment = new Comment();
-    $comment->setComment("Symfony2 rocks!");
+    $comment->setComment("Symfony 2 é de mais!");
     $blog->addComment($comment);
 
 O trecho acima demonstra o comportamento normal que você gostaria que uma classe ``blog`` e ``comment`` tivesse. 
@@ -377,8 +377,8 @@ pode ver que uma rota correspondente irá executar a ação ``show`` do controla
 
 Este controlador ainda está para ser criado.
 
-A Ação Show do Controller
-~~~~~~~~~~~~~~~~~~~~~~~~~
+A Ação Show do Controlador
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 O responsável por ligar o modelo e a visão é o controlador, deste modo, aqui é o lugar onde nós começaremos a criar a 
 página show. 
@@ -412,7 +412,7 @@ Crie um novo arquivo em ``src/Blogger/BlogBundle/Controller/BlogController.php``
             $blog = $em->getRepository('BloggerBlogBundle:Blog')->find($id);
 
             if (!$blog) {
-                throw $this->createNotFoundException('Unable to find Blog post.');
+                throw $this->createNotFoundException('O post do blog não pode ser enconrado.');
             }
 
             return $this->render('BloggerBlogBundle:Blog:show.html.twig', array(
@@ -482,10 +482,10 @@ encontrada um ``createNotFoundException`` é exibido, ou seja, um ``404 Not Foun
 
     .. code-block:: php
 
-        // Return entities where 'author' matches 'dsyph3r'
+        // Retorna entidades onde o 'autor' casa com o termo 'dsyph3r'
         $em->getRepository('BloggerBlogBundle:Blog')->findBy(array('author' => 'dsyph3r'));
 
-        // Return one entity where 'slug' matches 'symblog-tutorial'
+        // Retorna entidades onde o 'slug' casa com o termo 'symblog-tutorial'
         $em->getRepository('BloggerBlogBundle:Blog')->findOneBySlug('symblog-tutorial');
 
     Nós vamos criar nossos próprios Repositório personalizados no próximo capítulo, quando precisarmos de pesquisas mais 
@@ -512,7 +512,7 @@ criar este template em ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.tw
                 <div class="date"><time datetime="{{ blog.created|date('c') }}">{{ blog.created|date('l, F j, Y') }}</time></div>
                 <h2>{{ blog.title }}</h2>
             </header>
-            <img src="{{ asset(['images/', blog.image]|join) }}" alt="{{ blog.title }} image not found" class="large" />
+            <img src="{{ asset(['images/', blog.image]|join) }}" alt="{{ blog.title }} imagem não encontrada" class="large" />
             <div>
                 <p>{{ blog.blog }}</p>
             </div>
@@ -559,7 +559,7 @@ Como já construímos o controlador e a visão para a ação ``show`` vamos dar 
 
 .. image:: /_static/images/part_3/404_not_found.jpg
     :align: center
-    :alt: Symfony2 404 Not Found Exception
+    :alt:Exceção Symfony 2 404 Não Encontrado
 
 O Symfony 2 gerou uma resposta 404 ``Não Encontrado``. Isto aconteceu porque não temos dados em nosso banco de dados. 
 Assim, nenhuma entidade com ``id`` igual a 1 poderia ser encontrada.
@@ -663,7 +663,7 @@ Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie u
         public function load(ObjectManager $manager)
         {
             $blog1 = new Blog();
-            $blog1->setTitle('A day with Symfony2');
+            $blog1->setTitle('Um dia com Symfony 2');
             $blog1->setBlog('Lorem ipsum dolor sit amet, consectetur adipiscing eletra electrify denim vel ports.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut velocity magna. Etiam vehicula nunc non leo hendrerit commodo. Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque. Nulla consectetur tempus nisl vitae viverra. Cras el mauris eget erat congue dapibus imperdiet justo scelerisque. Nulla consectetur tempus nisl vitae viverra. Cras elementum molestie vestibulum. Morbi id quam nisl. Praesent hendrerit, orci sed elementum lobortis, justo mauris lacinia libero, non facilisis purus ipsum non mi. Aliquam sollicitudin, augue id vestibulum iaculis, sem lectus convallis nunc, vel scelerisque lorem tortor ac nunc. Donec pharetra eleifend enim vel porta.');
             $blog1->setImage('beach.jpg');
             $blog1->setAuthor('dsyph3r');
@@ -673,7 +673,7 @@ Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie u
             $manager->persist($blog1);
     
             $blog2 = new Blog();
-            $blog2->setTitle('The pool on the roof must have a leak');
+            $blog2->setTitle('A piscina no telhado tem que ter um vazamento');
             $blog2->setBlog('Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque. Na. Cras elementum molestie vestibulum. Morbi id quam nisl. Praesent hendrerit, orci sed elementum lobortis.');
             $blog2->setImage('pool_leak.jpg');
             $blog2->setAuthor('Zero Cool');
@@ -683,7 +683,7 @@ Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie u
             $manager->persist($blog2);
     
             $blog3 = new Blog();
-            $blog3->setTitle('Misdirection. What the eyes see and the ears hear, the mind believes');
+            $blog3->setTitle('Desorientação. O que os olhos vêem e os ouvidos ouvem, a mente acredita');
             $blog3->setBlog('Lorem ipsumvehicula nunc non leo hendrerit commodo. Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque.');
             $blog3->setImage('misdirection.jpg');
             $blog3->setAuthor('Gabriel');
@@ -693,7 +693,7 @@ Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie u
             $manager->persist($blog3);
     
             $blog4 = new Blog();
-            $blog4->setTitle('The grid - A digital frontier');
+            $blog4->setTitle('A Grade - Uma fronteira digital');
             $blog4->setBlog('Lorem commodo. Vestibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque. Nulla consectetur tempus nisl vitae viverra.');
             $blog4->setImage('the_grid.jpg');
             $blog4->setAuthor('Kevin Flynn');
@@ -703,7 +703,7 @@ Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie u
             $manager->persist($blog4);
     
             $blog5 = new Blog();
-            $blog5->setTitle('You\'re either a one or a zero. Alive or dead');
+            $blog5->setTitle('Ou você é um ou zero. Vivo ou morto');
             $blog5->setBlog('Lorem ipsum dolor sit amet, consectetur adipiscing elittibulum vulputate mauris eget erat congue dapibus imperdiet justo scelerisque.');
             $blog5->setImage('one_or_zero.jpg');
             $blog5->setAuthor('Gary Winston');
@@ -725,7 +725,7 @@ Vejamos como podemos criar uma entrada no blog.
 .. code-block:: php
 
     $blog1 = new Blog();
-    $blog1->setTitle('A day in paradise - A day with Symfony2');
+    $blog1->setTitle('Um dia no paraiso - Um dia com Symfony 2');
     $blog1->setBlog('Lorem ipsum dolor sit d us imperdiet justo scelerisque. Nulla consectetur...');
     $blog1->setImage('beach.jpg');
     $blog1->setAuthor('dsyph3r');
@@ -778,7 +778,7 @@ com estilos.
 
 .. image:: /_static/images/part_3/blog_show.jpg
     :align: center
-    :alt: The symblog blog show page
+    :alt: A página de exibição do blog do Symblog
 
 Tente alterar o parâmetro ``id`` na URL para 2. Você deve ver a outra entrada do blog. Se você tentar acessar 
 ``http://symblog.dev/app_dev.php/100`` você verá uma exceção ``404 Not Found``. Calro,  não há entidade de ``Blog`` com 
