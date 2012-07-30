@@ -39,8 +39,8 @@ Vamos atualizar o template da visualização da página inicial localizado em
     {# .. #}
     
     <footer class="meta">
-        <p>Comments: {{ blog.comments|length }}</p>
-        <p>Posted by <span class="highlight">{{ blog.author }}</span> at {{ blog.created|date('h:iA') }}</p>
+        <p>Comentários: {{ blog.comments|length }}</p>
+        <p>Postado por <span class="highlight">{{ blog.author }}</span> em {{ blog.created|date('h:iA') }}</p>
         <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
     </footer>
     
@@ -97,14 +97,14 @@ lado deste ícone mostra o número de consultas executadas no banco de dados par
 
 .. image:: /_static/images/part_5/doctrine_2_toolbar_icon.jpg
     :align: center
-    :alt: Developer toolbar - Doctrine 2 icon
+    :alt: Ícone Developer toolbar - Doctrine 2
 
 Após clicar no ícone, você visualizará informações sobre as consultas que foram executadas pelo Doctrine 2 no banco de 
 dados para o requisição HTTP atual.
 
 .. image:: /_static/images/part_5/doctrine_2_toolbar_queries.jpg
     :align: center
-    :alt: Developer toolbar - Doctrine 2 queries
+    :alt: Consultas Developer toolbar - Doctrine 2
 
 Como você pôde ver na captura de tela acima, há uma série de consultas realizadas para um pedido para a página inicial. 
 
@@ -169,8 +169,8 @@ para adicionar um link para mostrar os comentários do blog.
     {# .. #}
     
     <footer class="meta">
-        <p>Comments: <a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}#comments">{{ blog.comments|length }}</a></p>
-        <p>Posted by <span class="highlight">{{ blog.author }}</span> at {{ blog.created|date('h:iA') }}</p>
+        <p>Comentários: <a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}#comments">{{ blog.comments|length }}</a></p>
+        <p>Postado por <span class="highlight">{{ blog.author }}</span> em {{ blog.created|date('h:iA') }}</p>
         <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
     </footer>
     
@@ -226,14 +226,14 @@ Vamos criar alguns novos métodos na classe ``BlogRepository`` do arquivo locali
         {
             $tagWeights[$tag] = (isset($tagWeights[$tag])) ? $tagWeights[$tag] + 1 : 1;
         }
-        // Shuffle the tags
+        // Embaralhar as tags
         uksort($tagWeights, function() {
             return rand() > rand();
         });
         
         $max = max($tagWeights);
         
-        // Max of 5 weights
+        // Peso Máximo de 5
         $multiplier = ($max > 5) ? 5 / $max : 1;
         foreach ($tagWeights as &$tag)
         {
@@ -283,13 +283,13 @@ Agora vamos criar esta View em ``src/Blogger/BlogBundle/Resources/views/Page/sid
     
     <section class="section">
         <header>
-            <h3>Tag Cloud</h3>
+            <h3>Nuvem de Tags</h3>
         </header>
         <p class="tags">
             {% for tag, weight in tags %}
                 <span class="weight-{{ weight }}">{{ tag }}</span>
             {% else %}
-                <p>There are no tags</p>
+                <p>Não há tags</p>
             {% endfor %}
         </p>
     </section>
@@ -431,7 +431,7 @@ com o seguinte código:
     parameters:
         # ..
 
-        # Blogger max latest comments
+        # Máximo de Últimos Comentários do Blog
         blogger_blog.comments.latest_comment_limit: 10
 
 Finalmente, precisamos renderizar os últimos comentários na barra lateral do template. 
@@ -447,12 +447,12 @@ código:
 
     <section class="section">
         <header>
-            <h3>Latest Comments</h3>
+            <h3>Últimos Comentários</h3>
         </header>
         {% for comment in latestComments %}
             <article class="comment">
                 <header>
-                    <p class="small"><span class="highlight">{{ comment.user }}</span> commented on
+                    <p class="small"><span class="highlight">{{ comment.user }}</span> comentou no
                         <a href="{{ path('BloggerBlogBundle_blog_show', { 'id': comment.blog.id }) }}#comment-{{ comment.id }}">
                             {{ comment.blog.title }}
                         </a>
@@ -463,7 +463,7 @@ código:
                 </p>
             </article>
         {% else %}
-            <p>There are no recent comments</p>
+            <p>Não há comentários recentes</p>
         {% endfor %}
     </section>
 
@@ -472,7 +472,7 @@ Tags.
 
 .. image:: /_static/images/part_5/sidebar.jpg
     :align: center
-    :alt: Sidebar - Tag Cloud and Latest Comments
+    :alt: Barra lateral - Nuvem de Tags e Últimos Comentários
 
 Extensões Twig
 ---------------
@@ -525,32 +525,32 @@ atualize-o com o seguinte conteúdo:
         {
             $delta = time() - $dateTime->getTimestamp();
             if ($delta < 0)
-                throw new \InvalidArgumentException("createdAgo is unable to handle dates in the future");
+                throw new \InvalidArgumentException("createdAgo não está habilitado para trabalhar com datas no futuro");
 
             $duration = "";
             if ($delta < 60)
             {
-                // Seconds
+                // Segundos
                 $time = $delta;
-                $duration = $time . " second" . (($time > 1) ? "s" : "") . " ago";
+                $duration = $time . " segundos" . (($time > 1) ? "s" : "") . " atrás";
             }
             else if ($delta <= 3600)
             {
-                // Mins
+                // Minutos
                 $time = floor($delta / 60);
-                $duration = $time . " minute" . (($time > 1) ? "s" : "") . " ago";
+                $duration = $time . " minutos" . (($time > 1) ? "s" : "") . " atrás";
             }
             else if ($delta <= 86400)
             {
-                // Hours
+                // Horas
                 $time = floor($delta / 3600);
-                $duration = $time . " hour" . (($time > 1) ? "s" : "") . " ago";
+                $duration = $time . " horas" . (($time > 1) ? "s" : "") . " atrás";
             }
             else
             {
-                // Days
+                // Dias
                 $time = floor($delta / 86400);
-                $duration = $time . " day" . (($time > 1) ? "s" : "") . " ago";
+                $duration = $time . " dias" . (($time > 1) ? "s" : "") . " atrás";
             }
 
             return $duration;
@@ -603,7 +603,7 @@ o seguinte código:
     
     <section class="section">
         <header>
-            <h3>Latest Comments</h3>
+            <h3>Últimos Comentários</h3>
         </header>
         {% for comment in latestComments %}
             {# .. #}
@@ -625,12 +625,12 @@ templete localizado em ``src/Blogger/BlogBundle/Resources/views/Comment/index.ht
     {% for comment in comments %}
         <article class="comment {{ cycle(['odd', 'even'], loop.index0) }}" id="comment-{{ comment.id }}">
             <header>
-                <p><span class="highlight">{{ comment.user }}</span> commented <time datetime="{{ comment.created|date('c') }}">{{ comment.created|created_ago }}</time></p>
+                <p><span class="highlight">{{ comment.user }}</span> comentou <time datetime="{{ comment.created|date('c') }}">{{ comment.created|created_ago }}</time></p>
             </header>
             <p>{{ comment.comment }}</p>
         </article>
     {% else %}
-        <p>There are no comments for this post. Be the first to comment...</p>
+        <p>Não há comentários para este post. Seja o primeiro a comentar...</p>
     {% endfor %}
 
 .. tip::
@@ -766,13 +766,13 @@ Adicione o método ``slugify`` para a entidade do ``Blog`` localizada em ``src/B
 
     public function slugify($text)
     {
-        // replace non letter or digits by -
+        // trocar caracteres não letras e não dígitos por '-'
         $text = preg_replace('#[^\\pL\d]+#u', '-', $text);
 
         // trim
         $text = trim($text, '-');
 
-        // transliterate
+        // tradução literal
         if (function_exists('iconv'))
         {
             $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
@@ -781,7 +781,7 @@ Adicione o método ``slugify`` para a entidade do ``Blog`` localizada em ``src/B
         // lowercase
         $text = strtolower($text);
 
-        // remove unwanted characters
+        // remove caracteres indesejados
         $text = preg_replace('#[^-\w]+#', '', $text);
 
         if (empty($text))
@@ -854,17 +854,17 @@ passam o slug do blog para a função ``path`` do Twig.
                 <img src="{{ asset(['images/', blog.image]|join) }}" />
                 <div class="snippet">
                     <p>{{ blog.blog(500) }}</p>
-                    <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">Continue reading...</a></p>
+                    <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">Continue lendo...</a></p>
                 </div>
     
                 <footer class="meta">
-                    <p>Comments: <a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}#comments">{{ blog.comments|length }}</a></p>
-                    <p>Posted by <span class="highlight">{{ blog.author }}</span> at {{ blog.created|date('h:iA') }}</p>
+                    <p>Comentários: <a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}#comments">{{ blog.comments|length }}</a></p>
+                    <p>Postado por <span class="highlight">{{ blog.author }}</span> em {{ blog.created|date('h:iA') }}</p>
                     <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
                 </footer>
             </article>
         {% else %}
-            <p>There are no blog entries for symblog</p>
+            <p>Não há entradas de blog para Symblog</p>
         {% endfor %}
     {% endblock %}
 
@@ -924,7 +924,7 @@ dependendo das necessidades específicas durante o ciclo de vida da aplicação.
 
 Por padrão, Symfony 2 vem configurado com 3 ambientes:
 
-    1. ``Dev`` - Desenvolvimento
+    1. ``Dev``  - Desenvolvimento
     2. ``Test`` - Teste
     3. ``Prod`` - Produção
 
@@ -1044,7 +1044,7 @@ exibidas, tente acessar ``http://symblog.dev/999``.
 
 .. image:: /_static/images/part_5/production_error.jpg
     :align: center
-    :alt: Production - 404 Error
+    :alt: Produção - Erro 404
     
 A mensagem exceção detalhada foi substituída por uma mensagem simplificada informando o utilizador do problema. Essas 
 telas de exceção pode ser personalizado para se parecer com sua aplicação. Vamos explorar isso no próximo capítulo.
@@ -1274,11 +1274,11 @@ Filtros
 O verdadeiro poder do Assetic vem dos filtros. Os filtros podem ser aplicados a assets ou coleção de assets. Existe uma 
 série de filtros disponibilizados na biblioteca, incluindo os seguintes filtros:
 
-    1. ``CssMinFilter``: coloca o conteúdo do CSS em uma única linha
-    2. ``JpegoptimFilter``: otimiza seus JPEGs
+    1. ``CssMinFilter``:            coloca o conteúdo do CSS em uma única linha
+    2. ``JpegoptimFilter``:         otimiza seus JPEGs
     3. ``Yui\CssCompressorFilter``: comprime CSS usando o compressor YUI
-    4. ``Yui\JsCompressorFilter``: comprime o JavaScript usando o compressor YUI
-    5. ``CoffeeScriptFilter``: compila CoffeeScript em JavaScript
+    4. ``Yui\JsCompressorFilter``:  comprime o JavaScript usando o compressor YUI
+    5. ``CoffeeScriptFilter``:      compila CoffeeScript em JavaScript
 
 Há uma lista completa de filtros disponíveis no
 `Leia-me do Assetic <https://github.com/kriswallsmith/assetic/blob/master/README.md>`_.
