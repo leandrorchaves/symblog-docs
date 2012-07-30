@@ -98,19 +98,19 @@ Vários métodos comun de afirmação, que serão usados, estão listados abaixo
 
 .. code-block:: php
 
-    // Check 1 === 1 is true
+    // Verifica se 1 === 1 é verdadeiro
     $this->assertTrue(1 === 1);
 
-    // Check 1 === 2 is false
+    // Verifica se === 2 é falso
     $this->assertFalse(1 === 2);
 
-    // Check 'Hello' equals 'Hello'
+    // Verifica se 'Hello' é igul a 'Hello'
     $this->assertEquals('Hello', 'Hello');
 
-    // Check array has key 'language'
+    // Verifica se o array tem a chave (key) 'language'
     $this->assertArrayHasKey('language', array('language' => 'php', 'size' => '1024'));
 
-    // Check array contains value 'php'
+    // Verifica se o array contém o valor 'php'
     $this->assertContains('php', array('php', 'ruby', 'c++', 'JavaScript'));
 
 A lista completa de 
@@ -295,7 +295,7 @@ Atualize o ``BlogTest`` localizado em ``src/Blogger/BlogBundle/Teste/Entity/Blog
         {
             $blog = new Blog();
 
-            $this->assertEquals('hello-world', $blog->slugify('Hello World'));
+            $this->assertEquals('ola-mundo', $blog->slugify('Olá Mundo'));
         }
     }
 
@@ -344,8 +344,8 @@ Vamos atualizar o método ``testSlugify()`` para ver o que acontece quando os te
     {
         $blog = new Blog();
 
-        $this->assertEquals('hello-world', $blog->slugify('Hello World'));
-        $this->assertEquals('a day with symfony2', $blog->slugify('A Day With Symfony2'));
+        $this->assertEquals('ola-mundo', $blog->slugify('Olá Mundo'));
+        $this->assertEquals('um dia com symfony 2', $blog->slugify('Um Dia Com Symfony 2'));
     }
 
 Re execute os testes de unidade como antes. A saída será apresentada como a exibida baixo:
@@ -396,8 +396,8 @@ Corrija o método ``testSlugify()`` para que os testes sejam executados com êxi
     {
         $blog = new Blog();
 
-        $this->assertEquals('hello-world', $blog->slugify('Hello World'));
-        $this->assertEquals('a-day-with-symfony2', $blog->slugify('A Day With Symfony2'));
+        $this->assertEquals('ola-mundo', $blog->slugify('Olá Mundo'));
+        $this->assertEquals('um-dia-com-symfony-2', $blog->slugify('Um dia com Symfony 2'));
     }
 
 Antes de seguirmos, adicione mais alguns testes para o método ``slugify()``.
@@ -412,9 +412,9 @@ Antes de seguirmos, adicione mais alguns testes para o método ``slugify()``.
     {
         $blog = new Blog();
 
-        $this->assertEquals('hello-world', $blog->slugify('Hello World'));
+        $this->assertEquals('ola-mundo', $blog->slugify('Olá Mundo'));
         $this->assertEquals('a-day-with-symfony2', $blog->slugify('A Day With Symfony2'));
-        $this->assertEquals('hello-world', $blog->slugify('Hello    world'));
+        $this->assertEquals('ola-mundo', $blog->slugify('Olá    Mundo'));
         $this->assertEquals('symblog', $blog->slugify('symblog '));
         $this->assertEquals('symblog', $blog->slugify(' symblog'));
     }
@@ -434,16 +434,16 @@ Adicione os métodos a seguir no arquivo ``BlogTest`` localizado em ``src/Blogge
     {
         $blog = new Blog();
 
-        $blog->setSlug('Symfony2 Blog');
-        $this->assertEquals('symfony2-blog', $blog->getSlug());
+        $blog->setSlug('Blog Symfony 2');
+        $this->assertEquals('blog-symfony-2', $blog->getSlug());
     }
 
     public function testSetTitle()
     {
         $blog = new Blog();
 
-        $blog->setTitle('Hello World');
-        $this->assertEquals('hello-world', $blog->getSlug());
+        $blog->setTitle('Olá Mundo');
+        $this->assertEquals('ola-mundo', $blog->getSlug());
     }
 
 Começamos a testar o método ``setSlug`` para garantir que o membro ``$slug`` é executado (slugified) corretamente, 
@@ -476,15 +476,15 @@ Crie um novo arquivo de teste localizado em
         {
             $blog = new BloggerBlogExtension();
 
-            $this->assertEquals("0 seconds ago", $blog->createdAgo(new \DateTime()));
-            $this->assertEquals("34 seconds ago", $blog->createdAgo($this->getDateTime(-34)));
-            $this->assertEquals("1 minute ago", $blog->createdAgo($this->getDateTime(-60)));
-            $this->assertEquals("2 minutes ago", $blog->createdAgo($this->getDateTime(-120)));
-            $this->assertEquals("1 hour ago", $blog->createdAgo($this->getDateTime(-3600)));
-            $this->assertEquals("1 hour ago", $blog->createdAgo($this->getDateTime(-3601)));
-            $this->assertEquals("2 hours ago", $blog->createdAgo($this->getDateTime(-7200)));
+            $this->assertEquals("0 segundos atrás", $blog->createdAgo(new \DateTime()));
+            $this->assertEquals("34 segundos atrás", $blog->createdAgo($this->getDateTime(-34)));
+            $this->assertEquals("1 minuto atrás", $blog->createdAgo($this->getDateTime(-60)));
+            $this->assertEquals("2 minutos atrás", $blog->createdAgo($this->getDateTime(-120)));
+            $this->assertEquals("1 hora atrás", $blog->createdAgo($this->getDateTime(-3600)));
+            $this->assertEquals("1 hora atrás", $blog->createdAgo($this->getDateTime(-3601)));
+            $this->assertEquals("2 horas atrás", $blog->createdAgo($this->getDateTime(-7200)));
 
-            // Cannot create time in the future
+            // Não pode criar horas no futuro
             $this->setExpectedException('\InvalidArgumentException');
             $blog->createdAgo($this->getDateTime(60));
         }
@@ -524,13 +524,13 @@ falharam. A saída é mostrada abaixo:
     --- Expected
     +++ Actual
     @@ @@
-    -0 seconds ago
-    +0 second ago
+    -0 segundos atrás
+    +0 segundo atrás
 
     /var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php:14
 
-Esperavamos que a primeira afirmação retornasse ``0 segundos atrás (0 seconds ago)``, mas não o fez, a palavra 
-``segundo`` não estava no plural. 
+Esperavamos que a primeira afirmação retornasse ``0 segundos atrás``, mas não o fez, a palavra ``segundo`` não estava no 
+plural. 
 
 Vamos atualizar a Extensão do Twig, localizado em ``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php``, para 
 corrigir isso.
@@ -551,9 +551,9 @@ corrigir isso.
             // ..
             if ($delta < 60)
             {
-                // Seconds
+                // Segundos
                 $time = $delta;
-                $duration = $time . " second" . (($time === 0 || $time > 1) ? "s" : "") . " ago";
+                $duration = $time . " segundo" . (($time === 0 || $time > 1) ? "s" : "") . " atrás";
             }
             // ..
         }
@@ -571,16 +571,16 @@ teste ainda continua a falhar. Vamos examinar a próxima saída:
     --- Expected
     +++ Actual
     @@ @@
-    -1 hour ago
-    +60 minutes ago
+    -1 hora atrás
+    +60 minutos atrás
 
     /var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php:18
 
 Podemos ver agora que a quinta afirmação está falhando (observe o ``18`` no final da saída, isso nos dá o número da 
 linha no arquivo onde a afirmação falhou). 
 
-Observando o caso de teste, podemos ver que a extensão do Twig tem funcionado incorretamente. 1 hora atrás 
-``1 hour ago`` deveria ter sido devolvido, mas em vez disso, foi retornado 60 minutos atrás ``60 minutes ago``. 
+Observando o caso de teste, podemos ver que a extensão do Twig tem funcionado incorretamente. 1 hora atrás deveria ter 
+sido devolvido, mas em vez disso, foi retornado 60 minutos atrás. 
 
 Se examinarmos o código da extensão Twig ``BloggerBlogExtension``, podemos ver a razão. Nós comparamos o tempo para ser 
 inclusivo, ou seja, usamos ``<=`` ao invés de ``<``. Observe que isso causa a verificação em horas. 
@@ -605,15 +605,15 @@ este problema.
 
             else if ($delta < 3600)
             {
-                // Mins
+                // Minutos
                 $time = floor($delta / 60);
-                $duration = $time . " minute" . (($time > 1) ? "s" : "") . " ago";
+                $duration = $time . " minuto" . (($time > 1) ? "s" : "") . " atrás";
             }
             else if ($delta < 86400)
             {
-                // Hours
+                // Horas
                 $time = floor($delta / 3600);
-                $duration = $time . " hour" . (($time > 1) ? "s" : "") . " ago";
+                $duration = $time . " hora" . (($time > 1) ? "s" : "") . " atrás";
             }
 
             // ..
@@ -672,12 +672,12 @@ seguinte conteúdo:
 
             $crawler = $client->request('GET', '/about');
 
-            $this->assertEquals(1, $crawler->filter('h1:contains("About symblog")')->count());
+            $this->assertEquals(1, $crawler->filter('h1:contains("Sobre symblog")')->count());
         }
     }
 
 Nós já vimos um controlador de teste muito semelhante a este quando observamos a classe ``DefaultControllerTest``. Esta 
-classe está testando a página Sobre de Symblog, verificando se a string ``About Symblog`` está presente no HTML gerado, 
+classe está testando a página Sobre de Symblog, verificando se a string ``Sobre Symblog`` está presente no HTML gerado, 
 especificamente, dentro da tag ``H1``. 
 
 A classe ``PageControllerTest``, não estende ``\PHPUnit_Framework_TestCase``, como vimos com os exemplos de testes de 
@@ -715,7 +715,7 @@ Então, chamamos o método ``request()`` no cliente para simular uma solicitaç�
 objeto ``Crawler``, que contém a resposta. 
 
 A classe ``Crawler`` é muito útil, pois nos permite percorrer o HTML retornado. Usamos a instância do ``Crawler`` para 
-verificar que a tag ``H1`` na resposta HTML, contém as palavras ``About Symblog``. 
+verificar que a tag ``H1`` na resposta HTML, contém as palavras ``Sobre Symblog``. 
 
 Observe que, apesar de estarmos estendendo a classe ``WebTestCase``, ainda usamos o método de afirmação como antes 
 (Lembre-se, a classe ``PageControllerTest`` ainda é filha da classe ``\PHPUnit_Framework_TestCase``).
@@ -731,7 +731,7 @@ de testes pode ser uma tarefa demorada.
 Você pode observar a seguinte mensagem ``OK (1 test, 1 assertion)`` nos mostrando que um teste (o ``testAbout()``) foi 
 executado com 1 afirmação (o ``assertEquals()``).
 
-Tente alterar a string ``About Symblog`` por ``Contato`` e execute novamente o teste. O teste irá falhar pois 
+Tente alterar a string ``Sobre Symblog`` por ``Contato`` e execute novamente o teste. O teste irá falhar pois 
 ``Contato`` não vai ser encontrada, fazendo com que ``asertEquals`` equivalha a false.
 
 .. code-block:: bash
@@ -739,7 +739,7 @@ Tente alterar a string ``About Symblog`` por ``Contato`` e execute novamente o t
     1) Blogger\BlogBundle\Tests\Controller\PageControllerTest::testAbout
     Failed asserting that 0 matches expected 1.
 
-Retorne o valor da string  para ``About Symblog`` antes de prosseguirmos.
+Retorne o valor da string  para ``Sobre Symblog`` antes de prosseguirmos.
 
 A instância do ``Crawler`` utilizado, permite percorrer documentos HTML ou XML (o que significa que o ``Crawler`` só vai 
 funcionar com as respostas que retornam HTML ou XML). 
@@ -782,7 +782,7 @@ Adicione um novo método ``testIndex()`` para a classe ``PageControllerTest`` lo
 
         $crawler = $client->request('GET', '/');
 
-        // Check there are some blog entries on the page
+        // Verifica se há alguma entrada do blog na página
         $this->assertTrue($crawler->filter('article.blog')->count() > 0);
     }
 
@@ -809,12 +809,12 @@ Atualize o método ``testIndex()`` na classe ``PageControllerTest`` com o seguin
     {
         // ..
 
-        // Find the first link, get the title, ensure this is loaded on the next page
+        // Encontre o primeiro link, pega o título, confirma se foi carregado na próxima página
         $blogLink   = $crawler->filter('article.blog h2 a')->first();
         $blogTitle  = $blogLink->text();
         $crawler    = $client->click($blogLink->link());
 
-        // Check the h2 has the blog title in it
+        // Verifica se o h2 tem o título do blog no seu interior
         $this->assertEquals(1, $crawler->filter('h2:contains("' . $blogTitle .'")')->count());
     }
 
@@ -827,17 +827,17 @@ Para entender isso melhor, dê um olhar na marcação usada na página inicial p
 .. code-block:: html
 
     <article class="blog">
-        <div class="date"><time datetime="2011-09-05T21:06:19+01:00">Monday, September 5, 2011</time></div>
+        <div class="date"><time datetime="2011-09-05T21:06:19+01:00">Segunda feira, 5 de setembro, 2011</time></div>
         <header>
-            <h2><a href="/app_dev.php/1/a-day-with-symfony2">A day with Symfony2</a></h2>
+            <h2><a href="/app_dev.php/1/um-dia-com-symfony-2">Um dia com Symfony 2</a></h2>
         </header>
 
         <!-- .. -->
     </article>
     <article class="blog">
-        <div class="date"><time datetime="2011-09-05T21:06:19+01:00">Monday, September 5, 2011</time></div>
+        <div class="date"><time datetime="2011-09-05T21:06:19+01:00">Segunda feira, 5 de setembro,, 2011</time></div>
         <header>
-            <h2><a href="/app_dev.php/2/the-pool-on-the-roof-must-have-a-leak">The pool on the roof must have a leak</a></h2>
+            <h2><a href="/app_dev.php/2/a-piscina-no-telhado-tem-que-ter-um vazamento">A piscina no telhado tem que ter um vazamento</a></h2>
         </header>
 
         <!-- .. -->
@@ -902,17 +902,17 @@ Adicione um novo método ``testContact()`` para a classe ``PageControllerTest`` 
 
         $this->assertEquals(1, $crawler->filter('h1:contains("Contact symblog")')->count());
 
-        // Select based on button value, or id or name for buttons
+        // Seleciona basedo no valor do botão, ou id or nome para os botões
         $form = $crawler->selectButton('Submit')->form();
 
         $form['blogger_blogbundle_enquirytype[name]']       = 'name';
         $form['blogger_blogbundle_enquirytype[email]']      = 'email@email.com';
         $form['blogger_blogbundle_enquirytype[subject]']    = 'Subject';
-        $form['blogger_blogbundle_enquirytype[body]']       = 'The comment body must be at least 50 characters long as there is a validation constrain on the Enquiry entity';
+        $form['blogger_blogbundle_enquirytype[body]']       = 'O corpo do comentário deve ser de pelo menos 50 caracteres desde que haja uma validação na entidade para restringir isso';
 
         $crawler = $client->submit($form);
 
-        $this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count());
+        $this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Seu formulário de contato foi enviado com sucesso. Obrigado!")')->count());
     }
 
 Começamos na forma usual, fazendo uma solicitação para a URL ``/contact`` e verificamos se a página contém o titulo 
@@ -964,10 +964,10 @@ configurar o cliente para acompanhar o redirecionamento.
 
         $crawler = $client->submit($form);
 
-        // Need to follow redirect
+        // Precisa seguir o redirecionamento
         $crawler = $client->followRedirect();
 
-        $this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count());
+        $this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Seu formulário de contato foi enviado com sucesso. Obrigado!")')->count());
     }
 
 Agora, quando você executa os testes PHPUnit, eles devem passar. Vamos, agora, observar a etapa final do processo de 
@@ -998,27 +998,27 @@ serão perdidas. Atualize o método ``testContact()`` com o seguinte código:
 
         $crawler = $client->submit($form);
 
-        // Check email has been sent
+        // Verifica se o e-mail foi enviado
         if ($profile = $client->getProfile())
         {
             $swiftMailerProfiler = $profile->getCollector('swiftmailer');
 
-            // Only 1 message should have been sent
+            // Apenas 1 mensagem deveria ter sido enviada
             $this->assertEquals(1, $swiftMailerProfiler->getMessageCount());
 
-            // Get the first message
+            // Pegue a primeira mensagem
             $messages = $swiftMailerProfiler->getMessages();
             $message  = array_shift($messages);
 
             $symblogEmail = $client->getContainer()->getParameter('blogger_blog.emails.contact_email');
-            // Check message is being sent to correct address
+            // Verifica se a mensagem foi enviada para o endereço correto
             $this->assertArrayHasKey($symblogEmail, $message->getTo());
         }
 
         // Need to follow redirect
         $crawler = $client->followRedirect();
 
-        $this->assertTrue($crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count() > 0);
+        $this->assertTrue($crawler->filter('.blogger-notice:contains("Seu formulário de contato foi enviado com sucesso. Obrigado!")')->count() > 0);
     }
 
 Após o envio do formulário, vamos verificar se o perfil está disponível, pois ele pode ter sido desativado por uma 
@@ -1077,11 +1077,11 @@ seguinte código:
         {
             $client = static::createClient();
 
-            $crawler = $client->request('GET', '/1/a-day-with-symfony');
+            $crawler = $client->request('GET', '/1/um-dia-com-symfony-2');
 
-            $this->assertEquals(1, $crawler->filter('h2:contains("A day with Symfony2")')->count());
+            $this->assertEquals(1, $crawler->filter('h2:contains("Um dia com Symfony 2")')->count());
 
-            // Select based on button value, or id or name for buttons
+            // Seleciona baseado no valor do botão, ou id ou nome para os botões
             $form = $crawler->selectButton('Submit')->form();
 
             $crawler = $client->submit($form, array(
@@ -1089,17 +1089,18 @@ seguinte código:
                 'blogger_blogbundle_commenttype[comment]'       => 'comment',
             ));
 
-            // Need to follow redirect
+            // Precisa seguir o redirecionamento
             $crawler = $client->followRedirect();
 
-            // Check comment is now displaying on page, as the last entry. This ensure comments
-            // are posted in order of oldest to newest
+            // Verifica se o comentário está sendo exibido na página agora, como a última entrada. Isso assegura que os 
+            // comentários estão sendo postados na ordem do mais velho para o mais novo
             $articleCrawler = $crawler->filter('section .previous-comments article')->last();
 
             $this->assertEquals('name', $articleCrawler->filter('header span.highlight')->text());
             $this->assertEquals('comment', $articleCrawler->filter('p')->last()->text());
 
-            // Check the sidebar to ensure latest comments are display and there is 10 of them
+            // Verifica a barra lateral para assegurar que os últimos comentários estão sendo exibidos e se temos 10
+            //deles
 
             $this->assertEquals(10, $crawler->filter('aside.sidebar section')->last()
                                             ->filter('article')->count()
@@ -1135,10 +1136,10 @@ formulário de uma forma um pouco diferente da versão anterior. Desta vez, usar
 
     .. code-block:: php
 
-        // Tick a checkbox
+        // Marque a caixa de seleção
         $form['show_emal']->tick();
         
-        // Select an option or a radio
+        // Selecione um option ou um radio
         $form['gender']->select('Male');
 
 Após enviar o formulário, solicitamos que o cliente siga o redirecionamento para que possamos verificar a resposta. 
@@ -1197,14 +1198,14 @@ seguinte conteúdo:
 
             $this->assertTrue(count($tagsWeight) > 1);
 
-            // Test case where count is over max weight of 5
+            // Caso de Teste onde se verifica se o peso passou de 5
             $tagsWeight = $this->blogRepository->getTagWeights(
                 array_fill(0, 10, 'php')
             );
 
             $this->assertTrue(count($tagsWeight) >= 1);
 
-            // Test case with multiple counts over max weight of 5
+            // Caso de Teste com múltiplas contas que verificam se o peso passa de 5
             $tagsWeight = $this->blogRepository->getTagWeights(
                 array_merge(array_fill(0, 10, 'php'), array_fill(0, 2, 'html'), array_fill(0, 6, 'js'))
             );
@@ -1213,7 +1214,7 @@ seguinte conteúdo:
             $this->assertEquals(3, $tagsWeight['js']);
             $this->assertEquals(1, $tagsWeight['html']);
 
-            // Test empty case
+            // Teste de cassos vazios
             $tagsWeight = $this->blogRepository->getTagWeights(array());
 
             $this->assertEmpty($tagsWeight);
