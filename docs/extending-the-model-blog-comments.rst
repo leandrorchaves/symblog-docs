@@ -114,17 +114,17 @@ pelo código abaixo:
                 <img src="{{ asset(['images/', blog.image]|join) }}" />
                 <div class="snippet">
                     <p>{{ blog.blog(500) }}</p>
-                    <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}">Continue reading...</a></p>
+                    <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id }) }}">Continue lendo...</a></p>
                 </div>
         
                 <footer class="meta">
-                    <p>Comments: -</p>
-                    <p>Posted by <span class="highlight">{{blog.author}}</span> at {{ blog.created|date('h:iA') }}</p>
+                    <p>Comentários: -</p>
+                    <p>Postado por <span class="highlight">{{blog.author}}</span> em {{ blog.created|date('h:iA') }}</p>
                     <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
                 </footer>
             </article>
         {% else %}
-            <p>There are no blog entries for symblog</p>
+            <p>Não existem entradas de blog para Symblog</p>
         {% endfor %}
     {% endblock %}
 
@@ -138,10 +138,10 @@ abaixo:
     <?php if (count($blogs)): ?>
         <?php foreach ($blogs as $blog): ?>
             <h1><?php echo $blog->getTitle() ?><?h1>
-            <!-- rest of content -->
+            <!-- resto do conteúdo -->
         <?php endforeach ?>
     <?php else: ?>
-        <p>There are no blog entries</p>
+        <p>Não existem entradas de blog</p>
     <?php endif ?>
 
 A estrutura de controle do Twig ``for..else..endfor``, é uma forma mais limpa de realizar esta tarefa. A maioria do 
@@ -704,106 +704,106 @@ conteúdo:
         {
             $comment = new Comment();
             $comment->setUser('symfony');
-            $comment->setComment('To make a long story short. You can\'t go wrong by choosing Symfony! And no one has ever been fired for using Symfony.');
+            $comment->setComment('Para fazer um pequena longa história. Você não se arrependerá, escolhendo Symfony! E ninguém jamais foi demitido por usar Symfony.');
             $comment->setBlog($manager->merge($this->getReference('blog-1')));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('David');
-            $comment->setComment('To make a long story short. Choosing a framework must not be taken lightly; it is a long-term commitment. Make sure that you make the right selection!');
+            $comment->setComment('Para fazer um pequena longa história. Escolher um framework não deve ser uma escolha feita sem pensar, é um compromisso de longo prazo. Certifique-se de fazer a escolha certa!');
             $comment->setBlog($manager->merge($this->getReference('blog-1')));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Dade');
-            $comment->setComment('Anything else, mom? You want me to mow the lawn? Oops! I forgot, New York, No grass.');
+            $comment->setComment('Algo mais mãe? Você quer que eu corte a grama? Oops! Eu esqueci, New York, sem grama.');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Kate');
-            $comment->setComment('Are you challenging me? ');
+            $comment->setComment('Você está me desafiando? ');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 06:15:20"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Dade');
-            $comment->setComment('Name your stakes.');
+            $comment->setComment('Façam as suas apostas.');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 06:18:35"));
             $manager->persist($comment);
             
             $comment = new Comment();
             $comment->setUser('Kate');
-            $comment->setComment('If I win, you become my slave.');
+            $comment->setComment('Se eu ganhar, vocẽ será mey escravo.');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 06:22:53"));
             $manager->persist($comment);
             
             $comment = new Comment();
             $comment->setUser('Dade');
-            $comment->setComment('Your SLAVE?');
+            $comment->setComment('Seu ESCRAVO?');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 06:25:15"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Kate');
-            $comment->setComment('You wish! You\'ll do shitwork, scan, crack copyrights...');
+            $comment->setComment('Você quer! Você vai fazer o trabalho de merda, digitalização, os direitos autorais de crack...');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 06:46:08"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Dade');
-            $comment->setComment('And if I win?');
+            $comment->setComment('E se EU ganhar?');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 10:22:46"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Kate');
-            $comment->setComment('Make it my first-born!');
+            $comment->setComment('Tornarei isso o meu primogênito!');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-23 11:08:08"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Dade');
-            $comment->setComment('Make it our first-date!');
+            $comment->setComment('Tornaremos isso o nosso primogênito!');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-24 18:56:01"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Kate');
-            $comment->setComment('I don\'t DO dates. But I don\'t lose either, so you\'re on!');
+            $comment->setComment('Eu não procuro encontros. Mas eu não perco, por isso você está aqui!');
             $comment->setBlog($manager->merge($this->getReference('blog-2')));
             $comment->setCreated(new \DateTime("2011-07-25 22:28:42"));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Stanley');
-            $comment->setComment('It\'s not gonna end like this.');
+            $comment->setComment('Isso não vai terminar bem');
             $comment->setBlog($manager->merge($this->getReference('blog-3')));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Gabriel');
-            $comment->setComment('Oh, come on, Stan. Not everything ends the way you think it should. Besides, audiences love happy endings.');
+            $comment->setComment('Oh, vamos lá, Stan. Nem tudo termina do jeito que você acha que deveria. Além disso, o público adora finais felizes.');
             $comment->setBlog($manager->merge($this->getReference('blog-3')));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Mile');
-            $comment->setComment('Doesn\'t Bill Gates have something like that?');
+            $comment->setComment('Será que Bill Gates tem algo como isso aqui?');
             $comment->setBlog($manager->merge($this->getReference('blog-5')));
             $manager->persist($comment);
     
             $comment = new Comment();
             $comment->setUser('Gary');
-            $comment->setComment('Bill Who?');
+            $comment->setComment('Bill quem?');
             $comment->setBlog($manager->merge($this->getReference('blog-5')));
             $manager->persist($comment);
     
@@ -951,7 +951,7 @@ Atualize o template ``show`` do blog localizado em ``src/Blogger/BlogBundle/Reso
     
         <section class="comments" id="comments">
             <section class="previous-comments">
-                <h3>Comments</h3>
+                <h3>Comentários</h3>
                 {% include 'BloggerBlogBundle:Comment:index.html.twig' with { 'comments': comments } %}
             </section>
         </section>
@@ -980,12 +980,12 @@ código:
     {% for comment in comments %}
         <article class="comment {{ cycle(['odd', 'even'], loop.index0) }}" id="comment-{{ comment.id }}">
             <header>
-                <p><span class="highlight">{{ comment.user }}</span> commented <time datetime="{{ comment.created|date('c') }}">{{ comment.created|date('l, F j, Y') }}</time></p>
+                <p><span class="highlight">{{ comment.user }}</span> comentou <time datetime="{{ comment.created|date('c') }}">{{ comment.created|date('l, F j, Y') }}</time></p>
             </header>
             <p>{{ comment.comment }}</p>
         </article>
     {% else %}
-        <p>There are no comments for this post. Be the first to comment...</p>
+        <p>Não existem comentários para este post. Seja o primeiro a comentar...</p>
     {% endfor %}
 
 Como você pôde ver, iteramos uma coleção de entidades ``Comment`` e exibimos os comentários. Mostramos também uma outra 
@@ -1032,7 +1032,7 @@ deve ver a página de comentários do blog como a ilustrada abaixo:
 
 .. image:: /_static/images/part_4/comments.jpg
     :align: center
-    :alt: symblog show blog comments
+    :alt: Exibição dos comentários do Symblog
     
 Adicionando comentários
 -----------------------
@@ -1234,10 +1234,10 @@ Atualize a entidade ``Comment`` localizada em ``src/Blogger/BlogBundle/Entity/Co
         public static function loadValidatorMetadata(ClassMetadata $metadata)
         {
             $metadata->addPropertyConstraint('user', new NotBlank(array(
-                'message' => 'You must enter your name'
+                'message' => 'Vocẽ deve fornecer um nome'
             )));
             $metadata->addPropertyConstraint('comment', new NotBlank(array(
-                'message' => 'You must enter a comment'
+                'message' => 'Você deve fornecer um comentário'
             )));
         }
         
@@ -1264,7 +1264,7 @@ Crie um novo arquivo em ``src/Blogger/BlogBundle/Resources/views/Comment/form.ht
     <form action="{{ path('BloggerBlogBundle_comment_create', { 'blog_id' : comment.blog.id } ) }}" method="post" {{ form_enctype(form) }} class="blogger">
         {{ form_widget(form) }}
         <p>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Enviar">
         </p>
     </form>
 
@@ -1309,7 +1309,7 @@ Atualize o template localizado em ``src/Blogger/BlogBundle/Resources/views/Blog/
         <section class="comments" id="comments">
             {# .. #}
             
-            <h3>Add Comment</h3>
+            <h3>Adicione um Comentário</h3>
             {% render 'BloggerBlogBundle:Comment:new' with { 'blog_id': blog.id } %}
         </section>
     {% endblock %}
@@ -1322,7 +1322,7 @@ exceção do Symfony 2.
 
 .. image:: /_static/images/part_4/to_string_error.jpg
     :align: center
-    :alt: toString() Symfony2 Exception
+    :alt: Exceção toString() do Symfony 2
     
 Essa exceção está sendo exibida pelo template ``BloggerBlogBundle:Blog:show.html.twig``. Se formos para a linha 25 do 
 template ``BloggerBlogBundle:Blog:show.html.twig``, veremos que o problema da linha realmente existe.
@@ -1334,6 +1334,7 @@ template ``BloggerBlogBundle:Blog:show.html.twig``, veremos que o problema da li
 Se observarmos a mensagem de exceção, ela ainda nos dá mais algumas informações sobre o por que essa exceção foi causada.
 
     Entities passed to the choice field must have a "__toString()" method defined
+    (Entidades transformadas em campo de escolha, devem ter um método "__toString ()" definido)
 
 Esta mensagem nos diz que um campo de escolha que nós estamos tentando renderizar, não tem um método ``__toString()`` 
 definido para a entidade, cujo campo de escolha está associado. 
