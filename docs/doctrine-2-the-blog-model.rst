@@ -5,7 +5,7 @@ Visão geral
 -----------
 
 Este capítulo vai começar a explorar o Model do blog. O Model será implementado usando Mapa de Objeto Relacional (ORM) 
-`Doctrine 2 <http://www.doctrine-project.org/projects/orm>`_. 
+`Doctrine 2 <http://www.doctrine-project.org/projects/orm>`_.  
 
 Doctrine 2 oferece persistência para os objetos PHP. Ele também fornece um dialeto SQL próprio chamado de Doctrine Query 
 Language (DQL). 
