@@ -27,7 +27,7 @@ Download e Instalação
 --------------------- 
 
 Como dito acima, estaremos usando a distribuição Standard do Framework. Esta distribuição vem completa com as principais 
-bibliotecas e pacotes mais comuns necessários para o desenvolvimento de sites. 
+bibliotecas e pacotes mais comuns necessários para o desenvolvimento de sites.  
 
 Você pode fazer o `Download <http://symfony.com/download>`_ do pacote Symfony 2 diretamente do site do Symfony 2. 
 
