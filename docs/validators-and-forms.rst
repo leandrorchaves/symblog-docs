@@ -43,7 +43,7 @@ Controlador
 ~~~~~~~~~~~
 
 Agora vamos adicionar a ação para a página de contato no controlador ``Page`` em ``BloggerBlogBundle`` localizado em 
-``src/Blogger/BlogBundle/Controller/PageController.php``.
+``src/Blogger/BlogBundle/Controller/PageController.php``. 
 
 .. code-block:: php
 
