@@ -1,5 +1,5 @@
-[Parte 2] - Página Contato: Validadores, Formulários e E-mail
-=============================================================
+[Parte 2] - Página Contato: Validadores, Formulários e Envio de E-mails
+=======================================================================
 
 Visão geral
 -----------
@@ -11,9 +11,9 @@ que permite que os usuários enviem informações de contato para um e-mail de c
 
 As seguintes áreas serão abordadas neste capítulo:
 
-    1. Validadores
-    2. Forms
-    3. Definir valores de configuração do pacote (Bundle)
+ 1. Validadores
+ 2. Forms
+ 3. Definir valores de configuração do pacote (Bundle)
 
 Página de Contato
 -----------------
@@ -24,7 +24,7 @@ Rota
 Tal como foi feito com a página Sobre que nós criamos no último capítulo, vamos começar por definir a rota da página de 
 contato. 
 
-Abra o arquivo de rotas do``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` e 
+Abra o arquivo de rotas do ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` e 
 acrescente a seguinte regra de rota.
 
 .. code-block:: yaml
@@ -69,14 +69,14 @@ e adicione o seguinte conteúdo:
     {# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
     {% extends 'BloggerBlogBundle::layout.html.twig' %}
 
-    {% block title %}Contact{% endblock%}
+    {% block title %}Contato{% endblock%}
 
     {% block body %}
         <header>
-            <h1>Contact symblog</h1>
+            <h1>Contato Symblog</h1>
         </header>
 
-        <p>Want to contact symblog?</p>
+        <p>Gostaria de entrar em contato com o Symblog?</p>
     {% endblock %}
 
 Este template também é bastante simples. Ele extende o  layout do tamplate de ``BloggerBlogBundle``, substitui o bloco 
@@ -95,8 +95,8 @@ para vincular a página de contato.
         <nav>
             <ul class="navigation">
                 <li><a href="{{ path('BloggerBlogBundle_homepage') }}">Home</a></li>
-                <li><a href="{{ path('BloggerBlogBundle_about') }}">About</a></li>
-                <li><a href="{{ path('BloggerBlogBundle_contact') }}">Contact</a></li>
+                <li><a href="{{ path('BloggerBlogBundle_about') }}">Sobre</a></li>
+                <li><a href="{{ path('BloggerBlogBundle_contact') }}">Contato</a></li>
             </ul>
         </nav>
     {% endblock %}
@@ -297,10 +297,10 @@ seguinte conteúdo:
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-                // Perform some action, such as sending an email
+                // Executa alguma ação, como o envio de um e-mail
 
-                // Redirect - This is important to prevent users re-posting
-                // the form if they refresh the page
+                // Redirect - Isso é importante para evitar que os usuários postem novamente
+                // o formulário se eles atualizarem a página
                 return $this->redirect($this->generateUrl('BloggerBlogBundle_contact'));
             }
         }
@@ -343,7 +343,8 @@ As declarações devem ser colocados sob a forma ``use statement``.
     namespace Blogger\BlogBundle\Controller;
 
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-    // Import new namespaces
+    
+    // Importa novos namespaces
     use Blogger\BlogBundle\Entity\Enquiry;
     use Blogger\BlogBundle\Form\EnquiryType;
 
@@ -380,14 +381,14 @@ seguinte código:
     {# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
     {% extends 'BloggerBlogBundle::layout.html.twig' %}
 
-    {% block title %}Contact{% endblock%}
+    {% block title %}Contato{% endblock%}
 
     {% block body %}
         <header>
-            <h1>Contact symblog</h1>
+            <h1>Contato Symblog</h1>
         </header>
 
-        <p>Want to contact symblog?</p>
+        <p>Gostaria de entrar em contato com o Symblog?</p>
 
         <form action="{{ path('BloggerBlogBundle_contact') }}" method="post" {{ form_enctype(form) }} class="blogger">
             {{ form_errors(form) }}
@@ -399,7 +400,7 @@ seguinte código:
 
             {{ form_rest(form) }}
 
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Enviar" />
         </form>
     {% endblock %}
 
@@ -467,7 +468,7 @@ substitua seu conteúdo com o seguinte código:
     {% endblock %}
 
     {% block sidebar %}
-        Sidebar content
+        Conteúdo da barra lateral
     {% endblock %}
 
 Você pôde ver que temos definido um bloco de folhas de estilo para substituir o bloco de folhas de estilo definido no 
@@ -491,7 +492,7 @@ aplicações para a pasta ``web``. Isto pode ser feito da seguinte forma:
 
         php app/console assets:install web
 
-     Este método vai realmente copiar os recursos dos pacotes das pastas ``public`` na pasta ``web`` da aplicação. Como 
+    Este método vai realmente copiar os recursos dos pacotes das pastas ``public`` na pasta ``web`` da aplicação. Como 
     os arquivos são copiados, você terá de executar esta tarefa cada vez que fizer uma alteração em um recurso público 
     do pacote.
 
@@ -499,7 +500,7 @@ Agora, se você atualizar a página de contato, o formulário estará estilizado
 
 .. image:: /_static/images/part_2/contact.jpg
     :align: center
-    :alt: symblog contact form
+    :alt: Formulári ode contato do Symblog
 
 .. tip::
 
@@ -522,7 +523,7 @@ Se você tentou enviar o formulário, vocẽ se deparou com um erro do Symfony 2
 
 .. image:: /_static/images/part_2/post_error.jpg
     :align: center
-    :alt: No route found for "POST /contact": Method Not Allowed (Allow: GET, HEAD)
+    :alt: Nenhuma rota encontrada para "POST /contact": Método não permitido (Permitido: GET, HEAD)
 
 Esse erro está nos dizendo que não existe uma rota para coincidir com ``/contact`` para o método POST HTTP. A rota 
 aceita somente pedidos GET e HEAD. Isto é porque nós configuramos nossa rota com a exigência de método de GET.
@@ -622,7 +623,7 @@ validador de e-mail, você deve fazer o seguinte:
 .. code-block:: php
 
     $metadata->addPropertyConstraint('email', new Email(array(
-        'message' => 'symblog does not like invalid emails. Give me a real one!'
+        'message' => 'O Symblog não gosta de e-mails inválidos. Me passe um e-mail real!'
     )));
 
 .. tip::
@@ -650,7 +651,7 @@ O nosso formulário de contato permitirá que os usuários enviem perguntas mas 
 
 Vamos atualizar o controlador para enviar um e-mail possa ser enviado.
 
-Symfony2 vem com a biblioteca `Swift Mailer <http://swiftmailer.org/>`_ para envio de e-mails. Swift Mailer é uma 
+Symfony 2 vem com a biblioteca `Swift Mailer <http://swiftmailer.org/>`_ para envio de e-mails. Swift Mailer é uma 
 biblioteca muito poderosa, vamos ver o que esta biblioteca pode realizar.
 
 Configurar Swift Mailer
@@ -691,7 +692,7 @@ Atualize os parâmetros com o seguinte: (substitua o nome de usuário e senha no
     ``app/config/parameters.ini`` está na lista de ignorados de seus VCS's. 
 
     Uma abordagem comum para este problema é sufixar o nome do arquivo que tem informações sensíveis, tais como 
-    ``app/config/parameters.ini `` com ``.dist``. Você, então, fornece padrões sensíveis para as configurações deste 
+    ``app/config/parameters.ini`` com ``.dist``. Você, então, fornece padrões sensíveis para as configurações deste 
     arquivo e adiciona o arquivo atual, ou seja, ``app/config/parameters.ini`` para sua lista VCS de ignorados. 
 
     Você pode então implantar o arquivo ``*.dist`` com o projeto e permite que o desenvolvedor remova a extensão 
@@ -713,16 +714,16 @@ abaixo:
         if ($form->isValid()) {
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Contact enquiry from symblog')
+                ->setSubject('Formulário de Contato do Symblog')
                 ->setFrom('enquiries@symblog.co.uk')
                 ->setTo('email@email.com')
                 ->setBody($this->renderView('BloggerBlogBundle:Page:contactEmail.txt.twig', array('enquiry' => $enquiry)));
             $this->get('mailer')->send($message);
 
-            $this->get('session')->setFlash('blogger-notice', 'Your contact enquiry was successfully sent. Thank you!');
+            $this->get('session')->setFlash('blogger-notice', 'Seu formulário de contato foi enviado com sucesso. Obrigado!');
 
-            // Redirect - This is important to prevent users re-posting
-            // the form if they refresh the page
+            // Redirect - Isso é importante para prevenir que os usuários postem novamente
+            // o formulário se eles atualizarem a página
             return $this->redirect($this->generateUrl('BloggerBlogBundle_contact'));
         }
         // ..
@@ -756,9 +757,9 @@ Atualize o conteúdo do template com o seguinte código:
 
     {# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
 
-    {# rest of template ... #}
+    {# restante do template ... #}
     <header>
-        <h1>Contact symblog</h1>
+        <h1>Contato Symblog</h1>
     </header>
 
     {% if app.session.hasFlash('blogger-notice') %}
@@ -767,9 +768,9 @@ Atualize o conteúdo do template com o seguinte código:
         </div>
     {% endif %}
 
-    <p>Want to contact symblog?</p>
+    <p>Gostaria de entrar em contato com Symblog?</p>
 
-    {# rest of template ... #}
+    {# restante of template ... #}
 
 Verificamos se uma ``flash mesage`` com o identificador ``blogger-notice`` está definido e, assim, imprimimos a mensagem.
 
@@ -808,7 +809,7 @@ Para conseguir isso, atualize as diretivas ``imports`` na parte superior do arqu
 
     # app/config/config.yml
     imports:
-        # .. existing import here
+        # .. existe importação aqui
         - { resource: @BloggerBlogBundle/Resources/config/config.yml }
 
 O caminho de importação é o local físico do arquivo no disco. A diretiva ``@BloggerBlogBundle`` irá dizer que o caminho 
@@ -826,7 +827,7 @@ Finalmente vamos atualizar a ação de contato para usar o parâmetro.
         if ($form->isValid()) {
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('Contact enquiry from symblog')
+                ->setSubject('Formulário de Contato do Symblog')
                 ->setFrom('enquiries@symblog.co.uk')
                 ->setTo($this->container->getParameter('blogger_blog.emails.contact_email'))
                 ->setBody($this->renderView('BloggerBlogBundle:Page:contactEmail.txt.twig', array('enquiry' => $enquiry)));
@@ -849,7 +850,7 @@ Finalmente vamos atualizar a ação de contato para usar o parâmetro.
 
         # app/config/config.yml
         parameters:
-            # Blogger contact email address
+            # E-mail de contato do Blog
             blogger_blog.emails.contact_email: assistant@email.com
 
     Estas permissões de customizações para o pacote fornecem padrões sensíveis para os valores onde o aplicativo pode 
@@ -871,7 +872,7 @@ O corpo do e-mail está configurado para renderizar um template. Crie este templ
 .. code-block:: text
 
     {# src/Blogger/BlogBundle/Resources/views/Page/contactEmail.txt.twig #}
-    A contact enquiry was made by {{ enquiry.name }} at {{ "now" | date("Y-m-d H:i") }}.
+    Um formulário de econtato foi preenchido por {{ enquiry.name }} em {{ "now" | date("Y-m-d H:i") }}.
 
     Reply-To: {{ enquiry.email }}
     Subject: {{ enquiry.subject }}
@@ -920,7 +921,7 @@ Agora, quando você enviar um formulário, um e-mail será enviado para o endere
 
     .. image:: /_static/images/part_2/email_notifications.jpg
         :align: center
-        :alt: Symfony2 toolbar show email notifications
+        :alt: Barra de ferramentas do desenvolvedor do Symfony 2 motrando notificações de e-mails.
 
     Se você executar um redirecionamento após o envio de um e-mail, como nós fizemos para o formulário de contato, você 
     precisará definir a configuração de ``intercept_redirects`` em ``app/config/config_dev.yml`` para realmente ver o 
