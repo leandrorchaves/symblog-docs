@@ -9,7 +9,7 @@ Agora temos os templates básicos de HTML em seus devidos lugares, é hora de fa
 Vamos começar com uma página simples, a página de contato. No final deste capítulo, você terá uma página de contatos 
 que permite que os usuários enviem informações de contato para um e-mail de contato. 
 
-As seguintes áreas serão abordadas neste capítulo:
+As seguintes áreas serão abordadas neste capítulo: 
 
  1. Validadores
  2. Forms
