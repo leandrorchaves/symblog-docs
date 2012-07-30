@@ -1,99 +1,47 @@
-[Part 6] - Testing: Unit and Functional with PHPUnit
-====================================================
+[Parte 6] - Teste: Teste de Unidade e Teste Funcional com PHPUnit
+================================================== ==
 
-Overview
+Visão geral
 --------
 
-So far we have explored a good amount of ground looking at a number of core
-concepts with regards to Symfony2 development. Before we continue adding
-features it is time to introduce testing. We will look at how to test individual
-functions with unit testing and how to ensure multiple components are working
-correctly together with functional testing. The PHP testing library `PHPUnit
-<http://www.phpunit.de/manual/current/en/>`_ will be covered as this library is
-at the centre of the Symfony2 tests. As testing is a large topic it will also be
-covered in later chapters. By the end of this chapter you will have written a
-number of tests covering both unit and functional testing. You will have simulated
-browser requests, populated forms with data, and checked responses to ensure
-the website pages are outputting correctly. You will also have checked how much coverage
-your tests have on your applications code base.
+Até agora, exploramos vários conceitos fundamentais com relação ao desenvolvimento do Symfony 2. Antes de continuarmos a adicionar funcionalidades, é hora de realizarmos testes. Vamos ver como testar funções individualmente com testes de unidade e como garantir se múltiplos componentes estão funcionando corretamente em conjunto com testes funcionais. A biblioteca de testes PHP, `PHPUnit <http://www.phpunit.de/manual/current/en/>`_, será o centro dos testes em Symfony 2. Como ``teste`` é um tema abrangente, será abordado em capítulos posteriores. Até o final deste capítulo, você vai ter escrito vários testes que abrangem tanto o teste de unidade quanto testes funcionais. Você terá simulado solicitações do navegador, terá preenchido formulários com dados e verificado as respostas para garantir que as páginas do site retornam as saídas da forma correta. Você ainda poderá verificar o quanto seus testes são eficazes no código base de suas aplicações.
 
-Testing in Symfony2
+Testes em Symfony2
 -------------------
 
-`PHPUnit <http://www.phpunit.de/manual/current/en/>`_ has become the "de facto
-standard" for writing tests in PHP, so learning it will benefit you in all your
-PHP projects. Lets also not forget that most of the topics covered in this
-chapter are language independent and so can be transferred to other languages
-you. 
+`PHPUnit <http://www.phpunit.de/manual/current/en/>`_ tornou-se o padrão para a escrita de testes em PHP, então esta aprendizagem irá beneficiar você em todos os seus projetos em PHP. Não podemos esquecer que, a maioria dos tópicos abordados neste capítulo, são independentes de linguagem e, assim, podem ser utilizados em outras línguas. 
 
 .. tip::
 
-    If you are planning on writing your own Open Source Symfony2 bundles, 
-    you are much more likely to receive interest if your bundle is well
-    tested (and documented). Have a look at the existing Symfony2 bundles available
-    at `Symfony2Bundles <http://symfony2bundles.org/>`_.
+    Se você está pensando em escrever a seus próprios pacotes  de código fonte aberto do Symfony 2,
+    você irá ter mais vantagem se você testar (e documentar) bem seus pacotes. Dê uma olhada nos pacotes existentes do Symfony 2, disponíveis em `Symfony2Bundles <http://symfony2bundles.org/>`_.
 
-Unit Testing
-~~~~~~~~~~~~
+Testes Unitários
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Unit testing is concerned with ensuring individual units of code function
-correctly when used in isolation. In an Object Oriented code base like Symfony2,
-a unit would be a class and its methods. For example, we could write tests for
-the ``Blog`` and ``Comment`` Entity classes. When writing unit tests, the test
-cases should be written independently of other test cases, i.e., the result of test
-case B should not depend on the result of test case A. It is useful when unit testing
-to be able to create mock objects that allow you to easily unit test
-functions that have external dependencies. Mocking allows you to simulate a function
-call instead of actually executing it. An example of this
-would be unit testing a class that wraps up an external API. The API class may
-use a transport layer for communicating with the external API. We could mock the
-request method of the transport layer to return the results we specify, rather
-than actually hitting the external API. Unit testing does not test that the
-components of an application function correctly together, this is covered by the
-next topic, functional testing.
+O teste de unidade, está preocupado em garantia que unidades individuais de código funcionem corretamente, quando usados isoladamente. Em uma base de código Orientado à objetos, como Symfony 2, uma unidade seria uma classe e seus métodos. Por exemplo, poderíamos escrever testes para as classes de entidade ``Blog`` e ``Comments``. Ao escrevermos testes de unidade, os casos de testes devem ser escrito independentemente de outros casos de teste, isto é, o resultado do teste do caso B não depende do resultado do teste do caso A. Isso é útil quando o teste de unidade for capaz de criar objetos fictícios que permitem você, facilmente, teste as funções que têm dependências externas unicamente. Esses objetos fictícios, permitem simular uma função chamada, em vez de realmente executá-la. Um exemplo disso seria testar unicamente uma classe que encapsula uma API externa. A classe API pode usar uma camada de transporte para se comunicar com a API externa. Nós poderíamos simular um método de requisição da camada de transporte para retornar os resultados que especificamos, em vez de realmente atingir a API externa. O teste unitário não testa os componentes de uma função de uma aplicação, corretamente, em conjunto. Este assunto é abordado pelo próximo tópico, testes funcionais.
 
-Functional Testing
-~~~~~~~~~~~~~~~~~~
+Testes Funcionais
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Functional testing checks the integration of different components within the
-application, such as routing, controllers, and views. Functional tests are
-similar to the manual tests you would run yourself in the browser such as requesting
-the homepage, clicking a blog link and checking the correct blog is shown.
-Functional testing provides you with the ability to automate this process.
-Symfony2 comes complete with a number of useful classes that assist in functional testing
-including a ``Client`` that is able to requests pages and submit forms and DOM ``Crawler``
-that we can use to traverse the ``Response`` from the client.
+O teste funcional, verifica a integração dos componentes diferentes dentro da aplicação, tais como rota, controladores e as visões (Views). Testes funcionais são semelhante aos testes manuais que você executa no próprio navegador, como requisitar a página inicial, clicar em um link do blog e verificar se o blog correto está sendo. O teste funcional possibilita a capacidade de automatizar esse processo. O Symfony 2 vem completo com várias classes úteis que auxiliam no teste funcional,
+incluindo um ``Cliente`` que é capaz de requisitar páginas e enviar formulários e inspecionar o DOM ``DOM Crawler``, que podemos usar para interpretar a ``resposta`` do cliente.
 
 .. tip::
 
-    There are a number of software development process that are driven by testing.
-    These include processes such as Test Driven Development (TDD) and Behavioral
-    Driven Development (BDD). While these are out side the scope of this tutorial
-    you should be aware of the library written by `everzet
-    <https://twitter.com/#!/everzet>`_ that facilitates BDD called `Behat
-    <http://behat.org/>`_. There is also a Symfony2 `BehatBundle
-    <http://docs.behat.org/bundle/index.html>`_ available to easily integrate Behat
-    into your Symfony2 project.
+    Há vários processos de desenvolvimento de software que são direcionados a testes. Estes processos incluem Test Driven Development (TDD) e Behavioral Driven Development (BDD). Enquanto estes estão fora do escopo deste tutorial, você deve estar ciente da biblioteca escrita por `everzet <https://twitter.com/#!/everzet>`_ que facilita o BDD, chamada`Behat <http://behat.org/>`_. Existe também um pacote Symfony 2 `BehatBundle <http://docs.behat.org/bundle/index.html>`_ disponível para se integrar facilmente o Behat em seu projeto Symfony 2.
 
 PHPUnit
 -------
 
-As stated above, Symfony2 tests are written using PHPUnit. You will need to
-install PHPUnit in order to run these tests and the tests from this chapter.
-For detailed `installation instructions
-<http://www.phpunit.de/manual/current/en/installation.html>`_ refer to the
-official documentation on the PHPUnit website. To run the tests in Symfony2 you
-need to install PHPUnit 3.5.11 or later. PHPUnit is a very large testing library, so references
-to the official documentation will be made where additional reading can be
-found. 
+Como dito acima, os testes em Symfony 2, são escritos utilizando PHPUnit. Você vai precisar
+instalar PHPUnit a fim de executar esses testes e os testes deste capítulo. Para informações sobre uma `Instalação  detalhada <http://www.phpunit.de/manual/current/en/installation.html>`_, leia a
+documentação oficial no site do PHPUnit. Para executar os testes no Symfony 2, você precisa instalar PHPUnit 3.5.11 ou posterior. PHPUnit é uma biblioteca de teste muito grande, então, referências à documentação oficial será feita onde uma leitura adicional é recomendada.
 
-Assertions
-~~~~~~~~~~
+Afirmações (Assertions)
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Writing tests is concerened with checking that the actual test result is equal
-to the expected test result. There are a number of assertion methods available
-in PHPUnit to assist you with this task. Some of the common assertion
-methods you will use are listed below.
+Testes de escrita, estão relacionados com a verificação do resultado do teste atual, se é igual ao resultado do teste esperado. Há um certo número de métodos de afirmação disponíveis em PHPUnit para ajudá-lo com esta tarefa. Vários métodos de afirmação comuns que serão usados, ​​estão listados abaixo:
 
 .. code-block:: php
 
@@ -112,25 +60,18 @@ methods you will use are listed below.
     // Check array contains value 'php'
     $this->assertContains('php', array('php', 'ruby', 'c++', 'JavaScript'));
 
-A full list of
-`assertions <http://www.phpunit.de/manual/current/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions>`_
-is available in the PHPUnit documentation.
+A lista completa de `Afirmações <http://www.phpunit.de/manual/current/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.assertions>`_ está disponível na documentação do PHPUnit.
 
-Running Symfony2 Tests
+Executando Testes em Symfony 2
 ----------------------
 
-Before we begin writing some tests, lets look at how we run tests in Symfony2. PHPUnit
-can be set to execute using a configuration file. In our Symfony2 project this
-file is located at ``app/phpunit.xml.dist``. As this file is suffixed with
-``.dist``, you need to copy its contents into a file called ``app/phpunit.xml``.
+Antes de começar a escrever alguns testes, vamos ver como podemos executar testes em Symfony 2. PHPUnit pode ser configurado para executar usando um arquivo de configuração. Em nosso projeto Symfony 2,  este arquivo está localizado em ``app/phpunit.xml.dist``. Como este arquivo está com o sufixo ``.dist``, você precisa copiar o seu conteúdo para um arquivo chamado ``app/phpunit.xml``.
 
 .. tip::
 
-    If you are using a VCS such as Git, you should add the new ``app/phpunit.xml``
-    file to the VCS ignore list.
+   Se você estiver usando um VCS como Git, você deve adicionar o novo arquivo ``app/phpunit.xml`` na lista de VCS's ignorados.
 
-If you have a look at the contents of the PHPUnit configuration file you will see the
-following.
+Se você observar o conteúdo do arquivo de configuração do PHPUnit, você vai ver o seguinte:
 
 .. code-block:: xml
 
@@ -143,15 +84,11 @@ following.
         </testsuite>
     </testsuites>
 
-The following settings configure some directories that are part of our test suite.
-When running PHPUnit it will look in the above directories for tests to run. You
-can also pass additional command line arguments to PHPUnit to run tests in
-specific directories, instead of the test suite tests. You will see how to
-achieve this later.
+O código acima, configura alguns diretórios que fazem parte de nosso pacote de teste. Ao executarmos o PHPUnit, ele irá procurar, nos diretórios acima, testes para serem executados. Você
+também pode passar argumentos adicionais em linha de comando para o PHPUnit para executar testes em diretórios específicos, em vez de usar o pacote de testes. Você vai ver como fazer isso depois.
 
-You will also notice the configuration is specifying the bootstrap file located at
-``app/bootstrap.php.cache``. This file is used by PHPUnit to get the testing environment
-setup.
+Perceba que a configuração está especificando o arquivo de inicialização (bootstrap) localizada em
+``app/bootstrap.php.cache``. Este arquivo é usado pelo PHPUnit para obter a configuração do ambiente de teste.
 
 .. code-block:: xml
 
@@ -162,27 +99,19 @@ setup.
 
 .. tip::
 
-    For more information regarding configuring PHPUnit with an XML file
-    see the
-    `PHPUnit documentation <http://www.phpunit.de/manual/current/en/organizing-tests.html#organizing-tests.xml-configuration>`_.
+    Para mais informações sobre como configurar PHPUnit com um arquivo XML veja a
+    `Documentação do PHPUnit <http://www.phpunit.de/manual/current/en/organizing-tests.html#organizing-tests.xml-configuration>`_.
 
-Running the Current Tests
+Executando os testes atuais
 -------------------------
 
-As we used one of the Symfony2 generator tasks to create the
-``BloggerBlogBundle`` back in chapter 1, it also created a controller test for
-the ``DefaultController`` class. We can execute this test by running the
-following command from the root directory of the project. The ``-c`` option
-specifies that PHPUnit should load its configuration from the ``app`` directory.
+Assim como nós usamos o gerador de tarefas do Symfony 2para criar o ``BloggerBlogBundle``, no capítulo 1, ele também criou um controlador de teste para a classe ``DefaultController classe``. Podemos executar este teste, executando o seguinte comando, a partir do diretório raiz do projeto. A opção ``-c`` especifica que o PHPUnit deve carregar a sua configuração a partir do diretório ``app``.
 
 .. code-block:: bash
 
     $ phpunit -c app
 
-Once the testing has completed you should be notified that the tests failed.
-If you look at the ``DefaultControllerTest`` class located at
-``src/Blogger/BlogBundle/Tests/Controller/DefaultControllerTest.php`` you will see
-the following content.
+Depois que o teste foi completado, você poderá ser notificado de que os testes falharam. Se você observar a classe ``DefaultControllerTest`` localizado em ``src/Blogger/BlogBundle/Tests/Controller/DefaultControllerTest.php``, você vai ver o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -205,29 +134,14 @@ the following content.
         }
     }
 
-This is a functional test for the ``DefaultController`` class that Symfony2 generated.
-If you remember back to chapter 1, this Controller had an action that handled requests
-to ``/hello/{name}``. The fact that we removed this controller is why the above test
-is failing. Try going to the URL ``http://symblog.dev/app_dev.php/hello/Fabien`` in
-your browser. You should be informed that the route could not be found. As the
-above test makes a request to the same URL, it will also get the same response,
-hence why the test fails. Functional testing is a large part of this chapter and
-will be covered in detail later.
+Este é um teste funcional para a classe ``DefaultController`` que o Symfony 2 gerou. Se você se lembrar do capítulo 1, este controlador tem a ação de tratar as requisições para ``/Hello/{name}``. O pelo qual removemos este controlador, é por que o teste acima está falhando. Tente acessar ``http://symblog.dev/app_dev.php/hello/Fabien`` em seu navegador. Você deve ser informado de que o percurso não pôde ser encontrado. Como os teste acima faz uma requisição para a mesma URL, teremos a mesma resposta, daí o porque do teste falhar. O teste funcional é uma parte grande deste capítulo e será abordado em detalhe mais tarde.
 
-As the ``DefaultController`` class has been removed, you can also remove this test
-class. Delete the ``DefaultControllerTest`` class located at
-``src/Blogger/BlogBundle/Tests/Controller/DefaultControllerTest.php``.
+Como a classe ``DefaultController`` foi removida, você também pode remover esta classe de teste. Exclua a classe ``DefaultControllerTest`` localizado em ``src/Blogger/BlogBundle/Tests/Controller/DefaultControllerTest.php``.
 
-Unit Testing
+Testes Unitários
 ------------
 
-As explained previously, unit testing is concerned with testing individual units
-of your application in isolation. When writing unit tests it is recommend that you
-replicate the Bundle structure under the Tests folder. For example, if you wanted
-to test the ``Blog`` entity class located at
-``src/Blogger/BlogBundle/Entity/Blog.php`` the test file would reside at
-``src/Blogger/BlogBundle/Tests/Entity/BlogTest.php``. An example folder layout
-would be as follows.
+Como explicado anteriormente, teste de unidade está preocupado em testar unidades individuais de sua aplicação de forma isolada. Ao escrever testes de unidade, é recomendável que você replique a estrutura de pastas do pacote (Bundle) na pasta ``Tests``. Por exemplo, se você quiser testar a classe de entidade  ``Blog`` localizada em ``src/Blogger/BlogBundle/Entity/blog.php``, o arquivo de teste deve estar em ``src/Blogger/BlogBundle/Tests/Entity/BlogTest.php``. Um exemplo da pasta de layout, seria como se segue:
 
 .. code-block:: text
 
@@ -250,14 +164,12 @@ would be as follows.
                             Extensions/
                                 BloggerBlogExtensionTest.php
 
-Notice that each of the Test files are suffixed with Test.
+Observe que cada um dos arquivos de teste estão sufixados por ``Test``.
 
-Testing the Blog Entity - Slugify method
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Testando a Entidade Blog - método Slugify
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We begin by testing the slugify method in the ``Blog`` entity. Lets write some
-tests to ensure this method is working correctly. Create a new file located at
-``src/Blogger/BlogBundle/Tests/Entity/BlogTest.php`` and add the following.
+Começamos a testar o método slugify da entidade ``Blog``. Vamos escrever alguns testes para garantir que este método está funcionando corretamente. Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/tests/Entity/BlogTest.php ` e adicione o seguinte código:
 
 .. code-block:: php
 
@@ -273,17 +185,9 @@ tests to ensure this method is working correctly. Create a new file located at
 
     }
 
-We have created a test class for the ``Blog`` entity. Notice the location of the file
-complies with the folder structure mentioned above. The ``BlogTest`` class extends
-the base PHPUnit class ``PHPUnit_Framework_TestCase``. All tests you write for PHPUnit
-will be a child of this class. You'll remember from previous chapters that
-the ``\`` must be placed in front of the ``PHPUnit_Framework_TestCase`` class
-name as the class is declared in the PHP public namespace.
+Nós criamos uma classe de teste para a entidade ``Blog``. Note que a localização do arquivo está em conformidade com a estrutura da pasta acima mencionado. A classe ``BlogTest`` estende a classe base do PHPUnit ``PHPUnit_Framework_TestCase``. Todos os testes que você escreve para PHPUnit será um filho (child) da classe. Você vai se lembrar de capítulos anteriores que  ``\`` deve ser colocado na frente do nome da classe ``PHPUnit_Framework_TestCase`` pois a classe é declarada no namespace PHP público.
 
-Now we have the skeleton class for our ``Blog`` entity tests, lets write a test
-case. Test cases in PHPUnit are methods of the Test class prefixed
-with ``test``, such as ``testSlugify()``. Update the ``BlogTest`` located at
-``src/Blogger/BlogBundle/Tests/Entity/BlogTest.php`` with the following.
+Agora que temos a classe esqueleto para testar a nossa entidade ``Blog``, vamos escrever um caso de teste. Os casos de testes em PHPUnit, são métodos da classe Test, prefixadas com ``test``, como ``testSlugify()``. Atualize o ``BlogTest`` localizado em ``src/Blogger/BlogBundle/Teste/Entity/BlogTest.php`` com o seguinte código:
 
 .. code-block:: php
 
@@ -301,13 +205,9 @@ with ``test``, such as ``testSlugify()``. Update the ``BlogTest`` located at
         }
     }
 
-This is a very simple test case. It instantiates a new ``Blog`` entity and runs
-an ``assertEquals()`` on the result of the ``slugify`` method. The ``assertEquals()``
-method takes 2 mandatory arguments, the expected result and the actual result.
-An optional 3rd argument can be passed in to specify a message to display
-when the test case fails.
+Este é um caso de teste muito simples. Ele instancia uma nova entidade ``Blog`` e executa um ``assertEquals()`` sobre o resultado do método ``slugify``. O método ``assertEquals()`` leva 2 argumentos obrigatórios, o resultado esperado e o resultado atual. Um terceiro argumento opcional, pode ser passado para especificar uma mensagem a ser exibida quando o caso de teste falhar.
 
-Lets run our new unit test. Run the following on the command line.
+Vamos executar o nosso novo teste de unidade. Execute o seguinte na linha de comando:
 
 .. code-block:: bash
 
@@ -325,13 +225,7 @@ You should see the following output.
 
     OK (1 test, 1 assertion)
 
-The output from PHPUnit is very simple, Its start by displaying some information about
-PHPUnit and the outputs a number of ``.`` for each test it runs, in our case
-we are only running 1 test so only 1 ``.`` is output. The last statement informs
-us of the result of the tests. For our ``BlogTest`` we only ran 1 test with 1
-assertion. If you have color output on your command line you will also see the
-last line displayed in green showing everything executed OK.
-Lets update the ``testSlugify()`` method to see what happens when the tests fails.
+A saída do PHPUnit é muito simples. Primeiro, exibe algumas informações sobre o PHPUnit e devolve um número de ``.`` para cada teste executado, no nosso caso, estamos executando apenas um teste, então, apenas 1 ``.`` é a exibido. A última instrução nos informa do resultado dos testes. Para o nosso ``BlogTest``, nós só executamos um teste com 1 afirmação (assertion). Se seu prompt de comando exibir  saídas com cores, você verá que a última linha exibida está com um fundo verde,  informando que tudo está OK. Vamos atualizar o método ``testSlugify()`` para ver o que acontece quando os testes de falham.
 
 .. code-block:: php
 
@@ -347,7 +241,7 @@ Lets update the ``testSlugify()`` method to see what happens when the tests fail
         $this->assertEquals('a day with symfony2', $blog->slugify('A Day With Symfony2'));
     }
 
-Re run the unit tests as before. The following output will be displayed
+Re execute os testes de unidade como antes. A saída será apresentada como a exibida baixo:
 
 .. code-block :: bash
 
@@ -372,15 +266,7 @@ Re run the unit tests as before. The following output will be displayed
     FAILURES!
     Tests: 1, Assertions: 2, Failures: 1.
 
-The output is a bit more involved this time. We can see the ``.`` for the run tests
-is replaced by a ``F``. This tells us the test failed. You will also see the ``E``
-character output if your test contains Errors. Next PHPUnit notifies us in
-detail of the failures, in this case, the 1 failure. We can see the
-``Blogger\BlogBundle\Tests\Entity\BlogTest::testSlugify`` method failed because
-the Expected and the Actual values were different. If you have color output on
-your command line you will also see the last line displayed in red showing
-there were failures in your tests. Correct the ``testSlugify()`` method so
-the tests execute successfully.
+A saída é um pouco mais envolvente neste momento. Podemos ver que o ``.`` para a execução dos testes foi substituído por um ``F``. Isto nos diz que o teste falhou. Você também verá o caractere ``E`` se o teste contém erros. Depois, o PHPUnit nos informa sobre as falhas em detalhes, neste caso, a falha 1. Nós podemos ver o método ``Blogger\BlogBundle\Tests\Entity\BlogTest::testSlugify`` falhou porque o valor esperado e o valores atual eram diferentes. Se seu prompt de comando exibir saídas com cores, você verá que a última linha exibida está em vermelho informando que houve falhas em seu teste. Corrija o método ``testSlugify()`` para que os testes sejam executados com êxito.
 
 .. code-block:: php
 
@@ -396,7 +282,7 @@ the tests execute successfully.
         $this->assertEquals('a-day-with-symfony2', $blog->slugify('A Day With Symfony2'));
     }
 
-Before moving on add some more test for ``slugify()`` method.
+Antes de seguirmos, adicione mais alguns testes para o método ``slugify()``.
 
 .. code-block:: php
 
@@ -415,10 +301,7 @@ Before moving on add some more test for ``slugify()`` method.
         $this->assertEquals('symblog', $blog->slugify(' symblog'));
     }
 
-Now we have tested the ``Blog`` entity slugify method, we need to  ensure the ``Blog``
-``$slug`` member is correctly set when the ``$title`` member of the ``Blog`` is
-updated. Add the following methods to the ``BlogTest`` file located at
-``src/Blogger/BlogBundle/Tests/Entity/BlogTest.php``.
+Agora que nós testamos o método ``slugify`` da entidade ``Blog``, é preciso garantir que o membro ``$slug`` de ``Blog`` está definido corretamente quando o membro ``$title`` do ``Blog`` é atualizado. Adicione os métodos a seguir no arquivo ``BlogTest`` localizado em ``src/Blogger/BlogBundle/Tests/Entity/BlogTest.php``.
 
 .. code-block:: php
 
@@ -442,19 +325,14 @@ updated. Add the following methods to the ``BlogTest`` file located at
         $this->assertEquals('hello-world', $blog->getSlug());
     }
 
-We begin by testing the ``setSlug`` method to ensure the ``$slug`` member is
-correctly slugified when updated. Next we check the ``$slug`` member is correctly
-updated when the ``setTitle`` method is called on the ``Blog`` entity.
+Começamos a testar o método ``setSlug`` para garantir que o membro ``$slug`` é executado (slugified) corretamente quando atualizado. Depois, verifficamos que o membro``$slug`` é corretamente atualizado quando o método ``setTitle`` é chamado na entidade ``Blog``.
 
-Run the tests to verify the ``Blog`` entity is functioning correctly.
+Execute os testes para verificar que a entidade ``Blog`` está funcionando corretamente.
 
-Testing the Twig extension
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Testando a extensão do Twig
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-In the previous chapter we created a Twig extension to convert a ``\DateTime``
-instance into a string detailing the duration since a time period. Create a new test file located at
-``src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php`` and
-update with the following content.
+No capítulo anterior, criamos uma extensão do Twig para converter uma instância ``\DateTime`` em uma string detalhando o período de existência do post. Criar um novo arquivo de teste localizado em ``src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php`` e o atualize  com o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -490,24 +368,14 @@ update with the following content.
         }
     }
 
-The class is setup much the same as before, creating a method ``testCreatedAgo()``
-to test the Twig Extension. We introduce another PHPUnit method in this test case,
-the ``setExpectedException()`` method. This method should be called before executing
-a method you expect to throw an exception. We know that the ``createdAgo`` method
-of the Twig extension cannot handle dates in the future and will throw an
-``\Exception``. The ``getDateTime()`` method is simply a helper method for
-creating a ``\DateTime`` instance. Notice it is not prefixed with ``test`` so
-PHPUnit will not try to execute it as a test case. Open up the command line
-and run the tests for this file. We could simply run the test as before, but
-we can also tell PHPUnit to run tests for a specific folder (and its sub folders)
-or a file. Run the following command.
+A classe está configurada da mesma forma como antes, criando um método ``testCreatedAgo()`` para testar a extensão do Twig. Nós introduzimos um outro método PHPUnit neste caso de teste,
+o método ``setExpectedException()``. Este método deve ser chamado antes da execução de um método que você espera lançar uma exceção. Sabemos que o método ``createdAgo`` da extensão do Twig, não pode lidar com datas no futuro, então, irá lançar uma ``\Exception``. O método ``getDateTime()`` é simplesmente um método auxiliar para criar uma instância ``\DateTime``. Observe que não é prefixado com o ``test``, assim, o PHPUnit não vai tentar executá-lo como um caso de teste. Abra a linha de comando e execute os testes para esse arquivo. Nós poderíamos simplesmente executar o teste como antes, mas, também podemos dizer ao PHPUnit para executar testes para uma pasta específica (e suas sub-pastas) ou um arquivo. Execute o seguinte comando:
 
 .. code-block:: bash
 
     $ phpunit -c app src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php
 
-This will run the tests for the ``BloggerBlogExtensionTest`` file only. PHPUnit
-will inform us that the tests failed. The output is shown below.
+Isto irá executar os testes somente para o arquivo ``BloggerBlogExtensionTest``. O PHPUnit nos informa que os testes falharam. A saída é mostrada abaixo:
 
 .. code-block:: bash
 
@@ -521,9 +389,7 @@ will inform us that the tests failed. The output is shown below.
 
     /var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php:14
 
-We were expecting the first assertion to return ``0 seconds ago`` but it didn't, the
-word second was not plural. Lets update the Twig Extension located at
-``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php`` to correct this.
+Esperavamos a primeira afirmação retornar ``0 segundos atrás (0 seconds ago)``, mas não o fez, a palavra ``segundo`` não estava no plural. Vamos atualizar a Extensão do Twig localizado em ``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php`` para corrigir isso.
 
 .. code-block:: php
 
@@ -551,8 +417,7 @@ word second was not plural. Lets update the Twig Extension located at
         // ..
     }
 
-Re run the PHPUnit tests. You should see the first assertion passing correctly,
-but our test case still fails. Lets examine the next output.
+Re execute os testes PHPUnit. Você deverá ver a primeira afirmação passanda corretamente, mas o nosso caso de teste ainda continua a falhar. Vamos examinar a próxima saída:
 
 .. code-block:: bash
 
@@ -566,16 +431,7 @@ but our test case still fails. Lets examine the next output.
 
     /var/www/html/symblog/symblog/src/Blogger/BlogBundle/Tests/Twig/Extensions/BloggerBlogExtensionTest.php:18
 
-We can see now that the 5th assertion is failing (notice the 18 at the end of the
-output, this gives us the line number in the file where the assertion failed).
-Looking at the test case we can see that the Twig Extension has functioned
-incorrectly. 1 hour ago should have been returned, but instead 60 minutes ago
-was. If we examine the code in the ``BloggerBlogExtension`` Twig
-extension we can see the reason. We compare the time to be inclusive, i.e., we use
-``<=`` rather than ``<``. We can also see this is the case when checking for
-hours. Update the Twig extension located at
-``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php`` to correct
-this.
+Podemos ver agora que a quinta afirmação está falhando (observe o ``18`` no final da saída, isso nos dá o número da linha no arquivo onde a afirmação falhou). Observando o caso de teste, podemos ver que a extensão do Twig tem funcionado incorretamente. 1 hora atrás ``1 hour ago`` deveria ter sido devolvido, mas em vez disso, foi retornado 60 minutos atrás ``60 minutes ago``. Se examinarmos o código da extensão Twig ``BloggerBlogExtension``, podemos ver a razão. Nós comparamos o tempo para ser inclusivo, ou seja, usamos ``<=`` ao invés de ``<``. Nós podemos observar que isso causa a verificação em horas. Atualize a extensão Twig localizado em ``src/Blogger/BlogBundle/Twig/Extensions/BloggerBlogBundle.php`` para corrigir este problema.
 
 .. code-block:: php
 
@@ -611,34 +467,25 @@ this.
         // ..
     }
 
-Now re run all our tests using the following command.
+Agora re execute todos os testes usando o seguinte comando.
 
 .. code-block:: bash
 
     $ phpunit -c app
 
-This runs all our tests, and shows all tests pass successfully. Although we have
-only written a small number of unit tests you should be getting a feel for how
-powerful and important testing is when writing code. While the above errors
-were minor, they were still errors. Testing also helps any future functionality
-added to the project breaking previous features. This concludes the unit testing
-for now. We will see more unit testing in the following chapters. Try adding some
-of your own unit tests to test functionality that has been missed.
+Isso executa todos os testes e mostra que todos os testes passaram com sucesso. Embora tenhamos escrito apenas um pequeno número de testes de unidade, você deve estar percebendo como os testes são importantes, quando se escreve código. Apesar dos erros acima serem pequenos, eles ainda eram erros. Teste também ajuda, a qualquer funcionalidade futura adicionada ao projeto, romper características anteriores. Isto conclui o teste de unidade por agora. Veremos mais sobre teste de unidade nos capítulos seguintes. Tente adicionar algum de seus próprios testes de unidade para testar as funcionalidade que não foram abordadas aqui.
 
-Functional Testing
+Testes Funcionais
 ------------------
 
-Now we have written some unit tests, lets move on to testing multiple components
-together. The first section of the functional testing will involve simulating
-browser requests to tests the generated responses.
+Agora que nós escrevemos alguns testes de unidade, vamos passar para teste de vários componentes
+simultâneos. A primeira seção do teste funcional, envolverá simulação de requisições ao navegador para testar as respostas geradas.
 
-Testing the About page
-~~~~~~~~~~~~~~~~~~~~~~
+Testando a página Sobre
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-We begin testing the ``PageController`` class for the about page. As the about page
-is very simple, this is a good place to start. Create a new file located at
-``src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php`` and add
-the following content.
+Começamos testando a classe para a página sobre em ``PageController``. Como a página sobre
+é muito simples, este é um bom lugar para começar. Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php`` e adicione o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -661,24 +508,10 @@ the following content.
         }
     }
 
-We have already seen a Controller test very similar to this when we briefly looked
-at the ``DefaultControllerTest`` class. This is testing the about page of symblog,
-checking the string ``About symblog`` is present in the generated HTML,
-specifically within the ``H1`` tag. The ``PageControllerTest`` class doesn't extend the
-``\PHPUnit_Framework_TestCase`` as we saw with the unit testing examples,
-it instead extends the class ``WebTestCase``. This class is part of the Symfony2
-FrameworkBundle.
+Nós já vimos um controlador de teste muito semelhante a este quando observamos a classe ``DefaultControllerTest``. Esta classe está testando a página Sobre de Symblog, verificando se a string ``Sobre Symblog`` está presente no HTML gerado, especificamente dentro da tag ``H1``. A classe ``PageControllerTest`` não estende ``\PHPUnit_Framework_TestCase`` como vimos com os exemplos de testes de unidade. Em vez disso, estende a classe ``WebTestCase``. Essa classe é parte do pacote do Framework Symfony 2.
 
-
-As explained before PHPUnit test classes must extend the
-``\PHPUnit_Framework_TestCase``, but when extra or common functionality is
-required across multiple Test cases it is useful to encapsulate this in its
-own class and have your Test classes extend this. The ``WebTestCase`` does
-exactly this, it provides a number of useful method for running functional tests
-in Symfony2. Have a look at the ``WebTestCase`` file located at
-``vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php``, you
-will see that this class is in fact extending the ``\PHPUnit_Framework_TestCase``
-class.
+Como explicado anteriormente, classes de teste PHPUnit devem estender a ``\PHPUnit_Framework_TestCase``, mas, quando uma funcionalidade extra ou comum é
+necessária para vários casos de teste, é melhor encapsular esta funcionalidade na sua própria classe e fazer com que estas classes de teste estendam dela. O ``WebTestCase`` faz exatamente isso, ele fornece vários métodos úteis para a execução de testes funcionais em Symfony 2. Observe o arquivo ``WebTestCase`` localizado em ``vendor/symfony/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php``, você vai ver que esta classe é, na verdade, uma extensão da classe ``\PHPUnit_Framework_TestCase``.
 
 .. code-block:: php
 
@@ -689,74 +522,42 @@ class.
         // ..
     }
 
-If you look at the ``createClient()`` method in the ``WebTestCase`` class
-you can see it creates an instance of the Symfony2 Kernel. Following the methods
-through you will also notice that the ``environment`` is set to ``test``
-(unless overridden as one of the arguments to ``createClient()``). This is the
-``test`` environment we spoke about in the previous chapter.
+Se você observar o método ``createClient()`` na classe ``WebTestCase``, você pode ver que ele cria uma instância do Kernel do Symfony 2. Seguindo os métodos passados, você também vai perceber que o ``ambiente`` ``test`` é definido (A menos que seja substituído como um dos argumentos para ``createClient()``). Este é o ambiente de``test`` que falamos no capítulo anterior.
 
-Looking back at our test class we can see the ``createClient()`` method is
-called to get the test up and running. We then call the ``request()`` method on the
-client to simulate a browser HTTP GET request to the url ``/about`` (this would
-be just like you visiting ``http://symblog.dev/about`` in your browser). The
-request gives us a ``Crawler`` object back, which contains the ``Response``. The
-``Crawler`` class is very useful as it lets us traverse the returned HTML. We
-use the ``Crawler`` instance to check that the ``H1`` tag in the response HTML
-contains the words ``About symblog``. You'll notice that even though we are
-extending the class ``WebTestCase`` we still use the assert method as before
-(remember the ``PageControllerTest`` class is still is child of the
-``\PHPUnit_Framework_TestCase`` class).
+Observando nossa classe de teste, podemos ver que o método ``createClient()`` é chamado a fazer o teste e executá-lo. Então, chamamos o método ``request()`` no cliente para simular uma solicitação HTTP GET do navegador para a url ``/about`` (o mesmo que você visitar ``http://symblog.dev/about`` no seu navegador). A requisição nos dá um objeto``Crawler``, que contém a resposta. A classe ``Crawler`` é muito útil, pois nos permite percorrer o HTML retornado. Usamos a instância do ``Crawler`` para verificar que a tag ``H1`` na resposta HTML, contém as palavras ``Sobre Symblog``. Observe que, apesar de estarmos estendendo a classe ``WebTestCase``, ainda usamos o método de afirmação como antes (Lembre-se, a classe ``PageControllerTest`` ainda é filha da classe ``\PHPUnit_Framework_TestCase ``).
 
-Lets run the ``PageControllerTest`` using the following command. When writing
-tests its useful to only execute the tests for the file you are currently working on.
-As your test suite gets large, running tests can be a time consuming tasks.
+Vamos executar ``PageControllerTest`` usando o seguinte comando. Quando escrevemos testes, é melhor executar os testes somente para o arquivo que você está trabalhando atualmente. Quando o seu pacote de testes se torna grande, a execução de testes pode ser uma tarefa demorada.
 
 .. code-block:: bash
 
     $ phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
 
-You should be greeted with the message ``OK (1 test, 1 assertion)`` letting us
-know that 1 test (the ``testAbout()``) ran, with 1 assertion (the ``assertEquals()``).
+Você pode ser observar a seguinte mensagem `OK (1 teste, uma afirmação) ``OK (1 test, 1 assertion)`` ` nos mostrando que um teste (o ``testAbout()``) foi executado com 1 afirmação (o ``assertEquals()``).
 
-Try changing the ``About symblog`` string to ``Contact`` and then re run the test.
-The test will now fail as ``Contact`` wont be found, causing ``asertEquals`` to
-equate to false.
+Tente alterar a string ``Sobre Symblog`` por ``Contato`` e execute novamente o teste. O teste irá falhar pois ``Contato`` não vai ser encontrada, fazendo com que ``asertEquals`` equivalha a false.
 
 .. code-block:: bash
 
     1) Blogger\BlogBundle\Tests\Controller\PageControllerTest::testAbout
     Failed asserting that 0 matches expected 1.
 
-Revert the string back to ``About symblog`` before moving on.
+Retorne o valor da string  para ``Sobre symblog`` antes de prosseguirmos.
 
-The ``Crawler`` instance used allows you to traverse either HTML or XML
-documents (which means the ``Crawler`` will only work with responses that return
-HTML or XML). We can use the ``Crawler`` to traverse the generated response using
-methods such as ``filter()``, ``first()``, ``last()``, and ``parents()``. If you
-have used `jQuery <http://jquery.com/>`_ before you should feel right at home
-with the ``Crawler`` class. A full list of supported ``Crawler`` traversal methods can be
-found in the `Testing
-<http://symfony.com/doc/current/book/testing.html#traversing>`_ chapter of the
-Symfony2 book. We will explore more of the ``Crawler`` features as we continue.
+A instância do ``Crawler`` utilizado, permite percorrer documentos HTML ou XML (o que significa que o ``Crawler`` só vai funcionar com as respostas que retornam HTML ou XML). Podemos usar o ``Crawler`` para passar a resposta gerada usando outros métodos, tais como ``filter()``, ``first()``, ``last()``, e ``parents()``. Se você usa `jQuery <http://jquery.com/>`_, você deve estar se sentindo familiarizado com a classe ``Crawler``. A lista completa de métodos de passagens da classe ``Crawler`` pode ser encontrado no capítulo `Testes  <http://symfony.com/doc/current/book/testing.html#traversing>`_ do livro dio Symfony 2. Vamos explorar outros recursos do ``Crawler`` à medida que prosseguimos.
 
-Homepage
-~~~~~~~~
+Página inicial
+~ ~ ~ ~ ~ ~ ~ ~
 
-While the test for the about page was simple, it has outlined the basic principles
-of functional testing the website pages.
+Enquanto o teste para a página Sobre é simples, delineamos os princípios básicos de testes funcionais das páginas do site.
 
- 1. Create the client
- 2. Request a page
- 3. Check the response
+     1. Crie o cliente
+ 	2. Solicite uma página
+ 	3. Verifique a resposta
 
-This is a simple overview of the process, in fact there are a number of other
-steps we could also do such as clicking links and populating and submitting
-forms.
+Esta é uma visão geral simples do processo. De fato, existem vários outros passos que também poderíamos fazer, como clicar em links e preencher e enviar formulários.
 
-Lets create a method to test the homepage. We know the homepage is available
-via the URL ``/`` and that is should display the latest blog posts. Add a new
-method ``testIndex()`` to the ``PageControllerTest`` class located at
-``src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php`` as shown below.
+Vamos criar um método para testar a página inicial. Sabemos que a página inicial está disponível
+através da URL ``/`` e que deve exibir as mensagens mais recentes dos posts do blog. Adicione um novo método ``testIndex()`` para a classe ``PageControllerTest`` localizada em ``src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php`` como mostrado abaixo:
 
 .. code-block:: php
 
@@ -772,18 +573,13 @@ method ``testIndex()`` to the ``PageControllerTest`` class located at
         $this->assertTrue($crawler->filter('article.blog')->count() > 0);
     }
 
-You can see the same steps are taken as with the tests for the about page.
-Run the test to ensure everything is working as expected.
+Você pôde observar que são os mesmos passos tomados com os testes para a página Sobre. Execute o teste para garantir que tudo está funcionando como esperado.
 
 .. code-block:: bash
 
     $ phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
 
-Lets now take the testing a bit further. Part of functional testing involves being
-able to replicate what a user would do on the site. In order for users to move
-between pages on your website they click links. Lets simulate this action now
-to test the links to the show blog page work correctly when the blog title is clicked.
-Update the ``testIndex()`` method in the ``PageControllerTest`` class with the following.
+Vamos agora levar o teste um pouco mais adiante. Parte do teste funcional envolve ser capaz de reproduzir o que um usuário faria no site. Para que os usuários naveguem entre as páginas do seu site, eles devem clicar em links. Vamos simular esta ação agora para testar os links para a página do blog mostrando que funcionam corretamente quando o título do blog é clicado. Atualize o método ``testIndex()`` na classe ``PageControllerTest`` com o seguinte código:
 
 .. code-block:: php
 
@@ -802,11 +598,7 @@ Update the ``testIndex()`` method in the ``PageControllerTest`` class with the f
         $this->assertEquals(1, $crawler->filter('h2:contains("' . $blogTitle .'")')->count());
     }
 
-The first thing we do it use the ``Crawler`` to extract the text within the first
-blog title link. This is done using the filter ``article.blog h2 a``. This filter
-is used return the ``a`` tag within the ``H2`` tag of the ``article.blog``
-article. To understand this better, have a look at the markup used on the homepage
-for displaying blogs.
+A primeira coisa que fizemos foi usar o  ``Crawler`` para extrair o texto dentro do primeiro link do título do Blog. Isso é feito usando o filtro ``article.blog h2 a``. Este filtro é usado para retornar a tag ``a`` dentro da tag ``H2`` do artigo ``article.blog``. Para entender isso melhor, dê um olhar na marcação usada na página inicial para a exibição de blogs.
 
 .. code-block:: html
 
@@ -827,51 +619,34 @@ for displaying blogs.
         <!-- .. -->
     </article>
 
-You can see the filter ``article.blog h2 a`` structure in place in the homepage
-markup. You'll also notice that there is more than one ``<article class="blog">`` in
-the markup, meaning the ``Crawler`` filter will return a collection. As we only want
-the first link, we use the ``first()`` method on the collection. Finally we use
-the ``text()`` method to extract the link text, in this case it will be the text
-``A day with Symfony2``. Next, the blog title link is clicked to navigate to the
-blog show page. The client ``click()`` method takes a link object and returns the
-``Response`` in a ``Crawler`` instance. You should by now be noticing that the
-``Crawler`` object is a key part to functional testing.
+Você pode ver a estrutura do filtro ``article.blog h2 a`` no lugar da marcação, na página principal. Você também vai notar que há mais de um ``<article class="blog">`` na marcação, o que significa que o filtro do``Crawler`` irá retornar uma coleção. Como só queremos o primeiro link, usamos o método ``first()`` na coleção. Finalmente, usamos o método ``text()`` para extrair o texto do link, neste caso, será o texto ``Um dia com Symfony2 `. Em seguida, o link do título do blog é clicado para navegar para a página exibição do blog. O método cliente ``click()`` utiliza um objeto de ligação e retorna o ``Response`` em uma instância `` exemplo do ``Crawler`` . Você já deveria estar percebendo que o objeto ``Crawler``  é uma peça chave para o teste funcional.
 
-The ``Crawler`` object now contains the Response for the blog show page. We need
-to test that the link we navigated took us to the right page. We can use the
-``$blogTitle`` value we retrieved earlier to check this against the title in the
-Response.
+O objeto ``Crawler``, agora, contém a resposta para a página de apresentação do blog. Precisamos
+testar se o link que clicamos nos levou para a página correta. Podemos usar o valor de ``$BlogTitle``, que recuperamos mais cedo, para verificar se há um título na Resposta.
 
-Run the tests to ensure that navigation between the homepage and the blog show
-pages is working correctly.
+Execute os testes para garantir que a navegação entre a página inicial e a página de exibição do blog, está funcionando corretamente.
 
 .. code-block:: bash
 
     $ phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
 
-Now you have an understanding of how to navigate through the website pages
-when functional testing, lets move onto testing forms.
+Agora que você tem uma compreensão de como navegar através das páginas do site utilizando o teste funcional, vamos passar para os testes de formulários.
 
-Testing the Contact Page
-~~~~~~~~~~~~~~~~~~~~~~~~
+Testando a Página Contato
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Users of symblog are able to submit contact enquiries by completing the form on
-the contact page ``http://symblog.dev/contact``. Lets test that submissions
-of this form work correctly. First we need to outline what should happen when
-the form is successfully submitted (successfully submitted in this case means
-there are no errors present in the form).
+Usuários de Symblog são capazes de enviar informações de contato através do preenchimento do formulário da página de contato ``http://symblog.dev/contact``. Vamos testar se as submissões do formmulário funcionar corretamente. Primeiro, precisamos delinear o que deve acontecer quando
+o formulário é submetido corretamente (submetido com êxito, neste caso, significa não há erros presentes no formulário).
 
- 1. Navigate to contact page
- 2. Populate contact form with values
- 3. Submit form
- 4. Check email was sent to symblog
- 5. Check response to client contains notification of successful contact
+ 1. Navegue até a página de contato
+ 2. Preencher formulário de contato com os valores
+ 3. Enviar formulário
+ 4. Verifique se o e-mail foi enviado para Symblog
+ 5. Confira se a resposta para o cliente, contém notificação de contato bem sucedido
 
-So far we have explored enough to be able to complete steps 1 and 5 only. We will
-now look at how to test the 3 middle steps.
+Até agora, sabemos o suficiente para completar os passos 1 e 5 apenas. Iremos, agora, saber como testar os 3 passos intermediários.
 
-Add a new method ``testContact()`` to the ``PageControllerTest`` class located at
-``src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php``.
+Adicionar um novo método ``testContact()`` para a classe ``PageControllerTest`` localizada em ``src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php``.
 
 .. code-block:: php
 
@@ -898,16 +673,7 @@ Add a new method ``testContact()`` to the ``PageControllerTest`` class located a
         $this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count());
     }
 
-We begin in the usual fashion, making a request to the ``/contact`` URL, and
-checking the page contains the correct ``H1`` title. Next we use the ``Crawler``
-to select the form submit button. The reason we select the button and not the
-form is that a form may contain multiple buttons that we may want to click
-independently. From the selected button we are able to retrieve the form. We are
-able to set the form values using the array subscript notation ``[]``.
-Finally the form is passed to the client ``submit()`` method to actually
-submit the form. As usual, we receive a ``Crawler`` instance back. Using the
-``Crawler`` response we check to ensure the flash message is present in the returned
-response. Run the test to check everything is functioning correctly.
+Começamos na forma usual, fazendo uma solicitação para a URL ``/contact`` e verificamos se a página contém o titulo ``H1`` correto. Depois, usamos o ``Crawler`` para selecionar o botão enviar do formulário. A razão pela qual selecionamos o botão e não o formulário, é que um formulário pode conter vários botões que podemos querer clicar de forma independente. A partir do botão selecionado, somos capazes de recuperar o formulário. Somos capazes de definir os valores do formulário usando o array de subscrita ``[]``. Finalmente, o formulário é passado para o método cliente ``submit()`` para realmente enviar o formulário. Como de costume, recebemos um retorno da instância do ``Crawler``. Usando essa resposta, vamos verificar para garantir que as mensagens estão presentes no retorno da resposta. Execute o teste para verificar se tudo está funcionando corretamente.
 
 .. code-block:: bash
 
@@ -925,15 +691,7 @@ The tests failed. We are given the following output from PHPUnit.
     FAILURES!
     Tests: 3, Assertions: 5, Failures: 1.
 
-The output is informing us that the flash message could not be found in the
-response from the form submit. This is because when in the ``test`` environment,
-redirects are not followed. When the form is successfully validated in the
-``PageController`` class a redirect happens. This redirect is not being
-followed; We need to explicitly say that the redirect should be followed. The
-reason redirects are not followed is simple, you may want to check the current
-response first. We will demonstrate this soon to check the email was sent.
-Update the ``PageControllerTest`` class to set the client to follow the
-redirect.
+A saída está nos informando que a mensagem de texto não pôde ser encontrado na resposta do formulário de envio. Isto porque, quando no estamos no ambiente de ``teste``, redirecionamentos não são seguidas. Quando o formulário for validado com sucesso na c;asse ``PageController``, um redirecionamento acontece. Esse redirecionamento não está sendo seguido; Precisamos dizer explicitamente que o redirecionamento deve ser seguido. O motivo pelo qual o redirecionamento não é seguido, é simples. Você pode querer verificar a atual resposta primeiro. Vamos demonstrar isso em breve para verificar se o e-mail foi enviado. Atualize a classe ``PageControllerTest`` para configurar o cliente para acompanhar o redirecionamento.
 
 .. code-block:: php
 
@@ -951,10 +709,7 @@ redirect.
         $this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count());
     }
 
-No when you run the PHPUnit tests they should pass. Lets now look at the final
-step of checking the contact form submission process, step 4, checking an email
-was sent to symblog. We already know that emails will not be delivered in the
-``test`` environment due to the following configuration.
+Agora, quando você executa os testes PHPUnit, eles devem passar. Vamos, agora, observar a etapa final do processo de envio do formulário de contato, o passo 4, verificar se um e-mail foi enviado para Symblog. Nós já sabemos que e-mails não serão entregues no ambiente de ``test`` , devido à seguinte configuração.
 
 .. code-block:: yaml
 
@@ -963,10 +718,7 @@ was sent to symblog. We already know that emails will not be delivered in the
     swiftmailer:
         disable_delivery: true
 
-We can test the emails were sent using the information gathered by the web profiler.
-This is where the importance of the client not following redirects comes in. The
-check on the profiler needs to be done before the redirect happens, as the information
-in the profiler will be lost. Update the ``testContact()`` method with the following.
+Podemos testar se os e-mails foram enviados utilizando a informação recolhida pelo web profiler. Este arquivo é que diz ao cliente não fazer redirecionamentos. A verificação do profiler precisa ser feita antes que o redirecionamento acontecer, se não, as informações no perfil serão perdidas. Atualize o método ``testContact()`` com o seguinte:
 
 .. code-block:: php
 
@@ -1001,49 +753,35 @@ in the profiler will be lost. Update the ``testContact()`` method with the follo
         $this->assertTrue($crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count() > 0);
     }
 
-After the form submit we check to see if the profiler is available as it may have
-been disabled by a configuration setting for the current environment.
+Após o envio do formulário, vamos verificar se o perfil está disponível, pois ele pode ter sido desativado por uma configuração do ambiente atual.
 
 .. tip::
 
-    Remember tests don't have to be run in the ``test`` environment, they could be
-    run on the ``production`` environment where things like the profiler wont be
-    available.
+    Lembre-se, testes não tem que ser executados no ambiente de ``teste``, eles poderiam ser
+    executado no ambiente de ``produção`` onde as coisas como o profiler vão estar disponíveis.
 
-If we are able to get the profiler we make a request to retrieve the
-``swiftmailer`` collector. The ``swiftmailer`` collector works behind the scenes
-to gather information about how the emailing service is used. We can use this to
-get information regarding which emails have been sent.
+Se somos capazes de obter o profiler, faremos um pedido para recuperar o coletor ``SwiftMailer``. O coletor ``SwiftMailer`` trabalha nos bastidores para coletar informações sobre como o serviço de e-mail é usado. Podemos usar isso para obter informações sobre quais e-mails foram enviados.
 
-Next we use the ``getMessageCount()`` method to check that 1 email was sent. This
-maybe enough to ensure that at least an email is going to be sent, but it doesn't verify
-that the email will be sent to the correct location. It could be very embarrassing
-or even damaging for emails to be sent to the wrong email address. To check this
-isn't the case we verify the email to address is correct.
+Agora, usaremos o método ``getMessageCount()`` para verificar se um e-mail foi enviado. Este método talvez seja o suficiente para garantir que pelo menos um e-mail vai ser enviado, mas não verifica que o e-mail será enviado para o local correto. Poderia ser muito constrangedor ou até mesmo prejudicial se e-mails forem enviados para o endereço de e-mail errado. Para verificar isso, não é o caso, vamos verificar se o e-mail que vai receber a mensagem, está correto.
 
-Now re run the tests to check everything is working correctly.
+Agora, re-execute os testes para verificar se tudo está funcionando corretamente.
 
 .. code-block:: bash
 
     $ phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/PageControllerTest.php
 
-Testing Adding Blog Comments
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Teste de Adição de comentários do blog
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-Lets now use the knowledge we have gained from the previous tests on the contact page
-to test the process of submitting a blog comment.
-Again we outline what should happen when the form is successfully
-submitted.
+Vamos, agora, usar o conhecimento que adquirimos, a partir dos testes anteriores, na página de contato, para testar o processo de envio de um comentário no blog. Mais uma vez, destacamos o que deve acontecer quando o formulário é enviado com sucesso:
 
- 1. Navigate to a blog page
- 2. Populate comment form with values
- 3. Submit form
- 4. Check new comment is added to end of blog comment list
- 5. Also check sidebar latest comments to ensure comment is at top of list
+ 1. Navegue até uma página de blog
+ 2. Preencher formulário de comentar com os valores
+ 3. Enviar formulário
+ 4. Confira se o novo comentário é adicionado ao fim da lista de comentários do blog
+ 5. Além disso, verifique os comentários mais recentes da barra lateral para assegurar que o comentário está no topo da lista
 
-Create a new file located at
-``src/Blogger/BlogBundle/Tests/Controller/BlogControllerTest.php``
-and add in the following.
+Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Tests/Controller/BlogControllerTest.php`` e adicione o seguinte código:
 
 .. code-block:: php
 
@@ -1095,25 +833,17 @@ and add in the following.
         }
     }
 
-We jump straight in this time with the entire test. Before we begin dissecting the code,
-run the tests for this file to ensure everything is working correctly.
+Antes de começar a dissecar o código, execute os testes para este arquivo para garantir que tudo está funcionando corretamente.
 
 .. code-block:: bash
 
     $ phpunit -c app/ src/Blogger/BlogBundle/Tests/Controller/BlogControllerTest.php
 
-PHPUnit should inform you that the 1 test was executed successfully. Looking at
-the code for the ``testAddBlogComment()`` we can see things begin in the usual
-format, creating a client, requesting a page and checking the page we are on is
-correct. We then proceed to get the add comment form, and submit the form. The
-way we populate the form values is slightly different than the previous version.
-This time we use the 2nd argument of the client ``submit()`` method to pass in
-the values for the form.
+PHPUnit deve informá-lo que o teste 1 foi executado com êxito. Observando o código de ``testAddBlogComment()``, podemos ver as coisas acontecendo da seguinte forma: criamos um cliente, solicitamos uma página e verificamos se a página que estamos é a correta. Precisamos  prosseguir para obter adição do formulário de comentário e enviá-lo. Desta vez, vamos preencher os valores do formulário de uma forma um pouco diferente da versão anterior. Desta vez, usaremos o segundo argumento do método cliente ``submit()`` para passar os valores para o formulário.
 
 .. tip::
 
-    We could also use the Object Oriented interface to set the values of the form fields.
-    Some examples are shown below.
+    Poderíamos, também, utilizar a interface Orientada a Objetos para definir os valores dos campos do formulário. Alguns exemplos são mostrados abaixo.
 
     .. code-block:: php
 
@@ -1123,18 +853,13 @@ the values for the form.
         // Select an option or a radio
         $form['gender']->select('Male');
 
-After submitting the form, we request the client should follow the redirect so we
-can check the response. We use the ``Crawler`` again to get the last blog comment, which
-should be the one we just submitted. Finally we check the latest comments in the
-sidebar to check the comment is also the first one in the list.
+Após enviar o formulário, solicitamos que o cliente siga o redirecionamento para que possamos  verificar a resposta. Usamos o ``Crawler`` novamente para obter o último comentário no blog, que
+deve ser o único que acabamos de enviar. Por fim, verifique as últimas comentários na barra lateral para verificar o comentário é também o primeiro na lista.
 
-Blog Repository
-~~~~~~~~~~~~~~~
+Repositório do Blog
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-The last part of the functional testing we will explore in this chapter is
-testing a Doctrine 2 repository. Create a new file located at
-``src/Blogger/BlogBundle/Tests/Repository/BlogRepositoryTest.php`` and add the
-following content.
+Na última parte do teste funcional que abordamos neste capítulo é testa um repositório Doutrina 2. Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Tests/Repository/BlogRepositoryTest.php`` e adicionar o seguinte conteúdo:
 
 .. code-block:: php
 
@@ -1201,42 +926,30 @@ following content.
         }
     }
 
-As we want to perform tests that require a valid connection to the database
-we extend the ``WebTestCase`` again as this allows us to bootstrap the Symfony2
-Kernel. Run this test for this file using the following command.
+Como queremos realizar testes que requerem uma conexão válida ao banco de dados, estendemos o ``WebTestCase`` novamente pois nos permite inicializar o Kernel do Symfony 2. Execute este teste para este arquivo usando o seguinte comando:
 
 .. code-block:: bash
 
     $ phpunit -c app/ src/Blogger/BlogBundle/Tests/Repository/BlogRepositoryTest.php
 
-Code Coverage
+Cobertura de Código
 -------------
 
-Before we move on lets quickly touch on code coverage. Code coverage gives us an
-insight into which parts of the code are executed when the tests are run. Using
-this we can see the parts of our code that have no tests run on them, and
-determine if we need to write test for them.
+Antes de prosseguirmos, vamos abordar rapidamente a cobertura de código. Cobertura de código nos dá um insight sobre quais partes do código que são executados quando os testes são executados. Assim, podemos ver as partes do nosso código que não têm testes sendo executados sobre eles e determinar se precisamos escrever teste para eles.
 
-To output the code coverage analysis for your application run the following
+Para emitir a análise de cobertura de código para a sua aplicação, execute o seguinte comando:
 
 .. code-block:: bash
 
     $ phpunit --coverage-html ./phpunit-report -c app/
 
-This will output the code coverage analysis to the folder ``phpunit-report``.
-Open the ``index.html`` file in your browser to see the analysis output.
+A saída será a análise de cobertura de código para a pasta ``phpunit-report.``. Abra o arquivo ``index.html`` no seu navegador para ver o resultado da análise.
 
-See the `Code Coverage Analysis <http://www.phpunit.de/manual/current/en/code-coverage-analysis.html>`_
-chapter in the PHPUnit documentation for more information.
+Leia o capítulo `Análise da Cobertura de Código <http://www.phpunit.de/manual/current/en/code-coverage-analysis.html>`_ na documentação do PHPUnit para maiores informações.
 
-Conclusion
+Conclusão
 ----------
 
-We have covered a number of key areas with regards to testing. We have explored
-both unit and functional testing to ensure our website is functioning correctly.
-We have seen how to simulate browser requests and how to use the Symfony2 ``Crawler``
-class to check the Response from these requests.
+Nós cobrimos várias áreas-chave no que diz respeito aos testes. Nós exploramos tanto o teste de unidade quanto teste funcional, para garantir que o nosso site está funcionando corretamente. Vimos como simular solicitações do navegador e como usar a classe ``Crawler`` do Symfony2  para verificarmos as respostas à essas solicitações.
 
-Next we will look at the Symfony2 security component, and more specifically how to use it
-for user management. We will also integrate the FOSUserBundle ready for us to work on the
-symblog admin section.
+Em seguida, vamos abordar o componente de segurança do Symfony 2, e, mais especificamente, como usá-lo para gerenciamento de usuários. Também vamos integrar o FOSUserBundle pronto para que possamos trabalhar na seção admin do Symblog.
