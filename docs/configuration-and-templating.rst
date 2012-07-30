@@ -16,12 +16,12 @@ O site irá conter a estrutura principal HTML do blog, juntamente com algum cont
 
 As seguintes áreas serão abordadas neste capítulo: 
 
-    1. Configurando um aplicativo Symfony 2 
-    2. Configurando um domínio do desenvolvimento 
-    3. Pacotes (Bundles) Symfony 2 
-    4. Roteamento 
-    5. Controladores 
-    6. Geração de layout com Twig 
+ 1. Configurando um aplicativo Symfony 2 
+ 2. Configurando um domínio do desenvolvimento 
+ 3. Pacotes (Bundles) Symfony 2 
+ 4. Roteamento 
+ 5. Controladores 
+ 6. Geração de layout com Twig 
 
 Download e Instalação 
 --------------------- 
