@@ -218,7 +218,7 @@ formulário. Iremos voltar a este ponto mais tarde.
 
     Não tente corrigir estes erros usando as diretivas ``require`` ou ``include``.
 
-Firmulários (Forms)
+Formulários (Forms)
 -------------------
 
 Agora, vamos criar o formulário. 
