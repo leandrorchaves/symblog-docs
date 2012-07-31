@@ -4,17 +4,17 @@
 Visão geral
 -----------
 
-Este capítulo vai começar a explorar o Model do blog. O Model será implementado usando Mapa de Objeto Relacional (ORM) 
+Este capítulo vai explorar o Model do blog. O Model será implementado usando Mapa de Objeto Relacional (ORM) 
 `Doctrine 2 <http://www.doctrine-project.org/projects/orm>`_.  
 
-Doctrine 2 oferece persistência para os objetos PHP. Ele também fornece um dialeto SQL próprio chamado de Doctrine Query 
+Doctrine 2 oferece persistência para os objetos PHP. Ele também fornece um dialeto SQL próprio, chamado de Doctrine Query 
 Language (DQL). 
 
 Além disso, vamos apresentar alguns conceitos de Data Fixtures. Data Fixtures é um mecanismo para preencher o nosso 
 banco de dados em ambientes de desenvolvimento e de teste. 
 
-No final deste capítulo você terá definido o modelo do blog, terá o banco de dados atualizado para refletir o novo 
-modelo, e terá criado alguns data fixtures. Você irá também construir alguns métodos básicos da página ``show`` do blog.
+No final deste capítulo, você terá definido o model do blog, terá o banco de dados atualizado para refletir o novo 
+model, e terá criado alguns Data Fixtures. Você irá também construir alguns métodos básicos da página ``show`` do blog.
 
 Doctrine 2: O Modelo (Model)
 ----------------------------
@@ -24,34 +24,34 @@ exatamente para esta finalidade.
 
 O Doctrine 2 ORM se baseia em uma 
 `Camada de abstração de banco de dados <http://www.doctrine-project.org/projects/dbal>`_ que nos dá uma abstração de 
-armazenamento graças ao PHP PDO. 
+armazenamento, graças ao PHP PDO. 
 
-Assim, podemos usar um número variado de ferramentas de armazenamento, incluindo MySQL, PostgreSQL e SQLite. Iremos usar 
-o MySQL como nossa ferramenta de armazenamento, mas qualquer outra poderia ser facilmente utilizada. 
+Assim, podemos usar várias ferramentas de armazenamento, incluindo MySQL, PostgreSQL e SQLite. Iremos usar o MySQL como 
+nossa ferramenta de armazenamento, mas qualquer outra poderia ser facilmente utilizada. 
 
 .. tip::
 
     Se você não estiver familiarizado com ORMs, vamos explicar o princípio básico deles.
     
     A `Wikipedia <http://en.wikipedia.org/wiki/Object-relational_mapping>`_ define o seguinte:
-    "Mapeamento objeto-relacional (ORM, O/RM, e mapeamento O/R) em software de computador é uma técnica de programação 
-    para conversão de dados entre o tipo incompatível de sistemas em linguagens orientadas a objetos de programação. 
-    Isto cria, uma ``Base de dados de objeto virtual`` que pode ser usado a partir da linguagem de programação."
+    "Mapeamento objeto-relacional (ORM, O/RM, ou mapeamento O/R) em software de computador, é uma técnica de programação 
+    para conversão de dados entre o tipo incompatível de sistema, em linguagens orientadas a objetos de programação. 
+    Isto cria uma ``Base de dados de objeto virtual`` que pode ser usado a partir da linguagem de programação."
     
     O que as funcionalidades do ORM nos diz é que os dados de um banco de dados relacional, como o MySQL, podem ser 
-    manipulados como objetos do PHP. Isso nos permite encapsular a funcionalidade necessária em uma tabela dentro de uma 
+    manipulados como objetos do PHP. Isso nos permite encapsular a funcionalidade necessária de uma tabela dentro de uma 
     classe. 
 
-    Pense em um tabela de usuário, que provavelmente tem campos como nome de usuario, senha, primeiro_nome, ultimo_nome 
+    Pense em um tabela de usuário que provavelmente tem campos como nome de usuario, senha, primeiro_nome, ultimo_nome 
     e email. Com um ORM, isso se torna uma classe com membros usuario, senha, primeiro_nome, etc, o que nos permite 
     chamar métodos como ``getUsername()`` e ``setSenha()``. 
 
     Os ORMs podem ir muito mais além do que isso, eles também são capazes de recuperar tabelas relacionadas, seja ao 
-    mesmo tempo como nós recuperamos o objeto de usuário, ou mais de forma mais lenta. 
+    mesmo tempo, como nós recuperamos o objeto de usuário, ou mais de forma mais cadenciada. 
 
     Agora, considere que nosso usuário tem alguns amigos relacionados a ele. Teríamos uma tabela de amigos, armazenando 
-    a chave primária da tabela do usuário. Utilizando ORM, podemos agora fazer uma chamada do tipo 
-    ``$user->getFriends()`` para recuperar objetos da tabela de amigos. 
+    a chave primária da tabela do usuário. Utilizando ORM, podemos fazer uma chamada do tipo ``$user->getFriends()`` 
+    para recuperar objetos da tabela de amigos. 
 
     E também, o ORM lida com persistência, assim, podemos criar objetos em PHP, chamar um método como ``save()`` e 
     deixar o ORM lidar com os detalhes da persistência atual dos dados para o banco de dados. 
@@ -73,11 +73,12 @@ o MySQL como nossa ferramenta de armazenamento, mas qualquer outra poderia ser f
 A Entidade Blog
 ~~~~~~~~~~~~~~~
 
-Vamos começar a criar a classe de entidade ``Blog``. Nós já sabemos sobre entidades mostrado no capítulo anterior, 
-quando criamos a entidade ``Enquiry``. Como o objetivo da entidade é armazenar dados, faz todo o sentido usar uma para 
-representar uma entrada do blog. Ao definir uma entidade, não estamos automaticamente dizendo que os dados serão 
-mapeados para o banco de dados. Vimos isso com a nossa entidade de ``Enquiry``, onde os dados contidos na entidade foram 
-apenas enviados para o E-mail de contato.
+Vamos começar a criar a classe de entidade ``Blog``. Sabemos sobre entidades, mostrado no capítulo anterior, 
+quando criamos a entidade ``Contato``. 
+
+Como o objetivo da entidade é armazenar dados, faz todo o sentido usar uma para representar uma entrada do blog. Ao 
+definir uma entidade, não estamos automaticamente dizendo que os dados serão mapeados para o banco de dados. Vimos isso 
+com a nossa entidade de ``Contato``, onde os dados contidos na entidade foram apenas enviados para o E-mail de contato.
 
 Crie um novo arquivo em ``src/Blogger/BlogBundle/Entidade/blog.php`` e cole o seguinte código:
 
@@ -125,7 +126,7 @@ Os metadados podem ser especificados em vários formatos incluindo ``YAML``, ``P
 para eles. Assim, conseguimos flexibilidade de escolher somente os membros que exigem mapeamento do Doctrine 2 para o 
 banco de dados. 
 
-Substitua o conteúdo da classe da entidade ``Blog`` localizada em ``src/Blogger/BlogBundle/Entidade/blog.php`` com o 
+Substitua o conteúdo da classe da entidade ``Blog``, localizada em ``src/Blogger/BlogBundle/Entidade/blog.php``, com o 
 seguinte código:
 
 .. code-block:: php
@@ -252,7 +253,7 @@ comentários também se torna bem simples.
 Como você pôde ver, a variável ``$comment`` é apenas uma lista de objetos ``Comment``. Doctrine 2 não escolhe como isso 
 funciona. 
 
-Doctrine 2 vai automaticamente preencher essa variável ``$comments`` com objetos relacionados com o objeto ``Blog``.
+Doctrine 2 vai, automaticamente, preencher essa variável ``$comments`` com objetos relacionados com o objeto ``Blog``.
 
 Agora que dissemos como o Doctrine 2 deve mapear os membros da entidade, podemos gerar os métodos de acesso usando o 
 seguinte código:
@@ -305,7 +306,7 @@ Se um banco de dados com o mesmo nome já existir, um erro será exibido e o ban
 
     $ php app/console doctrine:database:create
 
-Agora estamos prontos para criar a representação da entidade do banco de dados do ``Blog``. Existem 2 maneiras para se 
+Estamos prontos para criar a representação da entidade do banco de dados do ``Blog``. Existem 2 maneiras para se 
 fazer isso. 
 
 Podemos usar os esquemas do Doctrine 2 para atualizar o banco de dados ou podemos usar as migrações (Migrations) do 
@@ -316,7 +317,7 @@ As Migrações do Doctrine, serão apresentadas no capítulo seguinte.
 Criando a tabela blog
 .....................
 
-Para criar a tabela blog em nosso banco de dados podemos executar o seguinte comando Doctrine.
+Para criar a tabela blog em nosso banco de dados, podemos executar o seguinte comando Doctrine.
 
 .. code-block:: bash
 
@@ -325,7 +326,7 @@ Para criar a tabela blog em nosso banco de dados podemos executar o seguinte com
 Esse comando executará o SQL necessário para gerar o esquema de banco de dados para a entidade do ``blog``. Você também 
 pode passar a opção ``--dump sql`` para a tarefa de salvar o SQL em vez de executá-lo na base de dados. 
 
-Se você ver o seu banco de dados, você verá que a tabela blog foi criada, com os campos que configuramos com informações 
+Se você ver o seu banco de dados, você verá que a tabela blog foi criada com os campos que configuramos com informações 
 do mapeamento.
 
 .. tip::
@@ -338,22 +339,22 @@ do mapeamento.
         $ php app/console doctrine:schema:create --help
 
     As informações de ajuda serão exibidas mostrando o uso e várias outras opções disponíveis. A maioria das 
-    funcionalidades vêm com uma série de opções que podem ser definidas para personalizar sua execução.
+    funcionalidades vêm com várias opções que podem ser definidas para personalizar sua execução.
 
 Integrando o Model com a Visão. Mostrando uma entrada do blog
 -------------------------------------------------------------
 
 Agora temos a entidade ``Blog`` criada e o banco de dados atualizado. Podemos começar a integrar o Model com a View. 
 
-Nós vamos começar construindo a página ``show`` do nosso blog.
+Vamos começar construindo a página ``show`` do nosso blog.
 
-A Rota da página show do Blog
+A Rota da Página Show do Blog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Começaremos criando a rota para a action ``show``. 
+Começaremos criando a rota para a ação ``show``. 
 
-Um blog será identificados pelo seu ``id`` único, de modo que este id deverá estar presente na URL. Atualize o arquivo 
-de rotas de ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` com o seguinte 
+Um blog será identificado pelo seu ``id`` único, de modo que este id deverá estar presente na URL. Atualize o arquivo 
+de rotas de ``BloggerBlogBundle``, localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml``, com o seguinte 
 código:
 
 .. code-block:: yaml
@@ -368,8 +369,8 @@ código:
 
 Como o id do blog deve estar presente na URL, especificamos um espaço reservado para o ``id``. Isto quer dizer que URLs 
 como ``http://symblog.co.uk/1`` e ``http://symblog.co.uk/my-blog`` irão corresponder a esta rota. No entanto, sabemos 
-que o id do blog deve ser um inteiro (é definido desta forma nos mapeamentos de entidade), então devemos adicionar uma 
-restrição para especificar que esta rota só pode coincidir apenas quando o parâmetro ``id`` contém um número inteiro.
+que o id do blog deve ser um inteiro (é definido desta forma nos mapeamentos de entidade), então, devemos adicionar uma 
+restrição para especificar que esta rota só pode coincidir, apenas quando o parâmetro ``id`` contém um número inteiro.
 Isto é feito com a rota desejada ``id: \d+``. 
 
 Agora, como exemplo, a URL anterior ``http://symblog.co.uk/my-blog`` deixaria de funcionar para esta rota. Você também 
@@ -380,8 +381,8 @@ Este controlador ainda está para ser criado.
 A Ação Show do Controlador
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-O responsável por ligar o modelo e a visão é o controlador, deste modo, aqui é o lugar onde nós começaremos a criar a 
-página show. 
+O responsável por ligar o Model e a View, é o controlador. Deste modo, aqui é o lugar onde nós começaremos a criar a 
+página de exibição. 
 
 Poderíamos acrescentar a ação ``show`` em nosso controlador ``Page`` já existente, mas como esta página serve para 
 mostrar as entidades do ``blog``, seria mais adequado criar a ação ``show`` no controlador ``Blog``.
@@ -425,14 +426,15 @@ Nós criamos um novo controlador para a entidade ``Blog`` e definimos a ação `
 ``id`` na regra de rota ``BloggerBlogBundle_blog_show`` do arquivo de rotas, ele será passado como um argumento para o 
 método ``showAction``. 
 
-Se tivéssemos especificado mais parâmetros na regra de roteamento, eles também seriam passados como argumentos separados.
+Se tivéssemos especificado mais parâmetros na regra de roteamento, eles também seriam passados, como argumentos 
+separados.
 
 .. tip::
 
     As ações do controlador também vão passar por um objeto ``Symfony\Component\HttpFoundation\Request`` se você 
     especificar isso como um parâmetro. Isto pode ser útil quando se lida com formulários. 
 
-    Formulários foram vistos no capítulo 2, mas nós não iremos usar esse método como foi utilizado em 
+    Formulários foram vistos no capítulo 2, mas, nós não iremos usar esse método como foi utilizado em 
     ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` utilizando métodos auxiliares como mostrado abaixo:
 
     .. code-block:: php
@@ -460,21 +462,20 @@ Se tivéssemos especificado mais parâmetros na regra de roteamento, eles també
     Ambos fazem a mesma coisa. Se o controlador não estender a classe auxiliar 
     ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` você não poderia utilizar o primeiro método.
 
-Agora, precisamos recuperar a entidade ``Blog`` do banco de dados . Nós, primeiramente, iremos usar outro método 
-auxiliar da classe ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` para obter o Gerenciador de Entidade 
-Doctrine 2. O trabalho do 
-`Gerente de Entidade <http://www.doctrine-project.org/docs/orm/2.0/en/reference/working-with-objects.html>`_ é lidar 
-com a recuperação e persistência de objetos de e para o banco de dados. 
+Agora, precisamos recuperar a entidade ``Blog`` do banco de dados . Primeiramente, iremos usar outro método auxiliar da 
+classe ``Symfony\Bundle\FrameworkBundle\Controller\Controller`` para obter o Gerenciador de Entidade Doctrine 2. O 
+trabalho do `Gerente de Entidade <http://www.doctrine-project.org/docs/orm/2.0/en/reference/working-with-objects.html>`_ 
+é lidar com a recuperação e persistência de objetos, de e para, o banco de dados. 
 
 Nós, em seguida, usaremos o objeto ``EntityManager`` para obter o ``Repositório`` do Doctrine 2 para a entidade 
-``BloggerBlogBundle:Blog``. A sintaxe especificada aqui é simplesmente uma amostra do que podemos usa com Doctrine 2 ao 
-invés de especificar o nome completo da entidade, ou seja, ``Blogger\BlogBundle\Entity\Blog``. 
+``BloggerBlogBundle:Blog``. A sintaxe especificada aqui é, simplesmente, uma amostra do que podemos usar com Doctrine 2 
+ao invés de especificar o nome completo da entidade, ou seja, ``Blogger\BlogBundle\Entity\Blog``. 
 
 Com o objeto repositório, podemos invocar o método ``find()`` passando o argumento ``$id``. Este método irá recuperar o 
 objeto pela sua chave primária.
 
-Finalmente verificamos se uma entidade foi encontrada e passamos esta entidade para a View. Se nenhuma entidade foi 
-encontrada um ``createNotFoundException`` é exibido, ou seja, um ``404 Not Found`` é exibido como resposta.
+Finalmente, verificamos se uma entidade foi encontrada e passamos esta entidade para a View. Se nenhuma entidade foi 
+encontrada, um ``createNotFoundException`` é exibido, ou seja, um ``404 Not Found`` é exibido como resposta.
 
 .. tip::
 
@@ -488,8 +489,8 @@ encontrada um ``createNotFoundException`` é exibido, ou seja, um ``404 Not Foun
         // Retorna entidades onde o 'slug' casa com o termo 'symblog-tutorial'
         $em->getRepository('BloggerBlogBundle:Blog')->findOneBySlug('symblog-tutorial');
 
-    Nós vamos criar nossos próprios Repositório personalizados no próximo capítulo, quando precisarmos de pesquisas mais 
-    complexas.
+    Nós vamos criar nossos próprios Repositórios personalizados no próximo capítulo, quando precisarmos de pesquisas 
+    mais complexas.
 
 A View Show
 ~~~~~~~~~~~
@@ -497,7 +498,7 @@ A View Show
 Agora que temos a ação ``show`` para o controlador ``Blog``, podemos focar em apresentar a entidade do ``Blog``. 
 
 Conforme especificado na ação ``show``, o template ``BloggerBlogBundle:Blog:show.html.twig`` será renderizado. Vamos 
-criar este template em ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig`` e cole no seguinte código:
+criar este template em ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.twig`` e colar o seguinte código:
 
 .. code-block:: html
     
@@ -520,11 +521,11 @@ criar este template em ``src/Blogger/BlogBundle/Resouces/views/Blog/show.html.tw
     {% endblock %}
 
 Como seria de esperar, começamos estendendo o layout principal de ``BloggerBlogBundle``. Em seguida, sobrescrevemos o 
-título da página com o título do blog. Esta é útil para atividades de SEO pois o título da página do blog é mais 
+título da página com o título do blog. Isso é útil para atividades de SEO pois o título da página do blog é mais 
 descritiva do que o título padrão que está definido. 
 
-Por último, substituimos o body block pelo conteúdo da entidade do ``Blog``. Nós usamos a função ``assets`` novamente 
-aqui para renderizar a imagem do blog. As imagens blog devem ser colocadas na pasta ``web/images``.
+Por último, substituimos o ``body block`` pelo conteúdo da entidade do ``Blog``. Usamos a função ``assets`` novamente 
+para renderizar a imagem do blog. As imagens do blog devem ser colocadas na pasta ``web/images``.
 
 CSS
 ...
@@ -546,15 +547,15 @@ Atualize a folha de estilo em ``src/Blogger/BlogBundle/Resouces/public/css/blog.
 
 .. note::
 
-    Se você não estiver usando o método de ligação simbólica para referenciar os pacotes de assets para a pasta ``web``, 
-    você deve re-executar o instalador de assets agora para copiar as alterações no seu CSS
+    Se você não estiver usando o método de link simbólico para referenciar os pacotes de assets para a pasta ``web``, 
+    você deve re-executar o instalador de assets agora para copiar as alterações no seu CSS.
 
     .. code-block:: bash
 
         $ php app/console assets:install web
 
 
-Como já construímos o controlador e a visão para a ação ``show`` vamos dar uma olhada na página de show. Acesse 
+Como já construímos o controlador e a visão para a ação ``show``, vamos dar uma olhada na página de show. Acesse 
 ``http://symblog.dev/app_dev.php/1``. Não é a página que você estava esperando?
 
 .. image:: /_static/images/part_3/404_not_found.jpg
@@ -570,10 +571,10 @@ Data Fixtures.
 Data Fixtures
 -------------
 
-Podemos usar os Data Fixtures para popular o banco de dados com alguns dados de amostra/teste. Para fazer isso usamos o 
+Podemos usar os Data Fixtures para popular o banco de dados com alguns dados de amostra/teste. Para fazer isso, usamos o 
 pacote de extensões Doctrine Data Fixtures. 
 
-O pacote de extensões Doctrine Data Fixtures não vem com a distribuição Standard do Symfony 2, precisamos instalar 
+O pacote de extensões Doctrine Data Fixtures, não vem com a distribuição Standard do Symfony 2, precisamos instalar 
 manualmente. Felizmente, esta é uma tarefa fácil. 
 
 Abra o arquivo ``deps`` localizado na raiz do projeto e adicione os pacotes e extensões Doctrine Data Fixtures como se 
@@ -602,7 +603,7 @@ Assim, faremos a atualização dos repositórios mais recente do Github e iremos
     extensões e pacotes.
 
     doctrine-fixtures extension: Faça o `Download <https://github.com/doctrine/data-fixtures>`_ da versão atual do 
-    pacote e extraia ``vendor/doctrine-fixtures``.
+    pacote e extraia em ``vendor/doctrine-fixtures``.
 
     DoctrineFixturesBundle: Faça o `Download  <https://github.com/symfony/DoctrineFixturesBundle>`_ da versão atual do 
     pacote e extraia em ``vendor/bundles/Symfony/Bundle/DoctrineFixturesBundle``.
@@ -644,7 +645,7 @@ Agora vamos registrar o ``DoctrineFixturesBundle`` no kernel em ``app/AppKernel.
 Blog Fixtures
 ~~~~~~~~~~~~~
 
-Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie um arquivo de fixture em 
+Agora, estamos prontos para definir algumas fixtures para os nossos blogs. Crie um arquivo de fixture em 
 ``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php`` e adicione o seguinte conteúdo:
 
 .. code-block:: php
@@ -717,7 +718,7 @@ Agora estamos prontos para definir algumas fixtures para os nossos blogs. Crie u
     
     }
 
-O arquivo de fixtures demonstra uma série de características importantes quando se utiliza Doctrine 2, incluindo como 
+O arquivo de fixtures, demonstra uma série de características importantes quando se utiliza Doctrine 2, incluindo, como 
 persistir entidades para o banco de dados.
 
 Vejamos como podemos criar uma entrada no blog.
@@ -740,18 +741,18 @@ Vejamos como podemos criar uma entrada no blog.
 Começamos criando um objeto do ``Blog`` e definimos alguns valores para seus membros. 
 
 Neste ponto, Doctrine 2 não sabe nada sobre o objeto ``Entity``. Só quando fazemos uma chamada 
-``$manager>persist($blog1)`` que instruimos o Doctrine 2 a começar a gerir o objeto da entidade. 
+``$manager>persist($blog1)`` é que instruimos o Doctrine 2 a começar a gerir o objeto da entidade. 
 
-O objeto ``$manager`` aqui, é uma instância do objeto ``EntityManager`` que vimos anteriormente ao recuperar entidades 
+O objeto ``$manager`` aqui, é uma instância do objeto ``EntityManager``, que vimos anteriormente ao recuperar entidades 
 do banco de dados. 
 
 É importante notar que, enquanto Doctrine 2 está, agora, sabendo da existência do objeto de entidade, ainda não é 
 mantido pelo o banco de dados. É  necessário fazer uma chamada para ``$manager->flush()``. 
 
-O método flush faz o Doctrine 2 realmente interagir com o banco de dados e aciona todas as entidades que serão mantidas. 
+O método flush, faz o Doctrine 2 realmente interagir com o banco de dados e aciona todas as entidades que serão mantidas. 
 
 Para um melhor desempenho, você deve agrupar as operações do Doctrine 2 em conjunto e executar todas as ações de uma só 
-vez. É assim que temos feito em nossos Data Fixture. Criamos as entidade, pedimos ao Doctrine 2 para manipula e, em 
+vez. É assim que temos feito em nossos Data Fixtures. Criamos as entidades, pedimos ao Doctrine 2 para manipular e, em 
 seguida, executamos todas as operações no final.
 
 .. tip:
@@ -767,7 +768,7 @@ seguida, executamos todas as operações no final.
 Carregando os Data Fixtures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-Agora estamos prontos para carregar os fixtures para o banco de dados.
+Agora, estamos prontos para carregar os fixtures para o banco de dados.
 
 .. code-block:: bash
 
@@ -782,7 +783,7 @@ com estilos.
 
 Tente alterar o parâmetro ``id`` na URL para 2. Você deve ver a outra entrada do blog. Se você tentar acessar 
 ``http://symblog.dev/app_dev.php/100`` você verá uma exceção ``404 Not Found``. Calro,  não há entidade de ``Blog`` com 
-um ``id`` de 100. Agora tente acessar ``http://symblog.dev/app_dev.php/symfony2-blog``. 
+um ``id`` de 100. Agora, tente acessar ``http://symblog.dev/app_dev.php/symfony2-blog``. 
 
 Por que não temos uma exceção ``404 Not Found``? Isto é porque a ação ``show`` nunca é executado. A URL falhou em 
 coincidir qualquer rota na aplicação por causa da especificação ``\d+`` que definimos na rota 
@@ -805,10 +806,10 @@ fornece `Callbacks do ciclo de vida <http://www.doctrine-project.org/docs/orm/2.
 Podemos usar esses eventos de callbacks para registrar nossas entidades para ser notificado sobre eventos durante o 
 período de vida da entidade. 
 
-Alguns exemplos de eventos de notificação são  utilizados para ilustrar que algo aconteceu antes de uma atualização, 
+Alguns exemplos de eventos de notificação são utilizados para ilustrar que algo aconteceu antes de uma atualização, 
 depois de uma persistência e depois de uma exclusão. 
 
-Para utilizar Callbacks do ciclo de vida em nossa entidade temos que registrar a entidade para eles. Isso é feito usando 
+Para utilizar Callbacks do ciclo de vida em nossa entidade, temos que registrar a entidade para eles. Isso é feito usando 
 metadados na entidade. Atualize a entidade ``Blog`` em ``src/Blogger/BlogBundle/Entity/blog.php`` com o seguinte código:
 
 .. code-block:: php
@@ -828,7 +829,7 @@ metadados na entidade. Atualize a entidade ``Blog`` em ``src/Blogger/BlogBundle/
         // ..
     }
 
-Agora vamos adicionar um método na entidade ``Blog`` que registra o evento ``preUpdate``. Nós também adicionamos um 
+Agora, vamos adicionar um método na entidade ``Blog`` que registra o evento ``preUpdate``. Nós também adicionamos um 
 construtor para definir valores padrão para os membros ``created`` e o ``updated``.
 
 .. code-block:: php
@@ -864,7 +865,7 @@ construtor para definir valores padrão para os membros ``created`` e o ``update
         // ..
     }
 
-Nós registramos a entidade ``Blog`` para ser notificado sobre o evento ``preUpdate`` para definir o valor de ``updated``. 
+Registramos a entidade ``Blog`` para ser notificada sobre o evento ``preUpdate``, para definir o valor de ``updated``. 
 Agora, quando você executar novamente a inserção do fixtures, você vai notar que os membros ``created`` e ``updated`` 
 são definidos automaticamente.
 
