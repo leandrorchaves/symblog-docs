@@ -399,16 +399,16 @@ Como Symfony 2 suporta `HTML5 <http://diveintohtml5.org/>`_, também vamos usá-
                             <nav>
                                 <ul class="navigation">
                                     <li><a href="#">Home</a></li>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="#">Sobre</a></li>
+                                    <li><a href="#">Contato</a></li>
                                 </ul>
                             </nav>
                         {% endblock %}
                     </div>
 
                     <hgroup>
-                        <h2>{% block blog_title %}<a href="#">symblog</a>{% endblock %}</h2>
-                        <h3>{% block blog_tagline %}<a href="#">creating a blog in Symfony2</a>{% endblock %}</h3>
+                        <h2>{% block blog_title %}<a href="#">Symblog</a>{% endblock %}</h2>
+                        <h3>{% block blog_tagline %}<a href="#">criando um blog em Symfony2</a>{% endblock %}</h3>
                     </hgroup>
                 </header>
 
@@ -421,7 +421,7 @@ Como Symfony 2 suporta `HTML5 <http://diveintohtml5.org/>`_, também vamos usá-
 
                 <div id="footer">
                     {% block footer %}
-                        Symfony2 blog tutorial - created by <a href="https://github.com/dsyph3r">dsyph3r</a>
+                        Tutorial de um blo em Symfony 2 - criado por <a href="https://github.com/dsyph3r">dsyph3r</a>
                     {% endblock %}
                 </div>
             </section>
@@ -464,7 +464,7 @@ Podemos conseguir isso estendendo o layout e substituindo o bloco de título.
 
     {% extends '::base.html.twig' %}
 
-    {% block title %}The blog title goes here{% endblock %}
+    {% block title %}O título do blog vem aqui{% endblock %}
 
 No exemplo acima, estendemos o layout base das aplicações que, primeiramente, definiu o bloco de título. Note que o 
 formato de layout, usado com a diretiva ``extends``, está faltando as partes do pacote (Bundle) e do Controlador, 
@@ -738,7 +738,7 @@ Você deve sempre usar as regras de roteamento do Symfony 2. Nunca, em sua aplic
 
 .. code-block:: html+php
 
-    <a href="/contact">Contact</a>
+    <a href="/contact">Contato</a>
 
     <?php $this->redirect("/contact"); ?>
 
