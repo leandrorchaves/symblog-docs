@@ -1,18 +1,18 @@
-[Parte 2] - Página Contato: Validadores, Formulários e Envio de E-mails
-=======================================================================
+[Parte 2] - Página de Contato: Validadores, Formulários e Envio de E-mails
+==========================================================================
 
 Visão geral
 -----------
 
-Agora temos os templates básicos de HTML em seus devidos lugares, é hora de fazer uma página mais funcional. 
+Agora que temos os templates HTML básicos em seus devidos lugares, é hora de fazer uma página mais funcional. 
 
 Vamos começar com uma página simples, a página de contato. No final deste capítulo, você terá uma página de contatos 
-que permite que os usuários enviem informações de contato para um e-mail de contato. 
+que permite que os usuários enviem informações para um e-mail. 
 
 As seguintes áreas serão abordadas neste capítulo: 
 
  1. Validadores
- 2. Forms
+ 2. Formulários (Forms)
  3. Definir valores de configuração do pacote (Bundle)
 
 Página de Contato
@@ -24,8 +24,8 @@ Rota
 Tal como foi feito com a página Sobre que nós criamos no último capítulo, vamos começar por definir a rota da página de 
 contato. 
 
-Abra o arquivo de rotas do ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` e 
-acrescente a seguinte regra de rota.
+Abra o arquivo de rotas do ``BloggerBlogBundle``, localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml`` e 
+acrescente a seguinte regra de rota:
 
 .. code-block:: yaml
 
@@ -36,13 +36,13 @@ acrescente a seguinte regra de rota.
         requirements:
             _method:  GET
 
-Não há nada novo aqui, a regra corresponde ao padrão ``/contact``, para o método HTTP ``GET`` que executa a ação 
+Não há nada novo aqui, a regra corresponde ao padrão ``/contact`` para o método HTTP ``GET`` que executa a ação 
 ``contact`` do controlador ``Page`` em ``BloggerBlogBundle``.
 
 Controlador
 ~~~~~~~~~~~
 
-Agora vamos adicionar a ação para a página de contato no controlador ``Page`` em ``BloggerBlogBundle`` localizado em 
+Agora, vamos adicionar a ação para a página de contato no controlador ``Page`` em ``BloggerBlogBundle`` localizado em 
 ``src/Blogger/BlogBundle/Controller/PageController.php``. 
 
 .. code-block:: php
@@ -55,13 +55,12 @@ Agora vamos adicionar a ação para a página de contato no controlador ``Page``
     }
     // ..
 
-Até o momento, a ação é muito simples, apenas renderiza a visualização da página de contato. Voltaremos para o 
-controlador depois.
+Até o momento, a ação é muito simples, apenas renderiza a visualização da página de contato. Voltaremos aqui depois.
 
-Visão
-~~~~~
+Visão (View)
+~~~~~~~~~~~~ 
 
-Crie a página de visualização da página de contato em ``src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig`` 
+Crie o arquivo de visualização da página de contato em ``src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig`` 
 e adicione o seguinte conteúdo:
 
 .. code-block:: html
@@ -79,14 +78,14 @@ e adicione o seguinte conteúdo:
         <p>Gostaria de entrar em contato com o Symblog?</p>
     {% endblock %}
 
-Este template também é bastante simples. Ele extende o  layout do tamplate de ``BloggerBlogBundle``, substitui o bloco 
+Este template também é bastante simples. Ele extende o layout do tamplate de ``BloggerBlogBundle``, substitui o bloco 
 de título para definir um título personalizado e define algum conteúdo para o ``body block`` (o corpo da página).
 
-Linkando para a página
-~~~~~~~~~~~~~~~~~~~~~~
+Linkando para a página de contato
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Por último, precisamos atualizar o link no template da aplicação localizada em ``app/Resources/views/base.html.twig`` 
-para vincular a página de contato.
+Por último, precisamos atualizar o link no template da aplicação, localizada em ``app/Resources/views/base.html.twig``, 
+para vincular à página de contato.
 
 .. code-block:: html
 
@@ -113,8 +112,8 @@ do formulário de contato.
 A Entidade Contato
 ------------------
 
-Vamos começar criando uma classe que representa um formulário de contato de um usuário. Nós vamos usar algumas 
-informações básicas, tais como ``name``, ``subject`` e ``body`` da mensagem. Crie um novo arquivo localizado em 
+Vamos começar criando uma classe que representa um formulário de contato de um usuário. Usaremos algumas informações 
+básicas, tais como ``name``, ``subject`` e ``body`` da mensagem. Crie um novo arquivo localizado em 
 ``src/Blogger/BlogBundle/Entity/Enquiry.php`` e cole o seguinte conteúdo:
 
 .. code-block:: php
@@ -126,12 +125,16 @@ informações básicas, tais como ``name``, ``subject`` e ``body`` da mensagem. 
 
     class Enquiry
     {
+        //Nome de quem está enviando a mensagem
         protected $name;
 
+        //Email de quem está enviando a mensagem
         protected $email;
 
+        //Assunto da mensagem
         protected $subject;
 
+        //Conteúdo da mensagem
         protected $body;
 
         public function getName()
@@ -178,18 +181,18 @@ informações básicas, tais como ``name``, ``subject`` e ``body`` da mensagem. 
 Como você pôde ver, esta classe apenas define alguns métodos protegidos e os métodos de acesso a estes métodos 
 protegidos. 
 
-Não há nada aqui que define como vamos validar os métodos, ou como os métodos se relacionam com os elementos do 
-formulários. Iremos voltar a este ponto mais tarde.
+Não há nada aqui que define como vamos validar os métodos ou como os métodos se relacionam com os elementos do 
+formulário. Iremos voltar a este ponto mais tarde.
 
 
 .. note::
 
-    Vamos falar rapidamente sobre o uso de ``namespaces`` em Symfony 2. A classe de entidade que criamos define o 
+    Vamos falar, rapidamente, sobre o uso de ``namespaces`` em Symfony 2. A classe de entidade que criamos define o 
     namespace para ``Blogger\BlogBundle\Entity``. 
 
     Como o autoloading do Symfony 2 suporta o 
-    `Padrão PSR-0 <http://groups.google.com/group/php-standards/web/psr-0-final-proposal?pli=1>`_,  o namespace irá 
-    mapear diretamente para a estrutura de pastas do Bundle. 
+    `Padrão PSR-0 <http://groups.google.com/group/php-standards/web/psr-0-final-proposal?pli=1>`_, o namespace irá 
+    mapear diretamente para a estrutura de pastas do pacote (Bundle). 
 
     A classe da entidade do formulário está localizado em ``src/Blogger/BlogBundle/Entity/Enquiry.php`` assegurando o 
     Symfony 2 de fazer corretamente o autoload da classe.
@@ -213,15 +216,15 @@ formulários. Iremos voltar a este ponto mais tarde.
     de encontrar classes, é bem provável que você tenha um erro em seu namespace ou na estrutura de pastas. Verifique 
     também se o namespace foi registrado com o autoloader, como mostrado acima. 
 
-    Não tente corrigir isso usando as diretivas ``require`` ou ``include``.
+    Não tente corrigir estes erros usando as diretivas ``require`` ou ``include``.
 
-Forms
------
+Firmulários (Forms)
+-------------------
 
 Agora, vamos criar o formulário. 
 
-Symfony 2 vem com um Framework de formulário muito poderoso que torna a tarefa de lidar com o formulário mais fácil. 
-Tal como acontece com todos os componentes do Symfony 2, pode-se usar fora do Symfony 2 em seus próprios projetos.
+Symfony 2 vem com um Framework de formulário muito poderoso que torna a tarefa de lidar com formulários mais fácil. 
+Tal como acontece com todos os componentes do Symfony 2, pode-se usar fora do Symfony 2, em seus próprios projetos.
 O `Componente Formulário <https://github.com/symfony/Form>`_ está disponível no Github. 
 
 Vamos começar criando uma classe ``AbstractType`` que representa o formulário. Poderíamos ter criado o formulário 
@@ -229,7 +232,7 @@ diretamente no controlador sem se preocupar com essa classe, no entanto, separar
 permite-nos reutilizar o formulário em toda a aplicação. 
 
 Ele também impede-nos de ocupar ainda mais o controlador. Afinal, o controlador é supostamente simples. O objetivo dele 
-é proporcionar a ligação entre o modelo e a visão.
+é proporcionar a ligação entre o modelo (model) e a visão (view).
 
 EnquiryType
 ~~~~~~~~~~~
@@ -262,13 +265,13 @@ Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Form/EnquiryType.php
         }
     }
 
-A classe ``EnquiryType`` acrescenta a classe ``FormBuilder``. A classe ``FormBuilder`` é a sua melhor amiga, quando se 
+A classe ``EnquiryType`` acrescenta a classe ``FormBuilder``. A classe ``FormBuilder`` é a sua melhor amiga quando se 
 trata de criar formulários. É capaz de simplificar o processo de definição de campos com base nos metadados que o campo 
 tem. 
 
-Como a nossa Entidade ``Enquiry`` ainda é muito simples, pois nós não definimos nenhum metadado ainda, o ``FormBuilder``, 
+Como a nossa Entidade ``Contato`` ainda é muito simples, pois nós não definimos nenhum metadado ainda, o ``FormBuilder``, 
 por padrão, vai adicionar o tipo básico de campo para entrada de texto. Isto é adequado para a maioria dos campos
-exceto para o corpo pois queremos um ``textarea``, e e-mail onde queremos tirar vantagem do tipo de campo e-mail do 
+exceto para o corpo, pois queremos um ``textarea``, e e-mail, onde queremos tirar vantagem do tipo de campo e-mail do 
 HTML5.
 
 .. note::
@@ -281,7 +284,7 @@ Criando o formulário no controlador
 Agora que temos definido a Entidade do formulário e ``EnquiryType``, podemos atualizar a ação de contato para
 utilizá-los. 
 
-Substitua o conteúdo da ação de contato localizado em ``src/Blogger/BlogBundle/controller/PageController.php`` pelo 
+Substitua o conteúdo da ação de contato, localizado em ``src/Blogger/BlogBundle/controller/PageController.php``, pelo 
 seguinte conteúdo:
 
 .. code-block:: php
@@ -310,14 +313,14 @@ seguinte conteúdo:
         ));
     }
 
-Começamos criando uma instância da entidade ``Enquiry``. Esta entidade representa os dados de um formulário de contato. 
-Em seguida, criamos o formulário real. Nós especificamos o ``EnquiryType`` que criamos anteriormente e passamos para o 
+Começamos criando uma instância da entidade ``Contato``. Esta entidade representa os dados de um formulário de contato. 
+Em seguida, criamos o formulário real. Nós especificamos o ``EnquiryType``, que criamos anteriormente, e passamos para o 
 nosso objeto de entidade do formulário. 
 
 O método ``CreateForm`` é capaz de usar estes 2 método para criar um formulário.
 
 Com esta ação, o controlador irá lidar com a exibição e irá processar o formulário, assim, nós precisamos verificar o 
-método HTTP. Formulários são normalmente enviados enviados via ``POST``, e nosso formulário não será exceção. 
+método HTTP. Formulários são normalmente enviados via ``POST``, e nosso formulário não será exceção. 
 
 Se o método de solicitação é ``POST``, uma chamada para ``BindRequest`` irá transformar os dados enviados de volta para 
 o objeto ``$enquiry``. Neste momento, o objeto ``$enquiry`` representa o que o usuário enviou.
@@ -327,11 +330,11 @@ formulário será sempre válido.
 
 Finalmente, especificamos o template a ser renderizado. 
 
-Observe que agora estamos também passando uma representação do formulário para o modelo. Este objeto permite-nos 
-processar o formulário na View.
+Observe que agora, estamos passando uma representação do formulário para o template. Este objeto permite-nos processar o 
+formulário na View.
 
-Como usamos 2 novas classes em nosso controller, precisamos importar os namespaces. Atualize o arquivo controlador 
-localizado em ``src/Blogger/BlogBundle/Controller/PageController.php`` com o seguinte conteúdo. 
+Como usamos 2 novas classes em nosso controller, precisamos importar os namespaces. Atualize o arquivo controlador, 
+localizado em ``src/Blogger/BlogBundle/Controller/PageController.php``, com o seguinte conteúdo: 
 
 As declarações devem ser colocados sob a forma ``use statement``.
 
@@ -354,11 +357,11 @@ As declarações devem ser colocados sob a forma ``use statement``.
 Renderizando o formulário
 ~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-Graças aos métodos do Twig, renderização de formulários torna-se simples. O Twig fornece um sistema de camadas de 
+Graças aos métodos do Twig, a renderização de formulários torna-se simples. O Twig fornece um sistema de camadas de 
 renderização de formulários que lhe permite processar o formulário como uma entrada da entidade, ou como erros 
 individuais e elementos, dependendo do nível de personalização que você forneceu.
 
-Para demonstrar o poder dos métodos do Twig, podemos usar o seguinte trecho de código para processar todo o formulário.
+Para demonstrar o poder dos métodos do Twig, podemos usar o seguinte trecho de código para processar todo o formulário:
 
 .. code-block:: html
 
@@ -373,7 +376,7 @@ grandes, o que acontece com frequência com os formulários.
 
 Para o nosso formulário de contato, vamos optar pelo meio termo. 
 
-Substitua o código do template localizado em ``src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig`` pelo 
+Substitua o código do template localizado em ``src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig``, pelo 
 seguinte código:
 
 .. code-block:: html
@@ -406,14 +409,14 @@ seguinte código:
 
 Como você pôde ver, usamos 4 novos métodos do Twig para processar o formulário.
 
-    O primeiro método ``form_enctype`` define o tipo de conteúdo do formulário. Isso deve ser definido quando o seu 
+    O primeiro método, ``form_enctype``, define o tipo de conteúdo do formulário. Isso deve ser definido quando o seu 
     formulário lida com upload de arquivos. O nosso formulário não tem nenhum uso para este método, mas a sua prática é 
-    aconselhada caso você opte por adicionar o upload de arquivos no futuro. Depurar um formulário que manipula arquivos 
-    de uploads que não tem nenhum tipo de conteúdo definido pode ser uma verdadeira dor de cabeça!
+    aconselhada, caso você opte por adicionar o upload de arquivos no futuro. Depurar um formulário que manipula upload
+    de arquivos que não tem nenhum tipo de conteúdo definido, pode ser uma verdadeira dor de cabeça!
 
-    O segundo método ``form_errors`` irá renderizar quaisquer erros cuja validação do formulário tenha falhado.
+    O segundo método, ``form_errors``, irá renderizar quaisquer erros cuja validação do formulário tenha falhado.
 
-    O terceiro método ``form_row`` exibe as entradas dos elementos relacionados a cada campo de formulário. Isto inclui 
+    O terceiro método, ``form_row``, exibe as entradas dos elementos relacionadas a cada campo de formulário. Isto inclui 
     todos os erros para o campo, o label e o elemento do campo atual .
 
     Finalmente, usamos o método ``form_rest``. É sempre importante usar o método no final do formulário para renderizar 
@@ -434,7 +437,7 @@ que não parece tão atraente. Vamos adicionar alguns estilos para melhorar esta
 Como os estilos são específicos para o formulário dentro de nosso pacote (Bundle) Blog, iremos criar os estilos em uma 
 nova folha de estilos. 
 
-Crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Resources/public/css/blog.css`` e cole o seguinte conteúdo:
+Crie um novo arquivo em ``src/Blogger/BlogBundle/Resources/public/css/blog.css`` e cole o seguinte conteúdo:
 
 .. code-block:: css
 
@@ -454,7 +457,7 @@ Precisamos fazer com que o aplicativo saiba que nós queremos usar este estilo. 
 para o template de contato, mas como outros templates também podem vir a usar este estilo mais tarde, faz sentido 
 importá-lo para o layout de ``BloggerBlogBundle`` que criamos anteriormente no capítulo 1. 
 
-Abra o layout de ``BloggerBlogBundle`` localizado em ``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` e 
+Abra o layout de ``BloggerBlogBundle``, localizado em ``src/Blogger/BlogBundle/Resources/views/layout.html.twig``, e 
 substitua seu conteúdo com o seguinte código:
 
 .. code-block:: html
@@ -472,9 +475,9 @@ substitua seu conteúdo com o seguinte código:
     {% endblock %}
 
 Você pôde ver que temos definido um bloco de folhas de estilo para substituir o bloco de folhas de estilo definido no 
-modelo pai. No entanto, é importante notar a chamada para o método ``Pai``. Isto irá importar o conteúdo do bloco de 
-folhas de estilo do template ``Pai`` localizado em ``app/Resources/base.html.twig``, permitindo-nos anexar o nosso estilo 
-novo. Afinal, não queremos substituir as folhas de estilo existentes.
+template pai. No entanto, é importante notar a chamada para o método ``Pai``. Isto irá importar o conteúdo do bloco de 
+folhas de estilo do template ``Pai``, localizado em ``app/Resources/base.html.twig``, permitindo-nos anexar o nosso 
+estilo novo. Afinal, não queremos substituir as folhas de estilo existentes.
 
 Para que a função ``asset`` possa linkar corretamente o recurso, precisamos copiar ou vincular os recursos do pacote das 
 aplicações para a pasta ``web``. Isto pode ser feito da seguinte forma:
@@ -485,8 +488,8 @@ aplicações para a pasta ``web``. Isto pode ser feito da seguinte forma:
 
 .. note::
 
-    Se você estiver usando um sistema operacional que não suporta links simbólicos, tais como Windows você terá que 
-    utilizar o seguinte artificio.
+    Se você estiver usando um sistema operacional que não suporta links simbólicos, tais como Windows, você terá que 
+    utilizar o seguinte artificio:
 
     .. code-block:: bash
 
@@ -504,22 +507,22 @@ Agora, se você atualizar a página de contato, o formulário estará estilizado
 
 .. tip::
 
-    Enquanto a função ``asset`` fornece a funcionalidade do recurso que desejamos utilizar, existe uma alternativa 
-    melhor para isso. A biblioteca `Assetic <https://github.com/kriswallsmith/assetic>`_ de 
-    `Kris Wallsmith <https://github.com/kriswallsmith>`_ é empacotado com a distribuição Standard do Symfony 2 por 
+    Enquanto a função ``asset`` fornece as funcionalidades que desejamos para utilizar os recursos, existe uma 
+    alternativa melhor para isso. A biblioteca `Assetic <https://github.com/kriswallsmith/assetic>`_ de 
+    `Kris Wallsmith <https://github.com/kriswallsmith>`_, é empacotada com a distribuição Standard do Symfony 2 por 
     padrão. 
 
     Esta biblioteca fornece a manutenção dos assets muito além das capacidades dos padrões do Symfony 2. Assetic nos 
-    permite executar filtros ativos para combinar automaticamente, minify e gzip. Ele também pode executar filtros de 
+    permite executar filtros ativos para combinar, automaticamente, minify e gzip. Ela também pode executar filtros de 
     compressão de imagens. 
 
-    Assetic ainda nos permite fazer referência a recursos diretamente dentro da pasta ``public`` do pacote sem ter que 
+    Assetic, ainda, nos permite fazer referência a recursos diretamente dentro da pasta ``public`` do pacote sem ter que 
     executar a tarefa ``assets:install``. Vamos explorar o uso de Assetic mais adiante no tutorial.
 
 Falha ao postar os dados
 ------------------------
 
-Se você tentou enviar o formulário, vocẽ se deparou com um erro do Symfony 2.
+Se você tentou enviar o formulário, vocẽ se deparou com o seguinte erro do Symfony 2.
 
 .. image:: /_static/images/part_2/post_error.jpg
     :align: center
@@ -528,7 +531,7 @@ Se você tentou enviar o formulário, vocẽ se deparou com um erro do Symfony 2
 Esse erro está nos dizendo que não existe uma rota para coincidir com ``/contact`` para o método POST HTTP. A rota 
 aceita somente pedidos GET e HEAD. Isto é porque nós configuramos nossa rota com a exigência de método de GET.
 
-Vamos atualizar a rota da página de contato no arquivo localizado em 
+Vamos atualizar a rota da página de contato, no arquivo localizado em 
 ``src/Blogger/BlogBundle/Resources/config/routing.yml`` para também permitir as requisições POST.
 
 .. code-block:: yaml
@@ -542,25 +545,25 @@ Vamos atualizar a rota da página de contato no arquivo localizado em
 
 .. tip::
 
-    Você talvez esteja se perguntando por que a rota permite o método HEAD onde apenas o método  GET foi especificado. 
-    Isto é porque a HEAD é uma requisição GET mas apenas os cabeçalhos HTTP são retornados.
+    Você, talvez, esteja se perguntando por que a rota permite o método HEAD onde apenas o método GET foi especificado. 
+    Isto é porque o HEAD é uma requisição GET, mas, apenas os cabeçalhos HTTP são retornados.
 
-Agora, quando você enviar o formulário, deve funcionar como esperado embora, na verdade, não faça muito ainda. A página 
+Agora, quando você enviar o formulário, deve funcionar como esperado, embora, na verdade, não faça muito ainda. A página 
 só vai redirecioná-lo de volta para o formulário de contato.
 
 Validadores
 -----------
 
-Os validadores do Symfony 2 nos permitem realizar a tarefa de validação de dados. Validação é uma tarefa comum quando se 
+Os validadores do Symfony 2, nos permitem realizar a tarefa de validação de dados. Validação é uma tarefa comum quando se 
 lida com dados de formulários. 
 
-A validação também precisa ser realizada com os dados antes que ele seja submetido a uma base de dados. O validador do 
-Symfony 2 permite-nos separar a lógica de validação dos componentes que podem utilizar-la, tal como o componente do 
+Precisamos realizada a validadação dos dados antes que eles sejam submetidos a uma base de dados. O validador do 
+Symfony 2, permite-nos separar a lógica de validação, dos componentes que podem utilizar-la, tal como o componente do 
 Formulário ou o componente de banco de dados. 
 
 Esta abordagem significa que temos um conjunto de regras de validação para um objeto.
 
-Vamos começar pela atualização da Entidade ``Enquiry`` localizada em ``src/Blogger/BlogBundle/Entity/Enquiry.php`` para 
+Vamos começar pela atualização da Entidade ``Contato``, localizada em ``src/Blogger/BlogBundle/Entity/Enquiry.php``, para 
 especificar alguns validadores. Certifique-se de adicionar as 5 novas declarações ``use`` no topo do arquivo.
 
 .. code-block:: php
@@ -596,28 +599,28 @@ especificar alguns validadores. Certifique-se de adicionar as 5 novas declaraç�
 
     }
 
-Para definir os validadores, devemos implementar o método estático ``LoadValidatorMetadata``. Isso cria um objeto de 
-``ClassMetadata``. Podemos usar esse objeto para definir restrições de propriedade sobre os membros da nossa entidade. 
+Para definir os validadores, devemos implementar o método estático ``LoadValidatorMetadata``. Esse método cria um objeto 
+de ``ClassMetadata``. Podemos usar esse objeto para definir restrições de propriedade sobre os membros da nossa entidade. 
 
-A primeira declaração se aplica a restrição ``NotBlank`` de ``name``. O validador ``NotBlank`` é muito simples, ele só 
+A primeira declaração se aplica à restrição ``NotBlank`` de ``name``. O validador ``NotBlank`` é muito simples, ele só 
 irá retornar ``True`` se o valor que ele está validando não está vazio. 
 
-Em seguida, configuramos o validador para o e-mail ``email``. O serviço de validação do Symfony 2 fornece um validador 
+Em seguida, configuramos o validador ``email`` para o e-mail. O serviço de validação do Symfony 2 fornece um validador 
 para `E-mails <http://symfony.com/doc/current/reference/constraints/Email.html>`_ que ainda vai verificar os registros 
-MX para assegurar se o domínio é válido. Sobre o ``subject`` queremos definir uma restrição ``NotBlank`` e ``MaxLength``. 
-Você pode aplicar quantos validadores desejar em um determinado elemento.
+MX para assegurar se o domínio é válido. Sobre o ``subject``, queremos definir uma restrição ``NotBlank`` e 
+``MaxLength``. Você pode aplicar quantos validadores desejar em um determinado elemento.
 
 A lista completa de `Restriçõs de Validadores <http://symfony.com/doc/current/reference/constraints.html>`_ está 
 disponível nos documentos de referência do Symfony 2. 
 
-É também possível 
+É possível, também,  
 `Criar validadores customizados <http://symfony.com/doc/current/cookbook/validation/custom_constraint.html>`_.
 
 Agora, quando você enviar o formulário de contato, os dados apresentados serão transmitidos através dos critérios de 
 validação. Tente digitar um endereço de e-mail inválido. Você deve ver uma mensagem de erro informando que o endereço de 
 email é inválido. 
 
-Cada validador fornece uma mensagem padrão que pode ser substituído se necessário. Para alterar a mensagem de saída do 
+Cada validador fornece uma mensagem padrão que pode ser substituída se necessário. Para alterar a mensagem de saída do 
 validador de e-mail, você deve fazer o seguinte:
 
 .. code-block:: php
@@ -631,27 +634,27 @@ validador de e-mail, você deve fazer o seguinte:
     Se você estiver usando um browser que suporte HTML5 (é provávelmente você está), mensagens HTML5 serão exibidas 
     reforçando as restrições. 
 
-    Esta é a validação do lado do cliente e o Symfony 2 irá definir as restrições HTML5 adequados com base nos metadados 
+    Esta é a validação do lado do cliente e o Symfony 2 irá definir as restrições HTML5 adequadas com base nos metadados 
     da ``Entidade``. Você pode ver isso no elemento e-mail. A saída HTML é:
 
     .. code-block:: html
 
         <input type="email" value="" required="required" name="contact[email]" id="contact_email">
 
-    Foi usado um dos novos tipos de campos de entrada do HTML5, e-mail, e estabeleceu o atributo necessário. 
+    Foi usado um dos novos tipos de campos de entrada do HTML5, e-mail, e estabeleceu o atributo ``required``. 
     
-    Validação do lado do cliente é importante pois não exige um envio para o servidor para que o servidor valide o 
+    Validação do lado do cliente é importante, pois, não exige um envio para o servidor para que o servidor valide o 
     formulário. No entanto, a validação do lado cliente não devem ser usada ``sozinha``. Você deve sempre validar os 
     dados submetidos no lado servidor pois é muito fácil para um usuário contornar a validação do lado cliente.
 
 Enviando o e-mail
 -----------------
 
-O nosso formulário de contato permitirá que os usuários enviem perguntas mas nada realmente acontece com eles ainda. 
+O nosso formulário de contato permitirá que os usuários enviem perguntas, mas, nada realmente acontece com eles ainda. 
 
-Vamos atualizar o controlador para enviar um e-mail possa ser enviado.
+Vamos atualizar o controlador para enviar um e-mail.
 
-Symfony 2 vem com a biblioteca `Swift Mailer <http://swiftmailer.org/>`_ para envio de e-mails. Swift Mailer é uma 
+Symfony 2 vem com a biblioteca `Swift Mailer <http://swiftmailer.org/>`_ para envio de e-mails. Swift Mailer, é uma 
 biblioteca muito poderosa, vamos ver o que esta biblioteca pode realizar.
 
 Configurar Swift Mailer
@@ -660,7 +663,7 @@ Configurar Swift Mailer
 Swift Mailer já está configurado para trabalhar na distribuição Standard do Symfony 2, no entanto, precisamos definir 
 algumas configurações relativas aos métodos de envio e credenciais. 
 
-Abra o arquivo de parâmetros localizado em ``app/config/parameters.ini`` e encontre as configurações com o prefixo 
+Abra o arquivo de parâmetros, localizado em ``app/config/parameters.ini``, e encontre as configurações com o prefixo 
 ``mailer_``.
 
 .. code-block:: text
@@ -670,8 +673,8 @@ Abra o arquivo de parâmetros localizado em ``app/config/parameters.ini`` e enco
     mailer_user=""
     mailer_password=""
 
-Swift Mailer fornece um número de métodos para enviar mensagens, incluindo o uso de um servidor SMTP, usando uma 
-instalação local do sendmail ou mesmo usando uma conta do GMail.Para simplificar, vamos utilizar uma conta do GMail. 
+Swift Mailer fornece vários métodos para enviar mensagens, incluindo o uso de um servidor SMTP, usando uma instalação 
+local do sendmail ou mesmo usando uma conta do GMail. Para simplificar, vamos utilizar uma conta do GMail. 
 
 Atualize os parâmetros com o seguinte: (substitua o nome de usuário e senha nos locais correspondentes)
 
@@ -687,15 +690,15 @@ Atualize os parâmetros com o seguinte: (substitua o nome de usuário e senha no
 .. warning::
 
     Tenha cuidado se você estiver usando um sistema de controle de versão (VCS) como Git para seu projeto, especialmente 
-    se o seu repositório está acessível ao público, como o seu  nome de usuário e senha do GMail estão especificados no 
-    repositório e será disponível para qualquer um ver. Você deve se certificar que o arquivo 
+    se o seu repositório está acessível ao público, pois seu nome de usuário e senha do GMail estão especificados no 
+    repositório e estará disponível para qualquer um ver. Você deve se certificar que o arquivo 
     ``app/config/parameters.ini`` está na lista de ignorados de seus VCS's. 
 
     Uma abordagem comum para este problema é sufixar o nome do arquivo que tem informações sensíveis, tais como 
     ``app/config/parameters.ini`` com ``.dist``. Você, então, fornece padrões sensíveis para as configurações deste 
     arquivo e adiciona o arquivo atual, ou seja, ``app/config/parameters.ini`` para sua lista VCS de ignorados. 
 
-    Você pode então implantar o arquivo ``*.dist`` com o projeto e permite que o desenvolvedor remova a extensão 
+    Você pode, então, implantar o arquivo ``*.dist`` com o projeto e permitir que o desenvolvedor remova a extensão 
     ``.dist`` e preencher as configurações necessárias.
 
 Atualize o controlador
@@ -729,7 +732,7 @@ abaixo:
         // ..
     }
 
-Quando você usa a biblioteca do Swift Mailer para criar uma instância de ``Exemplo Swift_Message``, podemos enviar um 
+Quando você usa a biblioteca do Swift Mailer para criar uma instância de ``Swift_Message``, podemos enviá-la como um 
 e-mail.
 
 .. note::
@@ -738,15 +741,15 @@ e-mail.
     Isto diz ao PHP para voltar para o `Espaço global <http://www.php.net/manual/en/language.namespaces.global.php>`_. 
 
     Você vai precisar prefixar todas as classes e funções que não tem namespace ``\``. Se você não colocar este prefixo 
-    antes da classe ``Swift_Message``, o PHP irá pesquisar pela classe com namespace corrente, que neste exemplo é 
+    antes da classe ``Swift_Message``, o PHP irá pesquisar pela classe com namespace corrente, que, neste exemplo, é 
     ``Blogger\BlogBundle\Controlador``, causando um erro.
 
-Também definimos uma ``flash mesage`` na sessão. As mensagens flash são mensagens que perduram por exatamente uma 
-requisição. Depois disso, eles são automaticamente eliminados pelo Symfony 2. 
+Também definimos uma ``flash mesage (mensagens instantâneas)`` na sessão. As mensagens instantâneas (Flash), são 
+mensagens que perduram por exatamente uma requisição. Depois disso, eles são automaticamente eliminados pelo Symfony 2. 
 
 A ``Flash mesage`` será exibida na página de contato para informar ao usuário que o formulário foi enviado. Como a 
-``Flash mesage`` apenas persistem por exatamente um pedido, elas são perfeitas para notificar o usuário do sucesso 
-das ações anteriores.
+``Flash mesage`` apenas persistem, por exatamente um pedido, elas são perfeitas para notificar o usuário do sucesso das 
+ações anteriores.
 
 Para exibir as ``Flash mesages``, precisamos atualizar o template de contato localizado em 
 ``src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig``. 
@@ -777,13 +780,13 @@ Verificamos se uma ``flash mesage`` com o identificador ``blogger-notice`` está
 Registre um e-mail de contato
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Symfony 2 fornece um sistema de configuração que podemos usar para definir as nossas próprias configurações. Vamos usar 
-este sistema para definir o endereço de e-mail de contato ao invéz de codificar manualmente o endereço no controlador 
-acima. Dessa forma, podemos facilmente reutilizar esse valor em outros lugares, sem duplicação de código. Além disso, 
-quando o seu Blog gera muito tráfego, teremos muitas consultas, tornando difícil para o sistema lidar com isso. Assim, 
-você pode facilmente atualizar o endereço de e-mail para passar os e-mails para seu assistente. 
+O Symfony 2 fornece um sistema de configuração que podemos usar para definir as nossas próprias configurações. Vamos 
+usar este sistema para definir o endereço de e-mail de contato ao invéz de codificar manualmente o endereço no 
+controlador acima. Dessa forma, podemos, facilmente, reutilizar esse valor em outros lugares, sem duplicação de código. 
+Além disso, quando o seu Blog gera muito tráfego, teremos muitas consultas, tornando difícil para o sistema lidar com 
+isso. Assim, você pode, facilmente, atualizar o endereço de e-mail para passar os e-mails para seu assistente. 
 
-Crie um novo arquivo em ``src/Blogger/BlogBundle/Resources/config/config.yml`` e cole seguinte código.
+Crie um novo arquivo em ``src/Blogger/BlogBundle/Resources/config/config.yml`` e cole seguinte código:
 
 .. code-block:: yaml
 
@@ -797,13 +800,13 @@ Ao definir parâmetros, é uma boa prática quebrar o nome do parâmetro em um n
 A primeira parte deve ser uma versão ``lower cased`` do nome do pacote usando sublinhados para separar palavras. No 
 nosso exemplo, transformamos o pacote ``BloggerBlogBundle`` em ``blogger_blog``. 
 
-A parte restante do nome do parâmetro pode conter qualquer número de partes separadas pelo caractere ``.`` (Ponto final). 
-Isso nos permite agrupar logicamente os parâmetros.
+A parte restante do nome do parâmetro, pode conter qualquer número de partes separadas pelo caractere ``.`` (Ponto 
+final). Isso nos permite agrupar logicamente os parâmetros.
 
 Para que a aplicação Symfony 2 use os novos parâmetros, precisamos importar a configuração para o arquivo de 
-configuração principal da aplicação localizado em ``app/config/config.yml``. 
+configuração principal da aplicação, localizado em ``app/config/config.yml``. 
 
-Para conseguir isso, atualize as diretivas ``imports`` na parte superior do arquivo para o seguinte código.
+Para conseguir isso, atualize as diretivas ``imports``, na parte superior do arquivo, para o seguinte código:
 
 .. code-block:: yaml
 
@@ -815,7 +818,7 @@ Para conseguir isso, atualize as diretivas ``imports`` na parte superior do arqu
 O caminho de importação é o local físico do arquivo no disco. A diretiva ``@BloggerBlogBundle`` irá dizer que o caminho 
 do ``BloggerBlogBundle`` é ``src/Blogger/BlogBundle``.
 
-Finalmente vamos atualizar a ação de contato para usar o parâmetro.
+Finalmente, vamos atualizar a ação de contato para usar o parâmetro.
 
 .. code-block:: php
 
@@ -843,7 +846,7 @@ Finalmente vamos atualizar a ação de contato para usar o parâmetro.
     Como o arquivo de configuração é importado, na parte superior do arquivo de configuração do aplicativo, podemos 
     facilmente substituir qualquer um dos parâmetros importados no aplicativo.
 
-    Por exemplo, adicionar o seguinte código no fundo do arquivo ``app/config/config.yml`` substituiria o valor passado 
+    Por exemplo, adicionar o seguinte código no fundo do arquivo ``app/config/config.yml``, substituiria o valor passado 
     do pacote pelo do parâmetro.
 
     .. code-block:: yaml
@@ -881,13 +884,12 @@ O corpo do e-mail está configurado para renderizar um template. Crie este templ
 
 O conteúdo do e-mail é o formulário enviado pelo usuário.
 
-Você também deve ter notado a extensão deste modelo é diferente dos outros templates que criamos. Ele usa a extensão 
-``.txt.twig``. 
+Perceba que a extensão deste template é diferente dos outros templates que criamos. Ele usa a extensão ``.txt.twig``. 
 
 A primeira parte da extensão, ``.txt``, especifica o formato do arquivo a ser gerado. Os formatos mais comuns são 
 ``.txt``, ``.html``, ``.css``, ``.js``, ``.xml`` e ``.json``. 
 
-A última parte da extensão especifica qual mecanismo de template vai ser utilizado, neste caso, Twig. Uma extensão de 
+A última parte da extensão, especifica qual mecanismo de template vai ser utilizado, neste caso, Twig. Uma extensão de 
 ``.php`` usaria PHP para renderizar o template.
 
 Agora, quando você enviar um formulário, um e-mail será enviado para o endereço definido no parametro 
@@ -898,7 +900,7 @@ Agora, quando você enviar um formulário, um e-mail será enviado para o endere
     Symfony 2 nos permite configurar o comportamento da biblioteca Swift Mailer em diferentes ambientes de operação do 
     Symfony 2. Já podemos ver isso em uso para o ambiente de ``test``. 
 
-    Por padrão, a distribuição Standard do Symfony 2 configura Swift Mailer para não enviar e-mails durante a execução 
+    Por padrão, a distribuição Standard do Symfony 2, configura Swift Mailer para não enviar e-mails durante a execução 
     do ambiente ``test``. Isso é definido no arquivo de configuração de teste localizado em 
     ``app/config/config_test.yml``.
 
@@ -914,8 +916,8 @@ Agora, quando você enviar um formulário, um e-mail será enviado para o endere
     Para fazer isso, adicione a configuração acima para o arquivo de configuração ``dev`` localizado em 
     ``app/config/config_dev.yml``.
 
-    Você pode estar se perguntando como você pode testar se os e-mails estão sendo enviados e, mais especificamente, o 
-    conteúdo deles, visto que eles não serão mais entregues para um endereço de e-mail real. Symfony 2 tem uma solução 
+    Você pode estar se perguntando, como você pode testar se os e-mails estão sendo enviados e, mais especificamente, o 
+    conteúdo deles, visto que eles não serão mais entregues para um endereço de e-mail real. O Symfony 2 tem uma solução 
     para isso através da barra de ferramentas do desenvolvedor. Quando um e-mail é enviado um ícone de notificação de 
     e-mail aparecerá na barra de ferramentas que tem todas as informações sobre o e-mail que Swift Mailer entregaria.
 
@@ -939,10 +941,10 @@ Agora, quando você enviar um formulário, um e-mail será enviado para o endere
 Conclusão
 ---------
 
-Nós demonstramos os conceitos por trás da criação de um a parte mais fundamental de qualquer site: Firmulários. 
+Nós demonstramos os conceitos por trás da criação de uma parte mais fundamental de qualquer site: Formulários. 
 Symfony 2 vem com uma excelente biblioteca de Validadores e de Formulários que nos permite separar a lógica de validação 
-do formulário para que possa ser utilizado por outras partes do aplicativo (como o modelo). Nós também mostramos como 
-definir as configurações personalizadas que podem ser lidos no nosso aplicativo.
+do formulário, para que possa ser utilizado por outras partes do aplicativo (como o model). Nós também mostramos como 
+definir as configurações personalizadas que podem ser lidas no nosso aplicativo.
 
-No próximo capítulo, vamos ver uma parte fundamental deste tutorial, o modelo. Vamos utilizar Doctrine 2 e usá-lo para 
-definir o modelo de blog. Vamos também construir a página ``show`` do blog e explorar o conceito de Data Fixtures.
+No próximo capítulo, vamos ver uma parte fundamental deste tutorial, o Model. Vamos utilizar Doctrine 2 e usá-lo para 
+definir o Model do blog. Vamos também construir a página ``show`` do blog e explorar o conceito de Data Fixtures.
