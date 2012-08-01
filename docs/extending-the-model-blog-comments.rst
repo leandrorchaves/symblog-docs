@@ -36,8 +36,8 @@ Para exibir os blogs, precisamos recuperá-los do banco de dados. Doctrine 2 tra
 isso (Você também pode executar SQL pelo Doctrine 2, mas este método é desencorajado, pois ele tira a abstração de banco 
 de dados que o Doctrine 2 nos dá). 
 
-Nós usaremos o ``QueryBuilder``, pois ele fornece uma maneira amigável de trabalhar com orientação a objetos gerados pelo DQL, 
-para nos permitir consultar o banco de dados. 
+Nós usaremos o ``QueryBuilder``, pois ele fornece uma maneira amigável de trabalhar com orientação a objetos gerados pelo 
+DQL, para nos permitir consultar o banco de dados. 
 
 Vamos atualizar a ação ``index`` do controlador ``Page``, localizado em 
 ``src/Blogger/BlogBundle/Controller/PageController.php``, para trazer os blogs a partir do banco de dados.
@@ -202,7 +202,7 @@ Nós já vimos algo sobre as classes de repositórios do Doctrine 2 no capítulo
 apresentação do blog. 
 
 Utilizamos a implementação padrão da classe ``Doctrine\ORM\EntityRepository`` para recuperar uma entidade blog do banco 
-de dados através do método ``find()``. Como queremos criar uma consulta personalizada, precisamos criar um repositório 
+de dados, através do método ``find()``. Como queremos criar uma consulta personalizada, precisamos criar um repositório 
 personalizado. Doctrine 2 pode ajudar nessa tarefa. 
 
 Atualize os metadados das entidades do ``Blog``, no arquivo ``src/Blogger/BlogBundle/Entity/blog.php``.
@@ -335,7 +335,7 @@ Finalmente, vamos atualizar a ação ``index`` do controlador ``Page`` para usar
         // ..
     }
 
-Agora, quando você atualizar a página inicial, deve ser exibido exatamente o mesmo de antes. Tudo o que nós fizemos foi 
+Agora, quando você atualizar a página inicial, deve ser exibido exatamente o mesmo de antes. Tudo o que nós fizemos, foi 
 colocar nosso código nas classes corretas para que possam realizar as tarefas corretas.
 
 Mais sobre o Model: Criando a Entidade Comentário
@@ -423,9 +423,9 @@ O conteúdo do código acima, já foi abordado no capítulo anterior, porém, us
 entidade ``Blog``. Como comentário é para um post de um blog, temos que configurar um link na entidade ``Comment`` para
 pertencer à entidade ``Blog``. 
 
-Especificamos um link ``ManyToOne`` visando a entidade ``Blog``. Também especificamos que o inverso estará 
-disponível em ``comments``. Para isso, precisamos atualizar a entidade ``Blog`` para que o Doctrine 2 saiba que um blog 
-pode conter muitos comentários. 
+Especificamos um link ``ManyToOne`` visando a entidade ``Blog``. Também especificamos que o inverso estará disponível em 
+``comments``. Para isso, precisamos atualizar a entidade ``Blog`` para que o Doctrine 2 saiba que um blog pode conter 
+muitos comentários. 
 
 Atualize a entidade ``Blog``, localizada em ``src/Blogger/BlogBundle/Entity/blog.php``, adicionando este mapeamento:
 
@@ -537,8 +537,8 @@ Atualize o arquivo ``app/autoload.php`` para registrar o novo namespace. Como as
 namespace ``Doctrine\DBAL``, eles devem ser colocados acima das configurações ``Doctrine\DBAL`` existentes, especificando 
 um novo caminho. 
 
-Namespaces são verificados de cima para baixo para namespaces. Então, namespaces mais específicos precisam ser registrados 
-antes dos menos específicos.
+Namespaces são verificados de cima para baixo para namespaces. Então, namespaces mais específicos precisam ser 
+registrados antes dos menos específicos.
 
 .. code-block:: php
 
@@ -580,7 +580,7 @@ banco de dados atual. Isto é feito com a funcionalidade ``doctrine:migrations:d
 Segundo, precisamos, realmente, fazer a migração com base no dif criado anteriormente. Isto é feito com a funcionalidade 
 ``doctrine:migrations: migrate``.
 
-Execute os comandos abaixo para atualizar o esquema do banco de dados:
+Execute os comandos abaixo, para atualizar o esquema do banco de dados:
 
 .. code-block:: bash
 
@@ -602,9 +602,9 @@ Seu banco de dados vai refletir as alterações mais recentes das entidade e ir�
     desenvolvimento para que o banco de dados seja atualizado, automaticamente, quando implantamos uma nova versão da 
     aplicação. 
 
-    As migrações do Doctrine 2 permitem reverter as alterações, pois cada migração tem criado um método ``up`` e ``down``. 
-    Para reverter para uma versão anterior, você precisa especificar o número da versão que você gostaria de reverter, 
-    executando o seguinte código:
+    As migrações do Doctrine 2 permitem reverter as alterações, pois cada migração tem criado um método ``up`` e 
+    ``down``. Para reverter para uma versão anterior, você precisa especificar o número da versão que você gostaria de 
+    reverter, executando o seguinte código:
     
     .. code-block:: bash
     
@@ -628,7 +628,8 @@ entidades para o nosso pacote (Bundle)?
 A melhor maneira, seria criar um novo arquivo para a entidade ``Comment``. O problema com esta abordagem é que vamos 
 acessar a entidade ``blog`` através dos fixtues do blog.
 
-Felizmente, conseguimos, facilmente, ajustar as referências à objetos em um arquivo de fixture para que possa ser acessado. 
+Felizmente, conseguimos, facilmente, ajustar as referências à objetos em um arquivo de fixture para que possa ser 
+acessado. 
 
 Atualize a entidade ``Blog DataFixtures``, localizado em ``src/Blogger/BlogBundle/DataFixtures/ORM/BlogFixtures.php``, 
 com o código baixo. 
@@ -900,8 +901,8 @@ O Controlador do Blog
 
 Agora, precisamos atualizar a ação ``show`` do controlador do ``Blog`` para recuperar os comentários. 
 
-Atualize o controlador do ``Blog``, localizado em ``src/Blogger/BlogBundle/controller/BlogController.php``, com o seguinte 
-código:
+Atualize o controlador do ``Blog``, localizado em ``src/Blogger/BlogBundle/controller/BlogController.php``, com o 
+seguinte código:
 
 .. code-block:: php
     
@@ -937,7 +938,8 @@ Poderíamos, simplesmente, colocar a renderização dos comentários diretamente
 comentários tem a sua própria entidade, seria melhor separar a renderização em outro template para a inclusão do 
 comentário. Com isso, é possível reutilizar o template renderizado de comentários em outras partes do aplicação. 
 
-Atualize o template ``show`` do blog, localizado em ``src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig``, com o seguinte código:
+Atualize o template ``show`` do blog, localizado em ``src/Blogger/BlogBundle/Resources/views/Blog/show.html.twig``, com 
+o seguinte código:
 
 .. code-block:: html
 
@@ -969,8 +971,8 @@ O ``BloggerBlogBundle:Comment:index.html.twig``, que estavamos incluindo acima, 
 Como é apenas um template, não precisamos criar uma rota ou um controlador para ele, precisamos apenas do arquivo de 
 template. 
 
-Crie um novo arquivo, localizado em ``src/Blogger/BlogBundle/Recursos/views/Resources/index.html.twig``, e cole o seguinte 
-código:
+Crie um novo arquivo, localizado em ``src/Blogger/BlogBundle/Recursos/views/Resources/index.html.twig``, e cole o 
+seguinte código:
 
 .. code-block:: html
 
@@ -1039,8 +1041,8 @@ Adicionando comentários
 Para a última parte deste capítulo, iremos adicionar a funcionalidade para os usuários poderem adicionar comentários a um 
 post do blog. Isso será possível através de um formulário na página de apresentação do blog. 
 
-Já sabemos como criar um formulário em Symfony 2, isso foi mostrado quando criamos o formulário de contato. Em vez 
-de criar manualmente o formulário de comentário, podemos usar Symfony 2 para fazer isso. 
+Já sabemos como criar um formulário em Symfony 2, isso foi mostrado quando criamos o formulário de contato. Em vez de 
+criar manualmente o formulário de comentário, podemos usar Symfony 2 para fazer isso. 
 
 Execute o seguinte código para gerar a classe ``CommentType`` para a entidade ``Comment``.
 
@@ -1461,7 +1463,7 @@ de um formulário e os dados apresentados .
 Conclusão
 ---------
 
-Nós progredimos bem neste capítulo. Nosso site está começando a ficar do jeito que esperamos que funcione. Agora temos o 
+Nós progredimos bem neste capítulo. Nosso site está começando a ficar do jeito que esperamos que funcione. Agora, temos o 
 básico da página inicial criada e a entidade do comentário. 
 
 Os usuários, agora, podem postar comentários em posts do blog e ler os comentários deixado por outro utilizador. Vimos 
