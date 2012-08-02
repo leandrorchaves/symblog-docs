@@ -471,7 +471,7 @@ formato de layout, usado com a diretiva ``extends``, está faltando as partes do
 lembrando que o formato de layout é ``bundle:controller:template``. 
 
 Excluindo partes do pacote e do controlador, estamos especificando o uso de níveis de templates por aplicativo, definido 
-em ``app/Recursos/views/``. 
+em ``app/Resources/views/``. 
 
 Em seguida, temos definido um outro bloco de título e colocamos um conteúdo, neste caso, o título do blog. Como o 
 template pai já contém um bloco de título, ele é substituído por esse bloco novo. O título seria, agora, algo como 
@@ -545,7 +545,7 @@ Pacote Template - Nível 2
 ......................... 
 
 Vamos agora avançar para a criação do layout para o pacote (Bundle) Blog. Crie um arquivo em 
-``src/Blogger/BlogBundle/Recursos/views/layout.html.twig`` e adicione o seguinte conteúdo:
+``src/Blogger/BlogBundle/Resources/views/layout.html.twig`` e adicione o seguinte conteúdo:
 
 .. code-block:: html
 
@@ -604,7 +604,7 @@ Agora vamos criar o template para esta ação.
 
 Como você pode ver na ação do controlador, iremos renderizar o template de Page, o Index. 
 
-Crie o template em ``src/Blogger/BlogBundle/Recursos/views/Page/index.html.twig``
+Crie o template em ``src/Blogger/BlogBundle/Resources/views/Page/index.html.twig``
 
 .. code-block:: html
 
@@ -621,11 +621,11 @@ Neste exemplo, o template ``BloggerBlogBundle::layout.html.twig`` é estendido o
 pelo Controlador. 
 
 Excluindo partes do Controlador, estamos especificando a utilização de nível de template do pacote (bundle), criado em 
-``src/Blogger/BlogBundle/Recursos/views/layout.html.twig``. 
+``src/Blogger/BlogBundle/Resources/views/layout.html.twig``. 
 
 Agora vamos adicionar uma rota para a nossa homepage. 
 
-Atualize o arquivo de configuração de rotas localizado em ``src/Blogger/BlogBundle/Recursos/config/routing.yml``.
+Atualize o arquivo de configuração de rotas localizado em ``src/Blogger/BlogBundle/Resources/config/routing.yml``.
 
 .. code-block:: yaml
 
@@ -693,7 +693,7 @@ adicione a ação para lidar com a página Sobre.
 A Visão (View)
 ~~~~~~~~~~~~~~ 
 
-Para a visão, crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Recursos/views/Page/about.html.twig`` e copie 
+Para a visão, crie um novo arquivo localizado em ``src/Blogger/BlogBundle/Resources/views/Page/about.html.twig`` e copie 
 o seguinte conteúdo: 
 
 .. code-block:: html
