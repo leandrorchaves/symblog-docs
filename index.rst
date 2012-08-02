@@ -1,8 +1,8 @@
-Criando um blog com Symfony2
-============================
+Criando um blog com Symfony 2
+=============================
 
 Introdução
-------------
+----------
 
 Este tutorial irá guiá-lo no processo de aprendizado, através da criação de um blog completo usando 
 `Symfony 2 <http://symfony.com/>`_. 
@@ -35,7 +35,7 @@ O site Symblog pode ser acessado em
 `Github <https://github.com/dsyph3r/symblog>`_. Estes códigos, serão mostrados em cada parte do tutorial.
 
 Conteúdo do tutorial
----------------------
+--------------------
 
 Este tutorial tem, como objetivo, cobrir as tarefas comuns ao desenvolvimento de sites usando Symfony 2.
 
@@ -95,7 +95,7 @@ Symblog foi traduzido para o `Português Brasileiro <http://symblog-ptbr.totlab.
 
 
 Autor
-------
+-----
 
 Este tutorial, foi inicialmente criado por `dsyph3r <http://twitter.com/#!/dsyph3r>`_.
 
