@@ -39,23 +39,23 @@ Conteúdo do tutorial
 
 Este tutorial tem, como objetivo, cobrir as tarefas comuns ao desenvolvimento de sites usando Symfony 2.
 
-    1.  Pacotes (Bundles)
-    2.  Controladores
-    3.  Criação de interfaces (Usando TWIG)
-    4.  Model - Doctrine 2
-    5.  Migrações
-    6.  Data Fixtures
+    1.  Bundles - Pacotes
+    2.  Controllers - Controladores
+    3.  Templates - Criação de interfaces (Usando TWIG)
+    4.  Model - Modelos de Bancos de dados com Doctrine 2
+    5.  Migrations - Migrações
+    6.  Data Fixtures - Carga de Dados inicial
     7.  Validadores
     8.  Formulários
     9.  Rotas
-    10. Gerenciamento de Assets
-    11. Envio de Email
-    12. Ambientes
+    10. Assets Management - Gerenciamento de recursos extras
+    11. Emailing - Envio de Emails
+    12. Environments - Ambientes
     13. Customização de páginas de erro
     14. Segurança
     15. Usuário & Sessão
     16. Geração de CRUD
-    17. Memória Cache
+    17. Uso do Cache
     18. Testes
     19. Desenvolvimento
 
@@ -90,7 +90,7 @@ Symblog foi traduzido para o `Frances <http://keiruaprod.fr/symblog-fr/>`_  gra�
 Português
 ~~~~~~~~~
 
-Symblog foi traduzido para o `Português Brasileiro <http://symblog-ptbr.totlab.com.br/>`_  graças à contribuição de 
+Symblog foi traduzido para o `Português Brasileiro <http://symfony2blog.totlab.com.br/>`_  graças à contribuição de 
 `TotLab - Pesquisa e Desenvolvimento Web <http://totlab.com.br>`_.
 
 
