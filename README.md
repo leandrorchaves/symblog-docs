@@ -1,8 +1,8 @@
-symblog tutorial - Creating a blog in Symfony2
-==============================================
+symblog tutorial - Criando um blogo com Symfony 2
+=================================================
 
-Overview
---------
+Visão Geral
+-----------
 
 This project is the documentation source for the symblog tutorial located at
 http://tutorial.symblog.co.uk
