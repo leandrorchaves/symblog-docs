@@ -1,38 +1,37 @@
-symblog tutorial - Criando um blogo com Symfony 2
-=================================================
+Symblog - Criando um blog com Symfony 2
+=======================================
 
 Visão Geral
 -----------
 
-This project is the documentation source for the symblog tutorial located at
+Este projeto é uma fonte de codumentação para o tutorial do Symblog, localizado em
 http://tutorial.symblog.co.uk
 
-Full details of this project can be found at the
-[symblog tutorial](http://tutorial.symblog.co.uk) site.
+Detalhes completos do projeto podem ser encontrados no site
+[symblog tutorial](http://tutorial.symblog.co.uk).
 
-The first 6 parts are currently available:
+As 6 primeiras partes que atualmente estão disponíveis:
 
-1. [Symfony2 Configuration and Templating](http://tutorial.symblog.co.uk/docs/configuration-and-templating.html)
-2. [Contact Page: Validators, Forms and Emailing](http://tutorial.symblog.co.uk/docs/validators-and-forms.html)
-3. [The Blog Model: Using Doctrine 2 and Data Fixtures](http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html)
-4. [The Comments Model: Adding comments, Doctrine Repositories and Migrations](http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html)
-5. [Customising the view: Twig extensions, The sidebar and Assetic](http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html)
-6. [Testing: Unit and Functional with PHPUnit](http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html)
+1. [Configuração do Symfony 2 e Criação de layout](http://tutorial.symblog.co.uk/docs/configuration-and-templating.html)
+2. [Página de Contato: Validadores, Formulários e Envio de E-mails](http://tutorial.symblog.co.uk/docs/validators-and-forms.html)
+3. [O Model do Blog: Usando Doctrine 2 e Data Fixtures](http://tutorial.symblog.co.uk/docs/doctrine-2-the-blog-model.html)
+4. [O Model de Comentários: Adicionando comentários, Repositórios e Migrações do Doctrine 2](http://tutorial.symblog.co.uk/docs/extending-the-model-blog-comments.html)
+5. [Customizando a View: Extensões do Twig, a barra lateral e a Biblioteca Assetic](http://tutorial.symblog.co.uk/docs/customising-the-view-more-with-twig.html)
+6. [Teste: Teste de Unidade e Teste Funcional com PHPUnit](http://tutorial.symblog.co.uk/docs/testing-unit-and-functional-phpunit.html)
 
-Demo site
+Site de demosntração
+--------------------
+
+O site de demosntração deste projeto pode ser encontrado em http://symblog.co.uk
+
+Symfony 2
 ---------
 
-The demo site for this project can be found at http://symblog.co.uk
+O desenvolvimento do Symblog, atualmente, está ativo e usa o Symfony 2.0.3
 
-Symfony2
---------
-
-symblog is currently under active development and is using Symfony 2.0.3
-
-Contributing
+Contribuindo
 ------------
 
-This tutorial is created using [Sphinx](http://sphinx.pocoo.org/). Follow the
-install instructions on their website. When installed run 'make html' in the
-project route to output the tutorial in html format. The generated html files
-will be placed in _build
+Este tutorial foi criado usando [Sphinx](http://sphinx.pocoo.org/). Siga as instruções de instalação deste website. 
+Quando instalado, execute 'make html' no projeto principal para exibir o tutorial no formato HTML. Os arquivos HTML 
+gerados serão colocados em _build
