@@ -4,7 +4,7 @@ Symblog - Criando um blog com Symfony 2
 Visão Geral
 -----------
 
-Este projeto é uma fonte de codumentação para o tutorial do Symblog, localizado em
+Este projeto é uma fonte de documentação para o tutorial do Symblog, localizado em
 http://tutorial.symblog.co.uk
 
 Detalhes completos do projeto podem ser encontrados no site
